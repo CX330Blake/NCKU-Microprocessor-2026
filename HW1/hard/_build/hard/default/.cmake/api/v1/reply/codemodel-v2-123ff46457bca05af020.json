@@ -1,0 +1,70 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : [],
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-fd6451d79dc282e2f566.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.24.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "hard_default_project",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "hard_default_default_PIC_AS_assemble::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-hard_default_default_PIC_AS_assemble-d8d2701189af7caec75f.json",
+					"name" : "hard_default_default_PIC_AS_assemble",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "hard_default_image_4FlGuWsE::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-hard_default_image_4FlGuWsE-47084e9210422abe92ff.json",
+					"name" : "hard_default_image_4FlGuWsE",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/_build/hard/default",
+		"source" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/cmake/hard/default"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	}
+}

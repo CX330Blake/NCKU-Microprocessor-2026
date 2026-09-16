@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic/_build/basic/default",
+  "command": "/Applications/microchip/xc8/v3.10/pic-as/bin/pic-as -D__DEBUG=1 -I/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic -mcpu=18F4520 -c -misa=std -fmax-errors=20 -mwarn=0 -xassembler-with-cpp -mdfp=/Users/CX330/.mchp_packs/Microchip/PIC18Fxxxx_DFP/1.8.178/xc8 -o CMakeFiles/basic_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic/main.S.o -c /Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic/main.S",
+  "file": "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic/main.S",
+  "output": "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic/_build/basic/default/CMakeFiles/basic_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic/main.S.o"
+}
+]

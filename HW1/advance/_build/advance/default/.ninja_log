@@ -1,0 +1,9 @@
+# ninja log v7
+1	333	1789454452151050228	CMakeFiles/advance_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S.o	e6a4c34046f71b3
+333	586	1789454452483304431	/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/out/advance/default.elf	d827a141e936fa4
+1	277	1789454489235599410	CMakeFiles/advance_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S.o	e6a4c34046f71b3
+277	486	1789454489511705333	/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/out/advance/default.elf	d827a141e936fa4
+1	285	1789454881261078213	CMakeFiles/advance_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S.o	e6a4c34046f71b3
+285	483	1789454881545027700	/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/out/advance/default.elf	d827a141e936fa4
+2	298	1789454992050076490	CMakeFiles/advance_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S.o	e6a4c34046f71b3
+299	504	1789454992346832455	/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/out/advance/default.elf	d827a141e936fa4

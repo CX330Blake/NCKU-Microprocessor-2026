@@ -1,0 +1,30 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Note: Properties here can override MPLAB project settings
+      "name": "Launch advance: default",
+      "type": "mplab-core-da",
+      "request": "launch",
+      "project": "advance",
+      "configuration": "default",
+      "stopOnEntry": false,
+      "preLaunchTask": "advance: default - Build",
+      "program": "${workspaceFolder}/out/advance/default.elf"
+    },
+    {
+      // Note: Properties here can override MPLAB project settings
+      "name": "Program advance: default - Production",
+      "type": "mplab-core-da",
+      "request": "launch",
+      "project": "advance",
+      "configuration": "default",
+      "noDebug": true,
+      "preLaunchTask": "advance: default - Build (Production)",
+      "program": "${workspaceFolder}/out/advance/production/default-production.hex"
+    }
+  ]
+}

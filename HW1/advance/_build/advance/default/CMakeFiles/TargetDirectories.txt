@@ -1,0 +1,4 @@
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/_build/advance/default/CMakeFiles/advance_default_default_PIC_AS_assemble.dir
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/_build/advance/default/CMakeFiles/advance_default_image_IKm_teux.dir
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/_build/advance/default/CMakeFiles/edit_cache.dir
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/_build/advance/default/CMakeFiles/rebuild_cache.dir
