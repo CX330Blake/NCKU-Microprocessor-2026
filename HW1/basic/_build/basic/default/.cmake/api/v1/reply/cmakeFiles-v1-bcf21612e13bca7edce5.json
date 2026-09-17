@@ -5,29 +5,11 @@
 			"path" : "CMakeLists.txt"
 		},
 		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/opt/homebrew/share/cmake/Modules/CMakeDetermineSystem.cmake"
-		},
-		{
-			"path" : ".generated/toolchain.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/opt/homebrew/share/cmake/Modules/CMakeSystem.cmake.in"
-		},
-		{
 			"isGenerated" : true,
 			"path" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic/_build/basic/default/CMakeFiles/4.3.4/CMakeSystem.cmake"
 		},
 		{
 			"path" : ".generated/toolchain.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/opt/homebrew/share/cmake/Modules/CMakeNinjaFindMake.cmake"
 		},
 		{
 			"isCMake" : true,

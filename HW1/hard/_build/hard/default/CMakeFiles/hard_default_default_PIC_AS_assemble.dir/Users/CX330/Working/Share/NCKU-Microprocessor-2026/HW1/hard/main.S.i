@@ -1,10 +1,10 @@
-# 1 "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic/main.S"
+# 1 "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 296 "<built-in>" 3
 # 1 "<command line>" 1
 # 1 "<built-in>" 2
-# 1 "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic/main.S" 2
+# 1 "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S" 2
 PROCESSOR 18F4520
 # 1 "/Applications/microchip/xc8/v3.10/pic/include/xc.inc" 1 3
 
@@ -4112,7 +4112,7 @@ stk_offset SET 0
 auto_size SET 0
 ENDM
 # 6 "/Applications/microchip/xc8/v3.10/pic/include/xc.inc" 2 3
-# 3 "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/basic/main.S" 2
+# 3 "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S" 2
 
 PSECT resetVec,class=CODE,reloc=2
 
@@ -4122,52 +4122,62 @@ resetVec:
 PSECT code
 
 main:
-    ; testcase 1 initialization
-    movlw 0x07
-    movwf 0x000, c
+    ; test 1
+    MOVLW 0b01010101
+    MOVWF 0x00
+    ; test 2
+    ; MOVLW 0b01111100
+    ; MOVWF 0x00
 
-    movlw 0x09
+    ; 0x000 : original input (must remain unchanged)
+    ; 0x001 : working copy of input
+    ; 0x002 : current consecutive-1 count
+    ; 0x003 : loop counter
+    ; 0x010 : maximum consecutive-1 count (result)
+    movf 0x000, w, c
     movwf 0x001, c
 
-    movlw 0x16
-    movwf 0x002, c
+    ; current_count = 0
+    clrf 0x002, c
 
-    movlw 0x09
+    ; max_count = 0
+    clrf 0x010, c
+
+    ; Process exactly 8 bits.
+    movlw 0x08
     movwf 0x003, c
 
-    ; A1 = x1 + x2
-    movf 0x000, w, c
-    addwf 0x001, w, c
+check_bit:
+    ; Check bit 0 of the working copy.
+    ; If bit 0 is 0, skip the BRA and execute bit_one.
+    btfsc 0x001, 0, c
+    bra bit_one
+
+bit_zero:
+    ; A zero terminates the current consecutive-1 sequence.
+    clrf 0x002, c
+    bra next_bit
+
+bit_one:
+    incf 0x002, f, c
+
+    ; WREG = max_count
+    ; if (current_count > max_count): skip next
+    movf 0x010, w, c
+    cpfsgt 0x002, c
+    bra next_bit
+
+    ; update max_count
+    movf 0x002, w, c
     movwf 0x010, c
 
-    ; A2 = y1 + y2
-    movf 0x002, w, c
-    addwf 0x003, w, c
-    movwf 0x011, c
+next_bit:
+    ; Rotate the working copy right so the next original bit
+    ; moves into bit 0.
+    rrncf 0x001, f, c
 
-    ; if A1 == A2, skip the next instruction
-    movf 0x011, w, c
-    cpfseq 0x010, c
-    bra check_greater
-
-equal:
-    movlw 0x22
-    movwf 0x020, c
-    bra done
-
-check_greater:
-    ; If A1 > A2, skip the next instruction
-    cpfsgt 0x010, c
-    bra less
-
-greater:
-    movlw 0x11
-    movwf 0x020, c
-    bra done
-
-less:
-    movlw 0x33
-    movwf 0x020, c
+    decfsz 0x003, f, c
+    bra check_bit
 
 done:
     bra done

@@ -10,11 +10,11 @@ PSECT code
 
 main:
     ; test 1
-    MOVLW 0b10111011
+    MOVLW 0b01010101
     MOVWF 0x00
     ; test 2
-    MOVLW 0b01111100
-    MOVWF 0x00
+    ; MOVLW 0b01111100
+    ; MOVWF 0x00
 
     ; 0x000 : original input (must remain unchanged)
     ; 0x001 : working copy of input

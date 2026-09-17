@@ -691,10 +691,10 @@
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "The CMake toolchain file"
+					"value" : "No help, variable specified on the command line."
 				}
 			],
-			"type" : "FILEPATH",
+			"type" : "UNINITIALIZED",
 			"value" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/cmake/advance/default/.generated/toolchain.cmake"
 		},
 		{

@@ -53,24 +53,24 @@ MEDIUMCONST 600-7FD5 1
 %LINETAB
 $CMakeFiles/advance_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S.o
 7FD6 resetVec CODE >8:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FDA code CODE >14:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FDC code CODE >15:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FDE code CODE >17:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FE2 code CODE >18:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FE4 code CODE >20:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FE6 code CODE >21:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FE8 code CODE >24:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FEA code CODE >25:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FEC code CODE >26:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FEE code CODE >27:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FF0 code CODE >29:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FF2 code CODE >30:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FF4 code CODE >31:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FF6 code CODE >33:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FF8 code CODE >34:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FFA code CODE >35:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FFC code CODE >38:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
-7FFE code CODE >41:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FDA code CODE >15:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FDC code CODE >16:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FDE code CODE >18:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FE2 code CODE >19:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FE4 code CODE >21:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FE6 code CODE >22:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FE8 code CODE >25:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FEA code CODE >26:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FEC code CODE >27:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FEE code CODE >28:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FF0 code CODE >30:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FF2 code CODE >31:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FF4 code CODE >32:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FF6 code CODE >34:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FF8 code CODE >35:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FFA code CODE >36:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FFC code CODE >39:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
+7FFE code CODE >42:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/main.S
 # %SYMTAB Section
 # An enumeration of all symbols in the program.
 # The beginning of the section is indicated by %SYMTAB.

@@ -55,26 +55,26 @@ $CMakeFiles/hard_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/N
 7FD0 resetVec CODE >7:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
 7FD4 code CODE >13:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
 7FD6 code CODE >14:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FD8 code CODE >26:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FDA code CODE >27:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FDC code CODE >30:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FDE code CODE >33:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FE0 code CODE >36:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FE2 code CODE >37:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FE4 code CODE >42:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FE6 code CODE >43:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FE8 code CODE >47:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FEA code CODE >48:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FEC code CODE >52:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FEE code CODE >59:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FF0 code CODE >60:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FF2 code CODE >61:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FF4 code CODE >65:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FF6 code CODE >66:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FF8 code CODE >73:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FFA code CODE >76:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FFC code CODE >77:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
-7FFE code CODE >80:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FD8 code CODE >24:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FDA code CODE >25:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FDC code CODE >28:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FDE code CODE >31:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FE0 code CODE >34:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FE2 code CODE >35:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FE4 code CODE >40:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FE6 code CODE >41:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FE8 code CODE >45:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FEA code CODE >46:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FEC code CODE >49:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FEE code CODE >53:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FF0 code CODE >54:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FF2 code CODE >55:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FF4 code CODE >58:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FF6 code CODE >59:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FF8 code CODE >64:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FFA code CODE >66:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FFC code CODE >67:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
+7FFE code CODE >70:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/main.S
 # %SYMTAB Section
 # An enumeration of all symbols in the program.
 # The beginning of the section is indicated by %SYMTAB.

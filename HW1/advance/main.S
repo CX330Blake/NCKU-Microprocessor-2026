@@ -12,7 +12,7 @@ PSECT code
 main:
     ; testcase
     ; 0b11010010 = 0xD2
-    MOVLW   0xD2
+    MOVLW   0b01100110
     MOVWF   0x000
 
     MOVFF   0x000, 0x020

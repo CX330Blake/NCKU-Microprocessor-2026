@@ -10,16 +10,16 @@ PSECT code
 
 main:
     ; testcase 1 initialization
-    movlw   0x12
+    movlw   0x07
     movwf   0x000, c
 
-    movlw   0x08
+    movlw   0x09
     movwf   0x001, c
 
-    movlw   0x0A
+    movlw   0x16
     movwf   0x002, c
 
-    movlw   0x05
+    movlw   0x09
     movwf   0x003, c
 
     ; A1 = x1 + x2

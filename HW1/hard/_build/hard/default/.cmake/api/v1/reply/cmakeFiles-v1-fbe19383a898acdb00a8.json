@@ -5,29 +5,11 @@
 			"path" : "CMakeLists.txt"
 		},
 		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/opt/homebrew/share/cmake/Modules/CMakeDetermineSystem.cmake"
-		},
-		{
-			"path" : ".generated/toolchain.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/opt/homebrew/share/cmake/Modules/CMakeSystem.cmake.in"
-		},
-		{
 			"isGenerated" : true,
-			"path" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/_build/advance/default/CMakeFiles/4.3.4/CMakeSystem.cmake"
+			"path" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/_build/hard/default/CMakeFiles/4.3.4/CMakeSystem.cmake"
 		},
 		{
 			"path" : ".generated/toolchain.cmake"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/opt/homebrew/share/cmake/Modules/CMakeNinjaFindMake.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -110,8 +92,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/_build/advance/default",
-		"source" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/advance/cmake/advance/default"
+		"build" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/_build/hard/default",
+		"source" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW1/hard/cmake/hard/default"
 	},
 	"version" : 
 	{
