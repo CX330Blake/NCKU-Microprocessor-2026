@@ -1,7 +1,7 @@
 ### HEXMate logfile and output summary ###
 
 ### Command-line arguments ###
- /tmp/xcnfsz17H/driver_tmp_3.o
+ /tmp/xcnqznfcO/driver_tmp_3.o
  -O/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/out/HW2/default.hex
  -logfile=/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/out/HW2/default.hxl
  -addressing=1
@@ -9,15 +9,15 @@
 
 ### Memory Usage ###
  Input file ranges:
-  0h - 109h		(/tmp/xcnfsz17H/driver_tmp_3.o)
-  5000h - 5041h		(/tmp/xcnfsz17H/driver_tmp_3.o)
+  0h - 109h		(/tmp/xcnqznfcO/driver_tmp_3.o)
+  5000h - 5100h		(/tmp/xcnqznfcO/driver_tmp_3.o)
  Unused ranges:
   10Ah - 4FFFh
 
 ### Hex Memory Map ###
  Legend:
   -- = Unused memory
-  H1 = Input file             (/tmp/xcnfsz17H/driver_tmp_3.o)
+  H1 = Input file             (/tmp/xcnqznfcO/driver_tmp_3.o)
 ----------------------------------------------------------
          | 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
 ----------------------------------------------------------
@@ -43,5 +43,16 @@
 00005010 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 00005020 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 00005030 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
-00005040 | H1 H1 -- -- -- -- -- -- -- -- -- -- -- -- -- --
-00005050 | --
+00005040 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+00005050 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+00005060 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+00005070 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+00005080 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+00005090 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+000050A0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+000050B0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+000050C0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+000050D0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+000050E0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+000050F0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+00005100 | H1

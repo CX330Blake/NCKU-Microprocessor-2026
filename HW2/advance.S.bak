@@ -16,28 +16,28 @@ main:
     lfsr 1, 0x210 ; seq B
     lfsr 2, 0x220 ; final seq
 
-    movlw 0x01
+    movlw 0x12
     movwf POSTINC0
-    movlw 0x03
+    movlw 0x15
     movwf POSTINC0
-    movlw 0x05
+    movlw 0x18
     movwf POSTINC0
-    movlw 0x07
+    movlw 0x22
     movwf POSTINC0
-    movlw 0x09
+    movlw 0x2a
     movwf POSTINC0
-    movlw 0x0b
+    movlw 0x31
     movwf INDF0
 
-    movlw 0x02
-    movwf POSTINC1
     movlw 0x04
     movwf POSTINC1
-    movlw 0x06
+    movlw 0x09
     movwf POSTINC1
-    movlw 0x08
+    movlw 0x0e
     movwf POSTINC1
-    movlw 0x0a
+    movlw 0x12
+    movwf POSTINC1
+    movlw 0x1b
     movwf INDF1
     
     movlw 0x6

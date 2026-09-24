@@ -24,10 +24,10 @@ main:
     movlw 0x0A
     movwf POSTINC1
 
-    movlw 0x33
+    movlw 0x2B
     movwf POSTINC1
 
-    movlw 0x01
+    movlw 0x15
     movwf POSTINC1
 
     lfsr 0, 0x143
