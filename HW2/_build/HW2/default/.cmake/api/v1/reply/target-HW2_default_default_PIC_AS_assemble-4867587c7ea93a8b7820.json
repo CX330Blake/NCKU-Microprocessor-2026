@@ -1,0 +1,171 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "CMakeFiles/HW2_default_default_PIC_AS_assemble.dir/./Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S.o"
+		}
+	],
+	"backtrace" : 3,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"include",
+			"target_compile_options",
+			"HW2_default_default_PIC_AS_assemble_rule",
+			"target_compile_definitions",
+			"set_source_files_properties"
+		],
+		"files" : 
+		[
+			".generated/main.cmake",
+			"CMakeLists.txt",
+			".generated/rule.cmake",
+			".generated/file.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 15,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 8,
+				"parent" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 9,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 15,
+				"parent" : 4
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 16,
+				"parent" : 4
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 2,
+				"parent" : 2
+			},
+			{
+				"file" : 3,
+				"parent" : 7
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 7,
+				"parent" : 8
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"backtrace" : 5,
+					"fragment" : "-mcpu=18F4520"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-c"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-misa=std"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-fmax-errors=20"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-mwarn=0"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-xassembler-with-cpp"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-mdfp=/Users/CX330/.mchp_packs/Microchip/PIC18Fxxxx_DFP/1.8.178/xc8"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 6,
+					"define" : "__DEBUG=1"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 9,
+					"path" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2"
+				}
+			],
+			"language" : "ASM",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"id" : "HW2_default_default_PIC_AS_assemble::@6890427a1f51a3e7e1df",
+	"name" : "HW2_default_default_PIC_AS_assemble",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "OBJECT_LIBRARY"
+}

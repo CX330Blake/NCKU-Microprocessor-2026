@@ -1,0 +1,255 @@
+%CMF
+# %PSECTS Section
+# For each object file, details of its psects are enumerated here.
+# The begining of the section is indicated by %PSECTS.  The first
+# line indicates the name of the first object file, e.g.
+#    $foo.obj
+# Each line that follows describes a psect in that object file, until
+# the next object file.  The lines that describe a psect have the
+# format:
+#    <psect name> <class name> <space> <link address> <load addresses> <length> <delta> <reloc>
+# All addresses and the length are given in unqualified hexadecimal
+# in delta units.  Any other numeric values are decimal.
+%PSECTS
+$CMakeFiles/HW2_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S.o
+main CODE 0 0 0 10A 1 2
+testcase STRCODE 0 0 0 5042 1 1
+# %UNUSED Section
+# This section enumerates the unused ranges of each CLASS. Each entry
+# is described on a single line as follows:
+#    <class name> <range> <delta>
+# Addresses given in the range are in hexadecimal and units of delta.
+%UNUSED
+RAM 80-5FF 1
+BANK0 80-FF 1
+BANK1 100-1FF 1
+BANK2 200-2FF 1
+BANK3 300-3FF 1
+BANK4 400-4FF 1
+BANK5 500-5FF 1
+CONST 5042-7FFF 1
+IDLOC 200000-200007 1
+SMALLCONST 5042-7FFF 1
+CODE 5042-7FFF 1
+COMRAM 0-7F 1
+CONFIG 300000-30000D 1
+EEDATA F00000-F000FF 1
+MEDIUMCONST 5042-7FFF 1
+# %LINETAB Section
+# This section enumerates the file/line to address mappings.
+# The beginning of the section is indicated by %LINETAB.
+# The first line indicates the name of the first object file, e.g.
+#   $foo.obj
+# Each line that follows describes a single mapping until the next
+# object file.  Mappings have the following format:
+#    <address> <psect name> <class name> ><line number>:<file name>
+# The address is absolute and given given in unqualified hex 
+# in delta units of the psect. All mappings within an object file
+# are in ascending order of addresses.
+# All other numeric values are in decimal.
+%LINETAB
+$CMakeFiles/HW2_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S.o
+0 main CODE >54:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+10 main CODE >55:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+20 main CODE >68:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+22 main CODE >70:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+24 main CODE >72:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+26 main CODE >73:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+28 main CODE >74:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+2A main CODE >76:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+2E main CODE >85:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+30 main CODE >86:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+32 main CODE >92:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+34 main CODE >95:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+36 main CODE >96:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+38 main CODE >98:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+3A main CODE >99:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+3C main CODE >101:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+3E main CODE >102:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+40 main CODE >105:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+42 main CODE >106:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+44 main CODE >108:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+46 main CODE >109:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+48 main CODE >111:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+4A main CODE >112:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+4C main CODE >115:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+4E main CODE >116:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+50 main CODE >117:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+52 main CODE >118:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+54 main CODE >144:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+56 main CODE >145:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+58 main CODE >147:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+5A main CODE >148:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+5C main CODE >150:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+5E main CODE >151:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+60 main CODE >154:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+62 main CODE >155:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+64 main CODE >156:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+66 main CODE >159:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+68 main CODE >160:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+6A main CODE >165:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+6C main CODE >166:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+6E main CODE >167:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+70 main CODE >168:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+72 main CODE >176:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+74 main CODE >177:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+76 main CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+78 main CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+7A main CODE >182:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+7C main CODE >183:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+7E main CODE >198:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+80 main CODE >199:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+82 main CODE >200:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+84 main CODE >202:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+86 main CODE >207:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+88 main CODE >214:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+8A main CODE >215:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+8C main CODE >217:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+8E main CODE >218:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+90 main CODE >224:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+92 main CODE >225:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+94 main CODE >227:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+96 main CODE >228:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+98 main CODE >230:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+9A main CODE >231:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+9C main CODE >235:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+9E main CODE >236:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+A0 main CODE >245:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+A2 main CODE >248:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+A4 main CODE >249:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+A6 main CODE >252:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+A8 main CODE >253:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+AA main CODE >255:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+AC main CODE >256:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+AE main CODE >259:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+B0 main CODE >260:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+B2 main CODE >262:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+B4 main CODE >263:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+B6 main CODE >266:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+B8 main CODE >267:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+BA main CODE >269:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+BC main CODE >270:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+BE main CODE >272:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+C0 main CODE >273:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+C2 main CODE >281:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+C4 main CODE >282:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+C6 main CODE >283:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+C8 main CODE >285:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+CA main CODE >286:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+CC main CODE >287:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+CE main CODE >289:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+D0 main CODE >290:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+D2 main CODE >292:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+D6 main CODE >303:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+D8 main CODE >304:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+DA main CODE >305:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+DC main CODE >307:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+DE main CODE >308:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+E0 main CODE >310:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+E2 main CODE >311:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+E4 main CODE >312:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+E6 main CODE >314:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+EA main CODE >316:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+EC main CODE >331:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+EE main CODE >332:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+F0 main CODE >334:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+F2 main CODE >335:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+F4 main CODE >337:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+F6 main CODE >338:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+F8 main CODE >341:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+FA main CODE >342:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+FC main CODE >344:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+FE main CODE >345:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+100 main CODE >347:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+102 main CODE >348:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+104 main CODE >351:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+106 main CODE >353:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+108 main CODE >361:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+5000 testcase ABS >11:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+5002 testcase ABS >15:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+500A testcase ABS >16:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+5012 testcase ABS >17:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+501A testcase ABS >18:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+5022 testcase ABS >19:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+502A testcase ABS >20:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+5032 testcase ABS >21:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+503A testcase ABS >22:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S
+# %SYMTAB Section
+# An enumeration of all symbols in the program.
+# The beginning of the section is indicated by %SYMTAB.
+# Each line describes a single symbol as follows:
+#    <label> <value> [-]<load-adj> <class> <space> <psect> <file-name>
+# The value and load-adj are both in unqualified hexadecimal.
+# All other numeric values are in decimal.  The load-adj is the
+# quantity one needs to add to the symbol value in order to obtain the load
+# address of the symbol.  This value may be signed. If the symbol
+# was defined in a psect then <psect> will be "-". File-name
+# is the name of the object file in which the symbol was defined.
+%SYMTAB
+__Hspace_0 5042 0 ABS 0 - -
+__Hspace_1 0 0 ABS 0 - -
+__Hspace_3 0 0 ABS 0 - -
+__Hudata_bank0 5042 0 ABS 0 udata_bank0 -
+__Hudata_bank1 5042 0 ABS 0 udata_bank1 -
+__Hudata_bank2 5042 0 ABS 0 udata_bank2 -
+__Hudata_bank3 5042 0 ABS 0 udata_bank3 -
+__Hudata_bank4 5042 0 ABS 0 udata_bank4 -
+__Hudata_bank5 5042 0 ABS 0 udata_bank5 -
+__L__absolute__ 0 0 ABS 0 __absolute__ -
+isa$xinst 0 0 ABS 0 - CMakeFiles/HW2_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S.o
+__Hedata 5042 0 ABS 0 edata -
+__Hudata 5042 0 ABS 0 udata -
+__Ledata 5042 0 ABS 0 edata -
+__Ludata 5042 0 ABS 0 udata -
+__Hcode 5042 0 ABS 0 code -
+__Hdata 5042 0 ABS 0 data -
+__Lcode 5042 0 ABS 0 code -
+__Ldata 5042 0 ABS 0 data -
+__S0 0 0 ABS 0 - -
+__S1 0 0 ABS 0 - -
+__S3 0 0 ABS 0 - -
+isa$std 1 0 ABS 0 - CMakeFiles/HW2_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/hard.S.o
+__Lspace_0 0 0 ABS 0 - -
+__Lspace_1 0 0 ABS 0 - -
+__Lspace_3 0 0 ABS 0 - -
+__Ludata_bank0 5042 0 ABS 0 udata_bank0 -
+__Ludata_bank1 5042 0 ABS 0 udata_bank1 -
+__Ludata_bank2 5042 0 ABS 0 udata_bank2 -
+__Ludata_bank3 5042 0 ABS 0 udata_bank3 -
+__Ludata_bank4 5042 0 ABS 0 udata_bank4 -
+__Ludata_bank5 5042 0 ABS 0 udata_bank5 -
+__H__absolute__ 0 0 ABS 0 __absolute__ -
+__Hudata_acs 5042 0 ABS 0 udata_acs -
+__Ludata_acs 5042 0 ABS 0 udata_acs -
+# %SPLITSTAB Section
+# This section enumerates all the psect splits performed by the assembler.
+# The beginning of the section is indicated by %SPLITSTAB.
+# Each line is a record a particular split, where the parent psect is on
+# the left and the child on the right.  Note that a child psect is always
+# split form the top of the parent psect. All splits from a given parent
+# are listed in the order in which they occurred.
+%SPLITSTAB
+# %DABS Section
+# This section contains a table of all usuage of the assember
+# directive DABS in the program. Each line has the following format:
+#   <name> <space> <address> <size>
+# If the DABS was originally labelled then that shall be <name>,
+# otherwise name will be "-".  The <space> number is in decimal.
+# <address> and <size> are in byte units as unqaulified hexadecimal
+%DABS
+# %SEGMENTS Section
+# This sections enumerates the segments of the program.  Each segment
+# is described on a single line as follows:
+#    <name> <space> <link address> <file address> <size> <delta>
+# Addresses and size are in unqualified hexadecimal.  The link address
+# and size are in units of delta. The file address is in units of bytes.
+# All other numeric quantities are in decimal.
+%SEGMENTS
+# %NOTES Section
+# This section contains data of all the note-psects.  The beginning of the section
+# is indicated by %NOTES. The first line indicates the name and decimal
+# byte-length of the first note-psect, e.g.
+#   $codecov_info_hdr 16
+# Each line that follows contains the byte-data of the psect in hexadecimal as a
+# space-separated list. These lines are limited to 16 bytes of data.
+%NOTES

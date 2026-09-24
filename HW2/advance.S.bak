@@ -1,0 +1,88 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+COUNT_A equ 0x20
+COUNT_B equ 0x21
+
+main:
+    lfsr 0, 0x200 ; seq A
+    lfsr 1, 0x210 ; seq B
+    lfsr 2, 0x220 ; final seq
+
+    movlw 0x01
+    movwf POSTINC0
+    movlw 0x03
+    movwf POSTINC0
+    movlw 0x05
+    movwf POSTINC0
+    movlw 0x07
+    movwf POSTINC0
+    movlw 0x09
+    movwf POSTINC0
+    movlw 0x0b
+    movwf INDF0
+
+    movlw 0x02
+    movwf POSTINC1
+    movlw 0x04
+    movwf POSTINC1
+    movlw 0x06
+    movwf POSTINC1
+    movlw 0x08
+    movwf POSTINC1
+    movlw 0x0a
+    movwf INDF1
+    
+    movlw 0x6
+    movwf COUNT_A
+    movlw 0x5
+    movwf COUNT_B
+
+compare:
+    ; W = current A
+    movf INDF0, W
+    cpfseq INDF1 ; if equal, A has priority
+    bra not_equal
+    bra put_a
+
+not_equal:
+    cpfslt INDF1
+    bra put_b
+    bra put_a
+
+put_a:
+    movff POSTDEC0, POSTINC2
+    decfsz COUNT_A
+    bra compare
+    bra drain_b ; A is clear, copy the rest of B
+
+put_b:
+    movff POSTDEC1, POSTINC2
+    decfsz COUNT_B
+    bra compare
+    bra drain_a ; B is clear, copy the rest of A
+
+drain_a:
+    movff POSTDEC0, POSTINC2
+    decfsz COUNT_A, F
+    bra drain_a
+    bra done
+
+drain_b:
+    movff POSTDEC1, POSTINC2
+    decfsz COUNT_B, F
+    bra drain_b
+
+done:
+    bra done
+
+END resetVec
+
+

@@ -1,0 +1,11 @@
+{
+    "mplab.clangd.compileCommandsDir": "${workspaceFolder}/_build/HW2/default",
+    "cmake.sourceDirectory": "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW2/cmake/HW2/default",
+    "memory-inspector.debugTypes": [
+        "arm-debugger",
+        "embedded-debug",
+        "gdb",
+        "gdbtarget",
+        "mplab-core-da"
+    ]
+}

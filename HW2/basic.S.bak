@@ -1,0 +1,69 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+main:
+    ; Test Case 1:
+    ; [0x140] = 0x0A
+    ; [0x141] = 0x33
+    ; [0x142] = 0x01
+    ;
+    ; Expected:
+    ; [0x143] = 0x32
+    ; [0x144] = 0x66
+    ; [0x145] = 0x99
+
+    lfsr 1, 0x140
+
+    movlw 0x0A
+    movwf POSTINC1
+
+    movlw 0x33
+    movwf POSTINC1
+
+    movlw 0x01
+    movwf POSTINC1
+
+    lfsr 0, 0x143
+
+compute:
+    movff FSR0L, FSR2L
+    movff FSR0H, FSR2H
+
+    decf FSR2L, F
+
+    btfsc INDF2, 0 ; INDF2 = *FSR2
+    bra odd_case
+
+even_case:
+    movf POSTDEC2, W
+
+    addwf POSTDEC2, W
+
+    addwf INDF2, W
+
+    bra store_result
+
+odd_case:
+    movf POSTDEC2, W
+
+    subwf INDF2, W
+
+store_result:
+    movwf POSTINC0
+
+    movlw 0x46
+    cpfseq FSR0L ; test if it's 0x146
+    bra compute
+
+done:
+    bra done
+
+END resetVec
+
