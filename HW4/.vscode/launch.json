@@ -1,0 +1,30 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Note: Properties here can override MPLAB project settings
+      "name": "Launch HW4: default",
+      "type": "mplab-core-da",
+      "request": "launch",
+      "project": "HW4",
+      "configuration": "default",
+      "stopOnEntry": false,
+      "preLaunchTask": "HW4: default - Build",
+      "program": "${workspaceFolder}/out/HW4/default.elf"
+    },
+    {
+      // Note: Properties here can override MPLAB project settings
+      "name": "Program HW4: default - Production",
+      "type": "mplab-core-da",
+      "request": "launch",
+      "project": "HW4",
+      "configuration": "default",
+      "noDebug": true,
+      "preLaunchTask": "HW4: default - Build (Production)",
+      "program": "${workspaceFolder}/out/HW4/production/default-production.hex"
+    }
+  ]
+}

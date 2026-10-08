@@ -1,0 +1,60 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+; Select PDF test case 1 (result 0x037E) or 2 (result 0xAA80).
+#ifndef TEST_CASE
+#define TEST_CASE 2
+#endif
+
+; Inputs must be in the access bank. Results are high-byte-first.
+Mul_Add MACRO x1, x2, y1, y2
+    movf x1, w, a
+    mulwf x2, a
+    movff PRODH, 0x010
+    movff PRODL, 0x011
+
+    movf y1, w, a
+    mulwf y2, a
+    movf PRODL, w, a
+    addwf 0x011, f, a
+    ; MOVF preserves carry from the low-byte addition.
+    movf PRODH, w, a
+    addwfc 0x010, f, a
+ENDM
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+main:
+    ; Load the selected test case into the four input bytes.
+#if TEST_CASE == 2
+    movlw 0x48
+    movwf 0x000, a
+    movlw 0x06
+    movwf 0x001, a
+    movlw 0x5a
+    movwf 0x002, a
+    movlw 0x04
+    movwf 0x003, a
+#else
+    movlw 0xFF
+    movwf 0x000, a
+    movlw 0x02
+    movwf 0x001, a
+    movlw 0x80
+    movwf 0x002, a
+    movlw 0x03
+    movwf 0x003, a
+#endif
+
+calculate:
+    Mul_Add 0x000, 0x001, 0x002, 0x003
+
+done:
+    bra done
+END resetVec
+

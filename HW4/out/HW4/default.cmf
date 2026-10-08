@@ -1,0 +1,358 @@
+%CMF
+# %PSECTS Section
+# For each object file, details of its psects are enumerated here.
+# The begining of the section is indicated by %PSECTS.  The first
+# line indicates the name of the first object file, e.g.
+#    $foo.obj
+# Each line that follows describes a psect in that object file, until
+# the next object file.  The lines that describe a psect have the
+# format:
+#    <psect name> <class name> <space> <link address> <load addresses> <length> <delta> <reloc>
+# All addresses and the length are given in unqualified hexadecimal
+# in delta units.  Any other numeric values are decimal.
+%PSECTS
+$CMakeFiles/HW4_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S.o
+resetVec CODE 0 7DB8 7DB8 4 1 2
+code CODE 0 7DBC 7DBC 244 1 2
+# %UNUSED Section
+# This section enumerates the unused ranges of each CLASS. Each entry
+# is described on a single line as follows:
+#    <class name> <range> <delta>
+# Addresses given in the range are in hexadecimal and units of delta.
+%UNUSED
+RAM 80-5FF 1
+SFR F80-FFF 1
+BANK0 80-FF 1
+BANK1 100-1FF 1
+BANK2 200-2FF 1
+BANK3 300-3FF 1
+BANK4 400-4FF 1
+BANK5 500-5FF 1
+CONST 0-7DB7 1
+IDLOC 200000-200007 1
+SMALLCONST 600-7DB7 1
+CODE 0-7DB7 1
+BIGRAM 0-5FF 1
+BIGSFR F80-FFF 1
+COMRAM 0-7F 1
+CONFIG 300000-30000D 1
+EEDATA F00000-F000FF 1
+MEDIUMCONST 600-7DB7 1
+# %LINETAB Section
+# This section enumerates the file/line to address mappings.
+# The beginning of the section is indicated by %LINETAB.
+# The first line indicates the name of the first object file, e.g.
+#   $foo.obj
+# Each line that follows describes a single mapping until the next
+# object file.  Mappings have the following format:
+#    <address> <psect name> <class name> ><line number>:<file name>
+# The address is absolute and given given in unqualified hex 
+# in delta units of the psect. All mappings within an object file
+# are in ascending order of addresses.
+# All other numeric values are in decimal.
+%LINETAB
+$CMakeFiles/HW4_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S.o
+7DB8 resetVec CODE >73:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DBC code CODE >80:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DBE code CODE >81:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DC0 code CODE >82:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DC2 code CODE >83:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DC4 code CODE >84:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DC6 code CODE >85:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DC8 code CODE >86:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DCA code CODE >87:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DCC code CODE >88:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DCE code CODE >89:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DD0 code CODE >90:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DD2 code CODE >91:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DD4 code CODE >92:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DD6 code CODE >93:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DD8 code CODE >94:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DDA code CODE >95:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DDC code CODE >117:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DDE code CODE >118:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DE0 code CODE >119:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DE2 code CODE >120:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DE4 code CODE >123:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DE6 code CODE >123:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DEA code CODE >123:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DEC code CODE >123:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DF0 code CODE >124:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DF2 code CODE >124:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DF6 code CODE >124:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DF8 code CODE >124:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7DFC code CODE >125:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E00 code CODE >126:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E04 code CODE >127:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E06 code CODE >127:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E0A code CODE >127:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E0C code CODE >127:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E10 code CODE >128:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E14 code CODE >129:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E18 code CODE >130:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E1A code CODE >133:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E1C code CODE >133:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E20 code CODE >133:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E22 code CODE >133:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E26 code CODE >134:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E28 code CODE >134:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E2C code CODE >134:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E2E code CODE >134:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E32 code CODE >135:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E36 code CODE >136:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E3A code CODE >138:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E3E code CODE >139:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E42 code CODE >140:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E46 code CODE >141:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E4A code CODE >142:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E4C code CODE >142:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E50 code CODE >142:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E52 code CODE >142:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E56 code CODE >143:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E5A code CODE >144:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E5E code CODE >147:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E62 code CODE >148:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E66 code CODE >149:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E6A code CODE >150:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E6E code CODE >153:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E70 code CODE >159:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E72 code CODE >160:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E74 code CODE >161:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E76 code CODE >162:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E78 code CODE >164:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E7A code CODE >165:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E7C code CODE >166:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E7E code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E80 code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E82 code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E86 code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E8A code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E8C code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E8E code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E90 code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E92 code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E94 code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E96 code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E98 code CODE >169:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E9A code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E9C code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7E9E code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EA2 code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EA6 code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EA8 code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EAA code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EAC code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EAE code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EB0 code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EB2 code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EB4 code CODE >170:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EB6 code CODE >171:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EB8 code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EBA code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EBC code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EC0 code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EC4 code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EC6 code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EC8 code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7ECA code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7ECC code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7ECE code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7ED0 code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7ED2 code CODE >174:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7ED4 code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7ED6 code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7ED8 code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EDC code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EE0 code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EE2 code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EE4 code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EE6 code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EE8 code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EEA code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EEC code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EEE code CODE >175:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EF0 code CODE >176:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EF2 code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EF4 code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EF6 code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EFA code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7EFE code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F00 code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F02 code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F04 code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F06 code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F08 code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F0A code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F0C code CODE >179:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F0E code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F10 code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F12 code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F16 code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F1A code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F1C code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F1E code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F20 code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F22 code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F24 code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F26 code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F28 code CODE >180:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F2A code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F2C code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F2E code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F32 code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F36 code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F38 code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F3A code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F3C code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F3E code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F40 code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F42 code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F44 code CODE >181:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F46 code CODE >182:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F48 code CODE >183:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F4A code CODE >184:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F4C code CODE >185:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F4E code CODE >186:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F50 code CODE >187:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F52 code CODE >188:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F54 code CODE >190:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F56 code CODE >191:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F58 code CODE >192:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F5A code CODE >193:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F5C code CODE >196:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F60 code CODE >197:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F64 code CODE >198:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F68 code CODE >199:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F6C code CODE >200:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F70 code CODE >203:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F74 code CODE >204:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F78 code CODE >205:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F7C code CODE >206:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F80 code CODE >207:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F84 code CODE >208:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F88 code CODE >209:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F8C code CODE >210:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F90 code CODE >211:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F94 code CODE >212:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F98 code CODE >213:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7F9C code CODE >214:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FA0 code CODE >215:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FA2 code CODE >222:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FA4 code CODE >223:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FA6 code CODE >224:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FA8 code CODE >225:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FAC code CODE >226:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FB0 code CODE >227:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FB4 code CODE >228:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FB8 code CODE >229:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FBC code CODE >230:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FC0 code CODE >231:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FC4 code CODE >232:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FC8 code CODE >233:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FCC code CODE >234:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FCE code CODE >236:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FD0 code CODE >243:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FD2 code CODE >244:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FD4 code CODE >245:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FD6 code CODE >246:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FD8 code CODE >248:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FDA code CODE >249:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FDC code CODE >250:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FDE code CODE >251:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FE0 code CODE >252:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FE2 code CODE >254:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FE4 code CODE >255:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FE6 code CODE >256:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FE8 code CODE >257:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FEA code CODE >258:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FEC code CODE >259:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FEE code CODE >260:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FF0 code CODE >261:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FF4 code CODE >262:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FF8 code CODE >263:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FFA code CODE >265:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FFC code CODE >266:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+7FFE code CODE >267:/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S
+# %SYMTAB Section
+# An enumeration of all symbols in the program.
+# The beginning of the section is indicated by %SYMTAB.
+# Each line describes a single symbol as follows:
+#    <label> <value> [-]<load-adj> <class> <space> <psect> <file-name>
+# The value and load-adj are both in unqualified hexadecimal.
+# All other numeric values are in decimal.  The load-adj is the
+# quantity one needs to add to the symbol value in order to obtain the load
+# address of the symbol.  This value may be signed. If the symbol
+# was defined in a psect then <psect> will be "-". File-name
+# is the name of the object file in which the symbol was defined.
+%SYMTAB
+__Hspace_0 8000 0 ABS 0 - -
+__Hspace_1 0 0 ABS 0 - -
+__Hspace_3 0 0 ABS 0 - -
+__Hudata_bank0 0 0 ABS 0 udata_bank0 -
+__Hudata_bank1 0 0 ABS 0 udata_bank1 -
+__Hudata_bank2 0 0 ABS 0 udata_bank2 -
+__Hudata_bank3 0 0 ABS 0 udata_bank3 -
+__Hudata_bank4 0 0 ABS 0 udata_bank4 -
+__Hudata_bank5 0 0 ABS 0 udata_bank5 -
+__L__absolute__ 0 0 ABS 0 __absolute__ -
+__LresetVec 0 0 ABS 0 resetVec -
+__HresetVec 0 0 ABS 0 resetVec -
+isa$xinst 0 0 ABS 0 - CMakeFiles/HW4_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S.o
+__Hedata 0 0 ABS 0 edata -
+__Hudata 0 0 ABS 0 udata -
+__Ledata 0 0 ABS 0 edata -
+__Ludata 0 0 ABS 0 udata -
+__Hcode 0 0 ABS 0 code -
+__Hdata 0 0 ABS 0 data -
+__Lcode 0 0 ABS 0 code -
+__Ldata 0 0 ABS 0 data -
+__S0 8000 0 ABS 0 - -
+__S1 0 0 ABS 0 - -
+__S3 0 0 ABS 0 - -
+isa$std 1 0 ABS 0 - CMakeFiles/HW4_default_default_PIC_AS_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/hard.S.o
+__Lspace_0 0 0 ABS 0 - -
+__Lspace_1 0 0 ABS 0 - -
+__Lspace_3 0 0 ABS 0 - -
+__Ludata_bank0 0 0 ABS 0 udata_bank0 -
+__Ludata_bank1 0 0 ABS 0 udata_bank1 -
+__Ludata_bank2 0 0 ABS 0 udata_bank2 -
+__Ludata_bank3 0 0 ABS 0 udata_bank3 -
+__Ludata_bank4 0 0 ABS 0 udata_bank4 -
+__Ludata_bank5 0 0 ABS 0 udata_bank5 -
+__H__absolute__ 0 0 ABS 0 __absolute__ -
+__Hudata_acs 0 0 ABS 0 udata_acs -
+__Ludata_acs 0 0 ABS 0 udata_acs -
+# %SPLITSTAB Section
+# This section enumerates all the psect splits performed by the assembler.
+# The beginning of the section is indicated by %SPLITSTAB.
+# Each line is a record a particular split, where the parent psect is on
+# the left and the child on the right.  Note that a child psect is always
+# split form the top of the parent psect. All splits from a given parent
+# are listed in the order in which they occurred.
+%SPLITSTAB
+# %DABS Section
+# This section contains a table of all usuage of the assember
+# directive DABS in the program. Each line has the following format:
+#   <name> <space> <address> <size>
+# If the DABS was originally labelled then that shall be <name>,
+# otherwise name will be "-".  The <space> number is in decimal.
+# <address> and <size> are in byte units as unqaulified hexadecimal
+%DABS
+# %SEGMENTS Section
+# This sections enumerates the segments of the program.  Each segment
+# is described on a single line as follows:
+#    <name> <space> <link address> <file address> <size> <delta>
+# Addresses and size are in unqualified hexadecimal.  The link address
+# and size are in units of delta. The file address is in units of bytes.
+# All other numeric quantities are in decimal.
+%SEGMENTS
+resetVec 0 7DB8 7DB8 4 1
+code 0 7DBC 7DBC 244 1
+# %NOTES Section
+# This section contains data of all the note-psects.  The beginning of the section
+# is indicated by %NOTES. The first line indicates the name and decimal
+# byte-length of the first note-psect, e.g.
+#   $codecov_info_hdr 16
+# Each line that follows contains the byte-data of the psect in hexadecimal as a
+# space-separated list. These lines are limited to 16 bytes of data.
+%NOTES

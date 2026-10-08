@@ -1,0 +1,79 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+; Select one input: 0x1234 -> 0x4321, 0x3C7B -> 0xB7C3,
+; 0x1200 -> 0x0021, 0x0000 -> 0x0000, 0xFFFF -> 0xFFFF.
+#ifndef TEST_INPUT
+#define TEST_INPUT 0x2e5b
+#endif
+
+; All operands are in the PIC18 access bank.
+quotientHigh EQU 0x020
+quotientLow  EQU 0x021
+remainder    EQU 0x022
+nibbleCount  EQU 0x023
+shiftCount   EQU 0x024
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+main:
+    ; Load the selected test case before starting the reversal.
+    movlw ((TEST_INPUT >> 8) & 0xFF)
+    movwf 0x000, a
+    movlw (TEST_INPUT & 0xFF)
+    movwf 0x001, a
+
+reverseStart:
+    movff 0x000, quotientHigh
+    movff 0x001, quotientLow
+    clrf 0x010, a
+    clrf 0x011, a
+    movlw 4
+    movwf nibbleCount, a
+
+reverseLoop:
+    call division
+
+    ; Append the remainder: result = (result << 4) | remainder.
+    movlw 4
+    movwf shiftCount, a
+appendShift:
+    bcf STATUS, 0, a
+    rlcf 0x011, f, a
+    rlcf 0x010, f, a
+    decfsz shiftCount, f, a
+    bra appendShift
+    movf remainder, w, a
+    iorwf 0x011, f, a
+
+    ; Process exactly four digits, even when the quotient becomes zero.
+    decfsz nibbleCount, f, a
+    bra reverseLoop
+
+done:
+    bra done
+
+; Unsigned 16-bit division by the fixed divisor 16.
+; Input: quotientHigh:quotientLow = dividend.
+; Output: quotientHigh:quotientLow = quotient; remainder = dividend % 16.
+; Clobbers WREG, STATUS and shiftCount; preserves the original input RAM.
+division:
+    movf quotientLow, w, a
+    andlw 0x0F    ; any value % 16 means get its low 4 bits
+    movwf remainder, a
+    movlw 4
+    movwf shiftCount, a
+divisionShift:
+    bcf STATUS, 0, a
+    rrcf quotientHigh, f, a ; bit 7 -> C
+    rrcf quotientLow, f, a  ; C -> bit 0, makes it continuously
+    decfsz shiftCount, f, a
+    bra divisionShift
+    return
+
+END resetVec

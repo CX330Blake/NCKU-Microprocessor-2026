@@ -1,0 +1,4 @@
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/_build/HW4/default/CMakeFiles/HW4_default_default_PIC_AS_assemble.dir
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/_build/HW4/default/CMakeFiles/HW4_default_image_0BjC8NBF.dir
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/_build/HW4/default/CMakeFiles/edit_cache.dir
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW4/_build/HW4/default/CMakeFiles/rebuild_cache.dir
