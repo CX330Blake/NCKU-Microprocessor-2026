@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>17. 兩個三元素串列的對稱差集｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">2024 期中考 · 第 17 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>17. 兩個三元素串列的對稱差集</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">（15%）兩串列各有三個互異的 unsigned byte，求對稱差集：只輸出恰好屬於其中一列的元素，結果從 [0x00] 連續存放。題目保證至少一個獨有元素。解答自行選 A=0x100..0x102、B=0x110..0x112，這不是試卷指定輸入地址；另外用 [0x20] 保存有效輸出長度，不是題目要求的終止符。輸入保持不變，輸出依 A 獨有者再 B 獨有者的原序。各題須單獨組譯，不能把九題連結在一起；EQU 僅定義固定 RAM 符號而不保留記憶體。Access 模式不能直接存取任意 bank，跨 bank 陣列須用 FSR。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>逐個掃 A 的候選值，若 B 三項都不相等才附加。再反向掃 B 對 A。</li><li>FSR0 掃候選、FSR1 掃另一串列、FSR2 指向下一個輸出。</li><li>XOR 結果為零就是相同；找到共同值立即略過，不把共同值留一份。</li><li>每列內無重複，不需額外去重；輸出長度是 6−2×共同元素數。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>輸入</td><td>A=08 09 02；B=02 03 04</td><td>每列三項互異。</td></tr><tr><td>掃 A</td><td>08、09 附加；02 命中 B 跳過</td><td>輸出 08 09，數量 2。</td></tr><tr><td>掃 B</td><td>02 命中 A；03、04 附加</td><td>輸出 08 09 03 04，數量 4。</td></tr><tr><td>最後 RAM</td><td>0x00..0x03=08 09 03 04；0x20=04</td><td>後續 RAM 非有效輸出。</td></tr><tr><td>額外邊界：A=B</td><td>數量 0，不寫輸出</td><td>超出題目至少有獨有者的保證，但實作能處理。</td></tr><tr><td>含零且不相交</td><td>A=00 01 02，B=03 04 05 → 六項</td><td>0x00 是資料，不是結束標記。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">q2b.S</a></div><h3 class="file-title" id="file-0">Midterm/2024/solutions/q2b.S</h3><table class="codewalk" data-source="Midterm/2024/solutions/q2b.S"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1</td><td class="codecell"><pre class="source-code"><span></span>#include &lt;xc.inc&gt;
+</pre></td><td class="explanation">引入 xc.inc，提供 PIC18 暫存器與 pic-as 定義。</td></tr><tr class="blank"><td class="number">2</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">3–5</td><td class="codecell"><pre class="source-code"><span></span>CONFIG WDT = OFF
+CONFIG LVP = OFF
+CONFIG XINST = OFF
+</pre></td><td class="explanation">停用看門狗、低電壓燒錄及延伸指令集；其餘組態仍依工具預設，實體板須另設定 oscillator 等項目。</td></tr><tr><td class="number">6–12</td><td class="codecell"><pre class="source-code"><span></span>
+; Interface: LIST_A at 0x100..0x102 and LIST_B at 0x110..0x112.
+; Each list contains three distinct unsigned bytes. Inputs are preserved.
+; symmetric_difference writes the result at 0x00..(RESULT_COUNT-1),
+; in A-only order followed by B-only order. RESULT_COUNT at 0x20 is 0..6.
+; Bytes beyond RESULT_COUNT are unspecified. Scratch: 0x30..0x33.
+; Clobbers: WREG, STATUS, FSR0, FSR1, FSR2, scratch.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">13–16</td><td class="codecell"><pre class="source-code"><span></span>LIST_A          EQU 0x100
+LIST_B          EQU 0x110
+RESULT          EQU 0x00
+RESULT_COUNT    EQU 0x20
+</pre></td><td class="explanation">指定自選輸入地址、輸出起點與額外數量 RAM。</td></tr><tr><td class="number">17–20</td><td class="codecell"><pre class="source-code"><span></span>ITEMS_LEFT      EQU 0x30
+SCAN_LEFT       EQU 0x31
+CANDIDATE       EQU 0x32
+OTHER_BASE_LOW  EQU 0x33
+</pre></td><td class="explanation">0x30..0x33 分別記候選剩餘數、掃描剩餘數、候選值與另一列低位址。</td></tr><tr class="blank"><td class="number">21</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">22–26</td><td class="codecell"><pre class="source-code"><span></span>GLOBAL main, done, symmetric_difference
+
+PSECT resetVec,class=CODE,reloc=2
+reset_entry:
+    goto main
+</pre></td><td class="explanation">匯出三個入口，Reset 跳 main。</td></tr><tr class="blank"><td class="number">27</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">28–32</td><td class="codecell"><pre class="source-code"><span></span>PSECT mainCode,class=CODE,reloc=2
+main:
+    lfsr 0, LIST_A
+    movlw 0x08
+    movwf POSTINC0, 0
+</pre></td><td class="explanation">建立主程式區，FSR0 指 A，寫入第一項 0x08。</td></tr><tr><td class="number">33–36</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x09
+    movwf POSTINC0, 0
+    movlw 0x02
+    movwf INDF0, 0
+</pre></td><td class="explanation">寫 A 第二項 0x09、第三項 0x02；最後不再遞增。</td></tr><tr><td class="number">37–39</td><td class="codecell"><pre class="source-code"><span></span>    lfsr 0, LIST_B
+    movlw 0x02
+    movwf POSTINC0, 0
+</pre></td><td class="explanation">定位 B=0x110，寫第一項 0x02。</td></tr><tr><td class="number">40–43</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x03
+    movwf POSTINC0, 0
+    movlw 0x04
+    movwf INDF0, 0
+</pre></td><td class="explanation">寫 B 第二項 0x03、第三項 0x04。</td></tr><tr><td class="number">44–46</td><td class="codecell"><pre class="source-code"><span></span>    call symmetric_difference
+done:
+    bra done
+</pre></td><td class="explanation">呼叫集合運算，返回後停在 done。</td></tr><tr class="blank"><td class="number">47</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">48–51</td><td class="codecell"><pre class="source-code"><span></span>symmetric_difference:
+    clrf RESULT_COUNT, 0
+    lfsr 2, RESULT
+    lfsr 0, LIST_A
+</pre></td><td class="explanation">清輸出數量，FSR2 指結果起點，FSR0 指 A 候選列。</td></tr><tr><td class="number">52–54</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x10
+    movwf OTHER_BASE_LOW, 0
+    call append_missing
+</pre></td><td class="explanation">另一列低位址設 0x10，呼叫 append_missing 掃 A 對 B。</td></tr><tr><td class="number">55–58</td><td class="codecell"><pre class="source-code"><span></span>    lfsr 0, LIST_B
+    clrf OTHER_BASE_LOW, 0
+    call append_missing
+    return
+</pre></td><td class="explanation">改候選列為 B、另一列低位址清零代表 A；再掃一次後返回。</td></tr><tr><td class="number">59–61</td><td class="codecell"><pre class="source-code"><span></span>
+; Scan the three candidates at FSR0 against the opposite three-byte list.
+; Both opposite-list base addresses have high byte 1.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">62–64</td><td class="codecell"><pre class="source-code"><span></span>append_missing:
+    movlw 3
+    movwf ITEMS_LEFT, 0
+</pre></td><td class="explanation">每次 append_missing 都重新設定三個候選待處理。</td></tr><tr><td class="number">65–67</td><td class="codecell"><pre class="source-code"><span></span>candidate_loop:
+    movf POSTINC0, 0, 0
+    movwf CANDIDATE, 0
+</pre></td><td class="explanation">讀候選到 WREG，POSTINC0 前進，並存 CANDIDATE。</td></tr><tr><td class="number">68–70</td><td class="codecell"><pre class="source-code"><span></span>    movff OTHER_BASE_LOW, FSR1L
+    movlw 1
+    movwf FSR1H, 0
+</pre></td><td class="explanation">FSR1L 取另一列低位、FSR1H=1，重設完整掃描指標。</td></tr><tr><td class="number">71–72</td><td class="codecell"><pre class="source-code"><span></span>    movlw 3
+    movwf SCAN_LEFT, 0
+</pre></td><td class="explanation">將 SCAN_LEFT 設三，每個候選都要重新掃。</td></tr><tr><td class="number">73–76</td><td class="codecell"><pre class="source-code"><span></span>membership_loop:
+    movf CANDIDATE, 0, 0
+    xorwf POSTINC1, 0, 0
+    bz candidate_present
+</pre></td><td class="explanation">候選 XOR 另一列目前值；POSTINC1 前進，Z=1 則跳過附加。</td></tr><tr><td class="number">77–80</td><td class="codecell"><pre class="source-code"><span></span>    decfsz SCAN_LEFT, 1, 0
+    bra membership_loop
+    movff CANDIDATE, POSTINC2
+    incf RESULT_COUNT, 1, 0
+</pre></td><td class="explanation">未命中則繼續掃三項；三項均不等才把候選寫 POSTINC2 並增加結果數。</td></tr><tr><td class="number">81–84</td><td class="codecell"><pre class="source-code"><span></span>candidate_present:
+    decfsz ITEMS_LEFT, 1, 0
+    bra candidate_loop
+    return
+</pre></td><td class="explanation">無論命中或附加，都減候選數；非零處理下一項，最後返回。</td></tr><tr class="blank"><td class="number">85</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">86</td><td class="codecell"><pre class="source-code"><span></span>END reset_entry
+</pre></td><td class="explanation">指定 reset_entry 並結束組譯。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>聯集會保留共同元素一份，本題完全排除共同元素。</li><li>只讀 RESULT_COUNT 個 byte，未寫區域未定義。</li><li>本實作固定每列三項，OTHER_BASE_LOW 搭配高位 1 只適用選定地址。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>兩個大小為三的集合能輸出五項嗎？</summary><p>不能，長度只能 0、2、4、6；考題保證下是 2、4、6。</p></details><details><summary>資料 0 是否要略過？</summary><p>不應略過；以計數而非零作結束。</p></details></section><nav class="pager"><a href="midterm-q2a.html">← 16. 原地反轉指定子陣列</a><a href="midterm-q2c.html">18. 相同四個 hexadecimal digits 的下一個排列 →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>18. 相同四個 hexadecimal digits 的下一個排列｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">2024 期中考 · 第 18 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>18. 相同四個 hexadecimal digits 的下一個排列</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">（5%）輸入 unsigned 16-bit [0x10]:[0x11]，重新排列它的四個十六進位數字，求嚴格大於原值且最小者，輸出 [0x00]:[0x01]，均高位在前。四位包含前導零及重複數字，輸入保持不變。額外 SUCCESS=[0x20] 是解答自訂，不是考題要求；無解時原題未定義輸出，本碼約定保留輸入且 SUCCESS=0，不循環至最小排列。各題須單獨組譯，不能把九題連結在一起；EQU 僅定義固定 RAM 符號而不保留記憶體。Access 模式不能直接存取任意 bank，跨 bank 陣列須用 FSR。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>拆出四個 nibble d[0..3]，由右尋找第一個 d[i]&lt;d[i+1] 的 pivot。</li><li>找不到 pivot 表示全串非遞增，已是最大排列。</li><li>pivot 右側後綴為非遞增；從最右找嚴格大於 pivot 的數字，就是可用的最小較大數字。交換兩者。</li><li>反轉 pivot 後綴使其非遞減，再組回兩個 byte。保留最多高位、最小幅度增加 pivot、最小化後綴，三步保證下一個排列。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>main</td><td>0x1AC3 → d=[1,A,C,3]</td><td>實際預設是此例，不是 0x1234。</td></tr><tr><td>找 pivot</td><td>C≥3 跳過，A&lt;C 成功，i=1</td><td>Carry=0 表示 A−C 借位。</td></tr><tr><td>找 successor</td><td>3≤A 跳過，C&gt;A 成功，j=2</td><td>交換得 1 C A 3。</td></tr><tr><td>反轉後綴</td><td>A 3 → 3 A</td><td>結果 0x1C3A，SUCCESS=1。</td></tr><tr><td>簡單例</td><td>0x1234 → 0x1243</td><td>pivot=2，後綴僅一個數字。</td></tr><tr><td>重複數字</td><td>0x1121 → 0x1211</td><td>必須嚴格比較，不能用相等當成功。</td></tr><tr><td>前導零</td><td>0x0010 → 0x0100</td><td>四個 nibble 都參與。</td></tr><tr><td>無解</td><td>0xCBA1 或 0x1111 → 原值，SUCCESS=0</td><td>pivot 減至 0xFF，N=1，直接返回。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">q2c.S</a></div><h3 class="file-title" id="file-0">Midterm/2024/solutions/q2c.S</h3><table class="codewalk" data-source="Midterm/2024/solutions/q2c.S"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1</td><td class="codecell"><pre class="source-code"><span></span>#include &lt;xc.inc&gt;
+</pre></td><td class="explanation">引入 xc.inc，提供 PIC18 暫存器與 pic-as 定義。</td></tr><tr class="blank"><td class="number">2</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">3–5</td><td class="codecell"><pre class="source-code"><span></span>CONFIG WDT = OFF
+CONFIG LVP = OFF
+CONFIG XINST = OFF
+</pre></td><td class="explanation">停用看門狗、低電壓燒錄及延伸指令集；其餘組態仍依工具預設，實體板須另設定 oscillator 等項目。</td></tr><tr><td class="number">6–12</td><td class="codecell"><pre class="source-code"><span></span>
+; Interface: INPUT_HI:INPUT_LO at 0x10:0x11 is an unsigned 16-bit value.
+; next_permutation preserves the input and returns OUTPUT_HI:OUTPUT_LO
+; at 0x00:0x01. SUCCESS at 0x20 is 1 if a strictly larger permutation
+; exists. Otherwise SUCCESS is 0 and the output equals the input.
+; All four nibbles participate, including leading zeros and duplicates.
+; Scratch: 0x30..0x38. Clobbers: WREG, STATUS, FSR0, FSR1, scratch.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">13–17</td><td class="codecell"><pre class="source-code"><span></span>OUTPUT_HI   EQU 0x00
+OUTPUT_LO   EQU 0x01
+INPUT_HI    EQU 0x10
+INPUT_LO    EQU 0x11
+SUCCESS     EQU 0x20
+</pre></td><td class="explanation">指定輸出高低位、輸入高低位及自訂 SUCCESS 地址。</td></tr><tr><td class="number">18–21</td><td class="codecell"><pre class="source-code"><span></span>DIGIT0      EQU 0x30
+DIGIT1      EQU 0x31
+DIGIT2      EQU 0x32
+DIGIT3      EQU 0x33
+</pre></td><td class="explanation">四個拆解後的 nibble 存在 0x30..0x33，順序從最高位到最低位。</td></tr><tr><td class="number">22–26</td><td class="codecell"><pre class="source-code"><span></span>PIVOT       EQU 0x34
+SUCCESSOR   EQU 0x35
+LEFT_INDEX  EQU 0x36
+RIGHT_INDEX EQU 0x37
+TEMP_BYTE   EQU 0x38
+</pre></td><td class="explanation">分配 pivot、successor、反轉左右索引與交換暫存 byte。</td></tr><tr class="blank"><td class="number">27</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">28–32</td><td class="codecell"><pre class="source-code"><span></span>GLOBAL main, done, next_permutation
+
+PSECT resetVec,class=CODE,reloc=2
+reset_entry:
+    goto main
+</pre></td><td class="explanation">匯出介面並建立 Reset 跳轉 main。</td></tr><tr class="blank"><td class="number">33</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">34–39</td><td class="codecell"><pre class="source-code"><span></span>PSECT mainCode,class=CODE,reloc=2
+main:
+    movlw 0x1A
+    movwf INPUT_HI, 0
+    movlw 0xC3
+    movwf INPUT_LO, 0
+</pre></td><td class="explanation">主程式設輸入高 byte 0x1A、低 byte 0xC3。</td></tr><tr><td class="number">40–42</td><td class="codecell"><pre class="source-code"><span></span>    call next_permutation
+done:
+    bra done
+</pre></td><td class="explanation">呼叫 next_permutation，返回後停在 done。</td></tr><tr class="blank"><td class="number">43</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">44–47</td><td class="codecell"><pre class="source-code"><span></span>next_permutation:
+    clrf SUCCESS, 0
+    movff INPUT_HI, OUTPUT_HI
+    movff INPUT_LO, OUTPUT_LO
+</pre></td><td class="explanation">先清 SUCCESS，預先複製原值到輸出，無解便自然保留原值。</td></tr><tr><td class="number">48–50</td><td class="codecell"><pre class="source-code"><span></span>    swapf INPUT_HI, 0, 0
+    andlw 0x0F
+    movwf DIGIT0, 0
+</pre></td><td class="explanation">高 byte SWAP 後遮罩 0x0F，取得最高 nibble 到 DIGIT0。</td></tr><tr><td class="number">51–53</td><td class="codecell"><pre class="source-code"><span></span>    movf INPUT_HI, 0, 0
+    andlw 0x0F
+    movwf DIGIT1, 0
+</pre></td><td class="explanation">高 byte 遮罩 0x0F，取得 DIGIT1。</td></tr><tr><td class="number">54–56</td><td class="codecell"><pre class="source-code"><span></span>    swapf INPUT_LO, 0, 0
+    andlw 0x0F
+    movwf DIGIT2, 0
+</pre></td><td class="explanation">低 byte SWAP 後遮罩，取得 DIGIT2。</td></tr><tr><td class="number">57–59</td><td class="codecell"><pre class="source-code"><span></span>    movf INPUT_LO, 0, 0
+    andlw 0x0F
+    movwf DIGIT3, 0
+</pre></td><td class="explanation">低 byte 遮罩，取得最低 nibble DIGIT3。</td></tr><tr><td class="number">60–61</td><td class="codecell"><pre class="source-code"><span></span>
+    ; Find the rightmost i with digit[i] &lt; digit[i+1].
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">62–63</td><td class="codecell"><pre class="source-code"><span></span>    movlw 2
+    movwf PIVOT, 0
+</pre></td><td class="explanation">PIVOT 從 2 開始，先比較最後一對相鄰數字。</td></tr><tr><td class="number">64–67</td><td class="codecell"><pre class="source-code"><span></span>find_pivot:
+    lfsr 0, DIGIT0
+    movf PIVOT, 0, 0
+    addwf FSR0L, 1, 0
+</pre></td><td class="explanation">FSR0=0x30+PIVOT，指向 d[i]。</td></tr><tr><td class="number">68–72</td><td class="codecell"><pre class="source-code"><span></span>    movf INDF0, 0, 0
+    movwf TEMP_BYTE, 0
+    movf PREINC0, 0, 0
+    subwf TEMP_BYTE, 0, 0
+    bnc pivot_found
+</pre></td><td class="explanation">暫存 d[i]，PREINC0 讀 d[i+1]，計算 d[i]−d[i+1]；借位 C=0 才找到嚴格上升點。</td></tr><tr><td class="number">73–75</td><td class="codecell"><pre class="source-code"><span></span>    decf PIVOT, 1, 0
+    bn no_larger_permutation
+    bra find_pivot
+</pre></td><td class="explanation">索引減一，變 0xFF 時 N=1 表示全無上升點而返回，否則繼續往左找。</td></tr><tr class="blank"><td class="number">76</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">77–80</td><td class="codecell"><pre class="source-code"><span></span>pivot_found:
+    lfsr 0, DIGIT0
+    movf PIVOT, 0, 0
+    addwf FSR0L, 1, 0
+</pre></td><td class="explanation">重新定位 FSR0 到 pivot；之前 PREINC0 已使它右移。</td></tr><tr><td class="number">81–82</td><td class="codecell"><pre class="source-code"><span></span>    movlw 3
+    movwf SUCCESSOR, 0
+</pre></td><td class="explanation">SUCCESSOR 從最右索引 3 開始。</td></tr><tr><td class="number">83–88</td><td class="codecell"><pre class="source-code"><span></span>find_successor:
+    ; The suffix is nonincreasing: its rightmost larger digit is the
+    ; smallest available digit strictly greater than the pivot.
+    lfsr 1, DIGIT0
+    movf SUCCESSOR, 0, 0
+    addwf FSR1L, 1, 0
+</pre></td><td class="explanation">以 FSR1=0x30+SUCCESSOR 定位候選。</td></tr><tr><td class="number">89–93</td><td class="codecell"><pre class="source-code"><span></span>    movf INDF1, 0, 0
+    subwf INDF0, 0, 0
+    bnc successor_found
+    decf SUCCESSOR, 1, 0
+    bra find_successor
+</pre></td><td class="explanation">計算 pivot−候選；借位表示候選嚴格較大，否則索引減一繼續找。</td></tr><tr><td class="number">94–97</td><td class="codecell"><pre class="source-code"><span></span>successor_found:
+    movff INDF0, TEMP_BYTE
+    movff INDF1, INDF0
+    movff TEMP_BYTE, INDF1
+</pre></td><td class="explanation">透過 TEMP_BYTE 交換 pivot 與 successor 指向的數字。</td></tr><tr><td class="number">98–102</td><td class="codecell"><pre class="source-code"><span></span>    movf PIVOT, 0, 0
+    addlw 1
+    movwf LEFT_INDEX, 0
+    movlw 3
+    movwf RIGHT_INDEX, 0
+</pre></td><td class="explanation">反轉範圍設為 LEFT_INDEX=pivot+1、RIGHT_INDEX=3。</td></tr><tr><td class="number">103–104</td><td class="codecell"><pre class="source-code"><span></span>
+    ; Reverse the suffix to obtain the smallest possible remaining value.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">105–108</td><td class="codecell"><pre class="source-code"><span></span>reverse_suffix:
+    movf RIGHT_INDEX, 0, 0
+    subwf LEFT_INDEX, 0, 0
+    bc pack_result
+</pre></td><td class="explanation">計算 left−right；無借位 C=1 表示相遇或交錯，轉打包。</td></tr><tr><td class="number">109–111</td><td class="codecell"><pre class="source-code"><span></span>    lfsr 0, DIGIT0
+    movf LEFT_INDEX, 0, 0
+    addwf FSR0L, 1, 0
+</pre></td><td class="explanation">FSR0 定位後綴左端。</td></tr><tr><td class="number">112–114</td><td class="codecell"><pre class="source-code"><span></span>    lfsr 1, DIGIT0
+    movf RIGHT_INDEX, 0, 0
+    addwf FSR1L, 1, 0
+</pre></td><td class="explanation">FSR1 定位後綴右端。</td></tr><tr><td class="number">115–117</td><td class="codecell"><pre class="source-code"><span></span>    movff INDF0, TEMP_BYTE
+    movff INDF1, INDF0
+    movff TEMP_BYTE, INDF1
+</pre></td><td class="explanation">暫存左值、右搬左、暫存搬右，交換後綴兩端。</td></tr><tr><td class="number">118–120</td><td class="codecell"><pre class="source-code"><span></span>    incf LEFT_INDEX, 1, 0
+    decf RIGHT_INDEX, 1, 0
+    bra reverse_suffix
+</pre></td><td class="explanation">左索引加一、右索引減一，回去檢查反轉是否完成。</td></tr><tr class="blank"><td class="number">121</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">122–125</td><td class="codecell"><pre class="source-code"><span></span>pack_result:
+    swapf DIGIT0, 0, 0
+    iorwf DIGIT1, 0, 0
+    movwf OUTPUT_HI, 0
+</pre></td><td class="explanation">DIGIT0 SWAP 到高 nibble，與 DIGIT1 OR，寫 OUTPUT_HI。</td></tr><tr><td class="number">126–128</td><td class="codecell"><pre class="source-code"><span></span>    swapf DIGIT2, 0, 0
+    iorwf DIGIT3, 0, 0
+    movwf OUTPUT_LO, 0
+</pre></td><td class="explanation">DIGIT2 SWAP 與 DIGIT3 OR，寫 OUTPUT_LO。</td></tr><tr><td class="number">129–132</td><td class="codecell"><pre class="source-code"><span></span>    movlw 1
+    movwf SUCCESS, 0
+no_larger_permutation:
+    return
+</pre></td><td class="explanation">有解路徑設 SUCCESS=1；無解直接到同一返回標籤，不改初始旗標。</td></tr><tr class="blank"><td class="number">133</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">134</td><td class="codecell"><pre class="source-code"><span></span>END reset_entry
+</pre></td><td class="explanation">指定 Reset 入口並結束來源。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>固定交換末兩位不能處理非遞增後綴。</li><li>排序全部數字只會得到最小排列，不保證比原值大。</li><li>SUCCESS 與無解保留原值都是本解約定，不能當成原題規格。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>為何從後綴最右找較大數字？</summary><p>後綴非遞增，所以最右的合格者是最小較大值。</p></details><details><summary>完全相同的四位有下一個排列嗎？</summary><p>沒有嚴格較大的值。</p></details></section><nav class="pager"><a href="midterm-q2b.html">← 17. 兩個三元素串列的對稱差集</a><a href="midterm-q3a.html">19. 邏輯左移、算術右移與 nibble 乘法 →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>

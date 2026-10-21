@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>9. 分數計算機：三個分數、兩個運算子、化簡｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">HW4 · 第 9 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>9. 分數計算機：三個分數、兩個運算子、化簡</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">以無號整數完成三個分數、兩個運算子的分數計算器：A/B op1 C/D op2 E/F。A、B、C、D、E、F 都是 8 位元無號數，依序位於 [0x000]–[0x005]，分母不為零；[0x006]、[0x007] 為 op1/op2，編碼 00=加、01=減、02=乘、03=除。必須以 fractionCalc 子程式做一次兩分數運算，並呼叫 GCD 子程式將每次運算結果約成最簡分數，才可繼續下一次計算。乘除優先於加減，同級由左至右。最後分子以 16 位元高／低位存到 [0x010]/[0x011]，分母高／低位存到 [0x012]/[0x013]。題目保證減法結果非負且非零，除數分數非零，所有需要的中間值與最後值都在 0–65535，且不會出現零分母。PDF 範例一為 C7/E9 + 11/05 × 03/28 = C9E3/B608；範例二為 71/1B − B4/C4 ÷ F3/31 = 0004/0001。目前 TEST_CASE=2 實際載入自訂 65/17 − 2E/0B + AB/3E，並非 PDF 範例二。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>先判斷優先序：運算碼的 bit1 在加減時為 0、乘除時為 1。只有 op1 是加減且 op2 是乘除時先算右邊；其他組合一律先算左邊，因此同級自然由左至右。</li><li>leftN/leftD 與 rightN/rightD 都擴為 16 位元。乘法計算 (a×c)/(b×d)，除法計算 (a×d)/(b×c)，加減則先算交叉分子 a×d、c×b 與共同分母 b×d，再做 16 位元加減。</li><li>Multiply16 使用三次硬體 8×8 乘法：保留 al×bl 的完整 16 位元，將 ah×bl 與 al×bh 的低位加進結果高位。ah×bh 只影響 bit16 以上；由題目保證乘積可放入 16 位元，不需要保留那些位元。</li><li>每次 fractionCalc 先用 Euclid 餘數法算 gcd(resultN,resultD)，再分別除以同一個 GCD，把最簡分數寫回 leftN/leftD。rightN/rightD 與原輸入 RAM 保留。</li><li>divide16 是固定 16 次的恢復式長除法：將被除數逐位左移送入餘數，試減除數；無借位時接受差並將本輪商位設成 1，有借位時保留原餘數、商位維持 0。</li><li>先右算時，第一次結果原本在 left，必須先搬到 right 再重新載入第一個分數作 left；否則原本的右側子算式會被覆寫。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>目前預設輸入</td><td>101/23 − 46/11 + 171/62</td><td>六個輸入位元組為 65、17、2E、0B、AB、3E，運算碼為 01、00。</td></tr><tr><td>決定順序</td><td>op1.bit1=0，op2.bit1=0 → leftFirst</td><td>兩個都是低優先序，從左到右。</td></tr><tr><td>第一次 fractionCalc</td><td>(101×11−46×23)/(23×11)=(1111−1058)/253=53/253</td><td>16 位元借位由 SUBWF/SUBWFB 串接；分子為正。</td></tr><tr><td>第一次 GCD</td><td>(53,253)→(253,53)→(53,41)→(41,12)→(12,5)→(5,2)→(2,1)→(1,0)</td><td>GCD=1，left 保持 53/253。</td></tr><tr><td>第二次 fractionCalc</td><td>(53×62+171×253)/(253×62)=46549/15686</td><td>每個原始乘積與相加結果均在 16 位元範圍。</td></tr><tr><td>最後儲存</td><td>GCD=1；分子=0xB5D5、分母=0x3D46</td><td>010=B5、011=D5、012=3D、013=46；為原始碼的數學追蹤，並非新測試紀錄。</td></tr><tr><td>PDF 範例二的優先序</td><td>180/196 ÷ 243/49 = 5/27；113/27−5/27=4/1</td><td>op1=減、op2=除，走 rightFirst；只有載入 PDF 數值才會得到 0004/0001。</td></tr><tr><td>長除法縮小示意</td><td>13÷3 的最後四個有效位，餘數：1→0→0→1</td><td>依序送入 1、1、0、1：餘數由 1 到 0（試減成功）、0、1，商位為 0、1、0、0，即商 4、餘數 1；16 位元版本前面還有十二個零位。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">hard.S</a></div><h3 class="file-title" id="file-0">HW4/hard.S</h3><table class="codewalk" data-source="HW4/hard.S"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1–2</td><td class="codecell"><pre class="source-code"><span></span>PROCESSOR 18F4520
+#include &lt;xc.inc&gt;
+</pre></td><td class="explanation">選用 PIC18F4520 並引入 xc.inc 中的 SFR 與組譯定義。</td></tr><tr><td class="number">3–4</td><td class="codecell"><pre class="source-code"><span></span>
+; PDF case 1: 0xC9E3 / 0xB608. Case 2: 0x0004 / 0x0001.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">5–7</td><td class="codecell"><pre class="source-code"><span></span>#ifndef TEST_CASE
+#define TEST_CASE 2
+#endif
+</pre></td><td class="explanation">若未由外部定義則 TEST_CASE=2；實際 case 2 已改成自訂資料，並非檔首註解的 PDF case 2。</td></tr><tr><td class="number">8–9</td><td class="codecell"><pre class="source-code"><span></span>
+; All working bytes are in access RAM. Pairs are high-byte-first.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">10–13</td><td class="codecell"><pre class="source-code"><span></span>leftNH      EQU 0x020
+leftNL      EQU 0x021
+leftDH      EQU 0x022
+leftDL      EQU 0x023
+</pre></td><td class="explanation">020:021 為左分子 leftNH:leftNL，022:023 為左分母 leftDH:leftDL；EQU 定義位址，不會配置或清 RAM。</td></tr><tr><td class="number">14–17</td><td class="codecell"><pre class="source-code"><span></span>rightNH     EQU 0x024
+rightNL     EQU 0x025
+rightDH     EQU 0x026
+rightDL     EQU 0x027
+</pre></td><td class="explanation">024:025 為右分子，026:027 為右分母，均採高位在前。</td></tr><tr><td class="number">18–22</td><td class="codecell"><pre class="source-code"><span></span>operation   EQU 0x028
+resultNH    EQU 0x029
+resultNL    EQU 0x02A
+resultDH    EQU 0x02B
+resultDL    EQU 0x02C
+</pre></td><td class="explanation">028 保存運算碼；029:02A 保存未約分分子，02B:02C 保存未約分分母。</td></tr><tr><td class="number">23–26</td><td class="codecell"><pre class="source-code"><span></span>crossH      EQU 0x02D
+crossL      EQU 0x02E
+gcdAH       EQU 0x02F
+gcdAL       EQU 0x030
+</pre></td><td class="explanation">02D:02E 保存第二交叉乘積；02F:030 為 Euclid 的 gcdA。</td></tr><tr><td class="number">27–30</td><td class="codecell"><pre class="source-code"><span></span>gcdBH       EQU 0x031
+gcdBL       EQU 0x032
+quotientH   EQU 0x033
+quotientL   EQU 0x034
+</pre></td><td class="explanation">031:032 為 gcdB；033:034 為除法被除數／商，均高位在前。</td></tr><tr><td class="number">31–34</td><td class="codecell"><pre class="source-code"><span></span>divisorH    EQU 0x035
+divisorL    EQU 0x036
+remainderH  EQU 0x037
+remainderL  EQU 0x038
+</pre></td><td class="explanation">035:036 為非零除數，037:038 為餘數；divide16 不改除數。</td></tr><tr><td class="number">35–37</td><td class="codecell"><pre class="source-code"><span></span>differenceH EQU 0x039
+differenceL EQU 0x03A
+bitCount    EQU 0x03B
+</pre></td><td class="explanation">039:03A 暫存試減差值，03B 記錄剩餘除法位數。</td></tr><tr><td class="number">38–40</td><td class="codecell"><pre class="source-code"><span></span>
+; Compute an unsigned 16-bit product. Inputs and output must not overlap.
+; The assignment guarantees the complete product fits in 16 bits.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">41</td><td class="codecell"><pre class="source-code"><span></span>Multiply16 MACRO ah, al, bh, bl, rh, rl
+</pre></td><td class="explanation">定義六參數 Multiply16 巨集：兩個來源 16 位元數與一個輸出；來源、輸出不得重疊。</td></tr><tr><td class="number">42–45</td><td class="codecell"><pre class="source-code"><span></span>    movf al, w, a
+    mulwf bl, a
+    movff PRODH, rh
+    movff PRODL, rl
+</pre></td><td class="explanation">先算 al×bl，完整複製 PRODH、PRODL 到 rh、rl，建立乘積的低 16 位基底。</td></tr><tr><td class="number">46–49</td><td class="codecell"><pre class="source-code"><span></span>    movf ah, w, a
+    mulwf bl, a
+    movf PRODL, w, a
+    addwf rh, f, a
+</pre></td><td class="explanation">算 ah×bl，只有其低位在左移 8 位後會落進 bit8–15，因此把 PRODL 加到 rh。</td></tr><tr><td class="number">50–53</td><td class="codecell"><pre class="source-code"><span></span>    movf al, w, a
+    mulwf bh, a
+    movf PRODL, w, a
+    addwf rh, f, a
+</pre></td><td class="explanation">同理算 al×bh，把交叉乘積低位累加到 rh；更高位在範圍保證下不需儲存。</td></tr><tr><td class="number">54</td><td class="codecell"><pre class="source-code"><span></span>ENDM
+</pre></td><td class="explanation">結束 Multiply16 巨集；每次呼叫都展開上述三次硬體乘法。</td></tr><tr class="blank"><td class="number">55</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">56–60</td><td class="codecell"><pre class="source-code"><span></span>LoadLeft MACRO numerator, denominator
+    clrf leftNH, a
+    movff numerator, leftNL
+    clrf leftDH, a
+    movff denominator, leftDL
+</pre></td><td class="explanation">LoadLeft 巨集將兩個 8 位元記憶體輸入零擴展為左分子與左分母：高位清零，低位複製來源。</td></tr><tr><td class="number">61</td><td class="codecell"><pre class="source-code"><span></span>ENDM
+</pre></td><td class="explanation">結束 LoadLeft 定義。</td></tr><tr class="blank"><td class="number">62</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">63–67</td><td class="codecell"><pre class="source-code"><span></span>LoadRight MACRO numerator, denominator
+    clrf rightNH, a
+    movff numerator, rightNL
+    clrf rightDH, a
+    movff denominator, rightDL
+</pre></td><td class="explanation">LoadRight 用相同零擴展方式載入右分數，不改原始輸入 RAM。</td></tr><tr><td class="number">68</td><td class="codecell"><pre class="source-code"><span></span>ENDM
+</pre></td><td class="explanation">結束 LoadRight 定義。</td></tr><tr class="blank"><td class="number">69</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">70–73</td><td class="codecell"><pre class="source-code"><span></span>PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+</pre></td><td class="explanation">建立 resetVec 程式區與入口，重設後跳至 main。</td></tr><tr class="blank"><td class="number">74</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">75–77</td><td class="codecell"><pre class="source-code"><span></span>PSECT code
+
+main:
+</pre></td><td class="explanation">切換 code 區，main 開始載入八個輸入位元組。</td></tr><tr><td class="number">78</td><td class="codecell"><pre class="source-code"><span></span>    ; Initialize the eight input bytes; calculate is the custom-input breakpoint.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">79</td><td class="codecell"><pre class="source-code"><span></span>#if TEST_CASE == 2
+</pre></td><td class="explanation">TEST_CASE=2 時編入目前的自訂輸入，而非 PDF 的第二組。</td></tr><tr><td class="number">80–83</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x65
+    movwf 0x000, a
+    movlw 0x17
+    movwf 0x001, a
+</pre></td><td class="explanation">000←65（101）、001←17（23），第一個分數為 101/23。</td></tr><tr><td class="number">84–87</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x2E
+    movwf 0x002, a
+    movlw 0x0b
+    movwf 0x003, a
+</pre></td><td class="explanation">002←2E（46）、003←0B（11），第二個分數為 46/11。</td></tr><tr><td class="number">88–91</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0xAB
+    movwf 0x004, a
+    movlw 0x3E
+    movwf 0x005, a
+</pre></td><td class="explanation">004←AB（171）、005←3E（62），第三個分數為 171/62。</td></tr><tr><td class="number">92–95</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x01
+    movwf 0x006, a
+    movlw 0x00
+    movwf 0x007, a
+</pre></td><td class="explanation">006←01 是減法，007←00 是加法；目前式子是 101/23−46/11+171/62。</td></tr><tr><td class="number">96</td><td class="codecell"><pre class="source-code"><span></span>#else
+</pre></td><td class="explanation">否則選擇下一段 PDF 範例一資料。</td></tr><tr><td class="number">97–100</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0xC7
+    movwf 0x000, a
+    movlw 0xE9
+    movwf 0x001, a
+</pre></td><td class="explanation">載入第一分數 C7/E9，即 199/233。</td></tr><tr><td class="number">101–104</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x11
+    movwf 0x002, a
+    movlw 0x05
+    movwf 0x003, a
+</pre></td><td class="explanation">載入第二分數 11/05，即 17/5。</td></tr><tr><td class="number">105–108</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x03
+    movwf 0x004, a
+    movlw 0x28
+    movwf 0x005, a
+</pre></td><td class="explanation">載入第三分數 03/28，即 3/40。</td></tr><tr><td class="number">109–112</td><td class="codecell"><pre class="source-code"><span></span>    clrf 0x006, a
+    movlw 0x02
+    movwf 0x007, a
+#endif
+</pre></td><td class="explanation">op1 清成 00（加），op2 設為 02（乘），結束條件編譯；形成先乘後加案例。</td></tr><tr class="blank"><td class="number">113</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">114</td><td class="codecell"><pre class="source-code"><span></span>calculate:
+</pre></td><td class="explanation">calculate 是輸入載入完成後的計算入口，也適合在除錯器改自訂 RAM 後開始計算。</td></tr><tr><td class="number">115–116</td><td class="codecell"><pre class="source-code"><span></span>    ; Only low-precedence op1 followed by high-precedence op2 is right-first.
+    ; Bit 1 is clear for + / - and set for * / division.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">117–118</td><td class="codecell"><pre class="source-code"><span></span>    btfsc 0x006, 1, a
+    bra leftFirst
+</pre></td><td class="explanation">若 op1.bit1=1 就執行 BRA leftFirst；若為 0，BTFSC 跳過 BRA，再檢查 op2。</td></tr><tr><td class="number">119–120</td><td class="codecell"><pre class="source-code"><span></span>    btfsc 0x007, 1, a
+    bra rightFirst
+</pre></td><td class="explanation">在 op1 為低優先序前提下，op2.bit1=1 才跳 rightFirst；op2 也是低優先序時落入 leftFirst。</td></tr><tr class="blank"><td class="number">121</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">122–126</td><td class="codecell"><pre class="source-code"><span></span>leftFirst:
+    LoadLeft 0x000, 0x001
+    LoadRight 0x002, 0x003
+    movff 0x006, operation
+    call fractionCalc
+</pre></td><td class="explanation">leftFirst 載入第一、第二分數與 op1，CALL fractionCalc 後 left 變成已約分的第一段結果。</td></tr><tr><td class="number">127–130</td><td class="codecell"><pre class="source-code"><span></span>    LoadRight 0x004, 0x005
+    movff 0x007, operation
+    call fractionCalc
+    bra storeResult
+</pre></td><td class="explanation">載入第三分數到 right，改用 op2，再計算一次並跳至統一輸出區。</td></tr><tr class="blank"><td class="number">131</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">132–136</td><td class="codecell"><pre class="source-code"><span></span>rightFirst:
+    LoadLeft 0x002, 0x003
+    LoadRight 0x004, 0x005
+    movff 0x007, operation
+    call fractionCalc
+</pre></td><td class="explanation">rightFirst 先把第二與第三分數組成 left/right，以 op2 計算右側子式。</td></tr><tr><td class="number">137</td><td class="codecell"><pre class="source-code"><span></span>    ; Keep the reduced right-hand expression in the right operand.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">138–141</td><td class="codecell"><pre class="source-code"><span></span>    movff leftNH, rightNH
+    movff leftNL, rightNL
+    movff leftDH, rightDH
+    movff leftDL, rightDL
+</pre></td><td class="explanation">將已約分的右側子式從 left 搬到 right；四個位元組都要複製。</td></tr><tr><td class="number">142–144</td><td class="codecell"><pre class="source-code"><span></span>    LoadLeft 0x000, 0x001
+    movff 0x006, operation
+    call fractionCalc
+</pre></td><td class="explanation">重新載入最初第一分數到 left，選 op1，再以它和 right 子式做最後一次運算。</td></tr><tr class="blank"><td class="number">145</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">146–150</td><td class="codecell"><pre class="source-code"><span></span>storeResult:
+    movff leftNH, 0x010
+    movff leftNL, 0x011
+    movff leftDH, 0x012
+    movff leftDL, 0x013
+</pre></td><td class="explanation">storeResult 將最簡 left 分子高低位寫 010/011，分母高低位寫 012/013。</td></tr><tr class="blank"><td class="number">151</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">152–153</td><td class="codecell"><pre class="source-code"><span></span>done:
+    bra done
+</pre></td><td class="explanation">done 自我跳轉，避免繼續落入子程式區而破壞結果。</td></tr><tr><td class="number">154–157</td><td class="codecell"><pre class="source-code"><span></span>
+; Input: leftN/leftD, rightN/rightD and operation (0:+, 1:-, 2:*, 3:/).
+; Output: reduced fraction in leftN/leftD. Right operand and input RAM survive.
+; Clobbers WREG, STATUS, PRODH/PRODL and scratch 0x029 through 0x03B.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">158–162</td><td class="codecell"><pre class="source-code"><span></span>fractionCalc:
+    movlw 2
+    cpfseq operation, a
+    bra checkDivision
+    bra multiplyFractions
+</pre></td><td class="explanation">fractionCalc 先比較 operation 是否為 2：CPFSEQ 相等會略過下一個 BRA，因此直跳 multiplyFractions；否則進 checkDivision。</td></tr><tr><td class="number">163–166</td><td class="codecell"><pre class="source-code"><span></span>checkDivision:
+    movlw 3
+    cpfseq operation, a
+    bra addOrSubtract
+</pre></td><td class="explanation">比較 operation 是否為 3；相等時略過 BRA，落入 divideFractions；其餘轉入加減處理。</td></tr><tr class="blank"><td class="number">167</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">168–171</td><td class="codecell"><pre class="source-code"><span></span>divideFractions:
+    Multiply16 leftNH, leftNL, rightDH, rightDL, resultNH, resultNL
+    Multiply16 leftDH, leftDL, rightNH, rightNL, resultDH, resultDL
+    bra reduceFraction
+</pre></td><td class="explanation">除分數等同乘倒數：resultN=leftN×rightD，resultD=leftD×rightN，然後統一約分。</td></tr><tr class="blank"><td class="number">172</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">173–176</td><td class="codecell"><pre class="source-code"><span></span>multiplyFractions:
+    Multiply16 leftNH, leftNL, rightNH, rightNL, resultNH, resultNL
+    Multiply16 leftDH, leftDL, rightDH, rightDL, resultDH, resultDL
+    bra reduceFraction
+</pre></td><td class="explanation">乘分數分別乘分子與分母，將結果交給 reduceFraction。</td></tr><tr class="blank"><td class="number">177</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">178–181</td><td class="codecell"><pre class="source-code"><span></span>addOrSubtract:
+    Multiply16 leftNH, leftNL, rightDH, rightDL, resultNH, resultNL
+    Multiply16 rightNH, rightNL, leftDH, leftDL, crossH, crossL
+    Multiply16 leftDH, leftDL, rightDH, rightDL, resultDH, resultDL
+</pre></td><td class="explanation">加減先算 resultN=leftN×rightD、cross=rightN×leftD、resultD=leftD×rightD。</td></tr><tr><td class="number">182–183</td><td class="codecell"><pre class="source-code"><span></span>    btfsc operation, 0, a
+    bra subtractFractions
+</pre></td><td class="explanation">加減編碼的 bit0 為 1 時是減法；為 0 時跳過 BRA，執行下方加法。</td></tr><tr><td class="number">184–188</td><td class="codecell"><pre class="source-code"><span></span>    movf crossL, w, a
+    addwf resultNL, f, a
+    movf crossH, w, a
+    addwfc resultNH, f, a
+    bra reduceFraction
+</pre></td><td class="explanation">先加分子低位，再用 ADDWFC 把低位進位帶入高位；MOVF 保留 C，最後跳到約分。</td></tr><tr><td class="number">189–193</td><td class="codecell"><pre class="source-code"><span></span>subtractFractions:
+    movf crossL, w, a
+    subwf resultNL, f, a
+    movf crossH, w, a
+    subwfb resultNH, f, a
+</pre></td><td class="explanation">subtractFractions 以 resultN−cross 求分子；SUBWF 產生無借位旗標，SUBWFB 將借位傳到高位。</td></tr><tr class="blank"><td class="number">194</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">195–199</td><td class="codecell"><pre class="source-code"><span></span>reduceFraction:
+    movff resultNH, gcdAH
+    movff resultNL, gcdAL
+    movff resultDH, gcdBH
+    movff resultDL, gcdBL
+</pre></td><td class="explanation">reduceFraction 複製原始分子與分母到 gcdA、gcdB；保留 resultN/resultD 供之後精確除法。</td></tr><tr><td class="number">200</td><td class="codecell"><pre class="source-code"><span></span>    call GCD
+</pre></td><td class="explanation">CALL GCD，返回時 gcdA 是兩者最大公因數，gcdB 為零。</td></tr><tr><td class="number">201–202</td><td class="codecell"><pre class="source-code"><span></span>
+    ; Divide both raw results by the same GCD.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">203–207</td><td class="codecell"><pre class="source-code"><span></span>    movff gcdAH, divisorH
+    movff gcdAL, divisorL
+    movff resultNH, quotientH
+    movff resultNL, quotientL
+    call divide16
+</pre></td><td class="explanation">將 GCD 複製到 divisor，原分子複製到 quotient，divide16 求約分後分子。</td></tr><tr><td class="number">208–209</td><td class="codecell"><pre class="source-code"><span></span>    movff quotientH, leftNH
+    movff quotientL, leftNL
+</pre></td><td class="explanation">將除法商寫回 leftNH:leftNL；此後 left 分子就是下一次運算要用的最簡值。</td></tr><tr><td class="number">210–212</td><td class="codecell"><pre class="source-code"><span></span>    movff resultDH, quotientH
+    movff resultDL, quotientL
+    call divide16
+</pre></td><td class="explanation">原分母換入 quotient；不需重載 divisor，因 divide16 保留同一個 GCD。</td></tr><tr><td class="number">213–215</td><td class="codecell"><pre class="source-code"><span></span>    movff quotientH, leftDH
+    movff quotientL, leftDL
+    return
+</pre></td><td class="explanation">將約分後分母商寫回 leftDH:leftDL，RETURN 回呼叫端。</td></tr><tr><td class="number">216–219</td><td class="codecell"><pre class="source-code"><span></span>
+; Euclid's algorithm: (A, B) = (B, A % B) until B is zero.
+; Input: gcdA, gcdB. Output: gcdA = GCD; gcdB = 0.
+; Handles a zero numerator: GCD(0, denominator) = denominator.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">220–224</td><td class="codecell"><pre class="source-code"><span></span>GCD:
+gcdLoop:
+    movf gcdBH, w, a
+    iorwf gcdBL, w, a
+    bz gcdDone
+</pre></td><td class="explanation">GCD/gcdLoop 將 gcdBH OR gcdBL，只在兩個位元組都為零時 BZ gcdDone；高低位都需檢查。</td></tr><tr><td class="number">225–229</td><td class="codecell"><pre class="source-code"><span></span>    movff gcdAH, quotientH
+    movff gcdAL, quotientL
+    movff gcdBH, divisorH
+    movff gcdBL, divisorL
+    call divide16
+</pre></td><td class="explanation">以 gcdA 作被除數、gcdB 作除數，CALL divide16 取得 gcdA%gcdB。</td></tr><tr><td class="number">230–234</td><td class="codecell"><pre class="source-code"><span></span>    movff gcdBH, gcdAH
+    movff gcdBL, gcdAL
+    movff remainderH, gcdBH
+    movff remainderL, gcdBL
+    bra gcdLoop
+</pre></td><td class="explanation">更新 gcdA←舊 gcdB，gcdB←餘數，再迴圈；每次非零餘數比除數小，Euclid 因而收斂。</td></tr><tr><td class="number">235–236</td><td class="codecell"><pre class="source-code"><span></span>gcdDone:
+    return
+</pre></td><td class="explanation">gcdDone 返回；最大公因數留在 gcdA，不是 WREG。</td></tr><tr><td class="number">237–241</td><td class="codecell"><pre class="source-code"><span></span>
+; Unsigned restoring division, exactly 16 bit steps.
+; Input: quotient = dividend, divisor != 0.
+; Output: quotient and remainder; divisor is preserved.
+; Clobbers WREG, STATUS, difference and bitCount.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">242–246</td><td class="codecell"><pre class="source-code"><span></span>divide16:
+    clrf remainderH, a
+    clrf remainderL, a
+    movlw 16
+    movwf bitCount, a
+</pre></td><td class="explanation">divide16 先清兩位元組餘數，bitCount←16；quotient 入口值就是原被除數。</td></tr><tr><td class="number">247–250</td><td class="codecell"><pre class="source-code"><span></span>divideLoop:
+    bcf STATUS, 0, a
+    rlcf quotientL, f, a
+    rlcf quotientH, f, a
+</pre></td><td class="explanation">divideLoop 每輪清 C，再把 quotientL、quotientH 串接左移；舊 bit15 留在 C，商 bit0 先補零。</td></tr><tr><td class="number">251–252</td><td class="codecell"><pre class="source-code"><span></span>    rlcf remainderL, f, a
+    rlcf remainderH, f, a
+</pre></td><td class="explanation">再左移 remainderL、remainderH，把剛才的被除數最高位經 C 送入餘數低位。</td></tr><tr class="blank"><td class="number">253</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">254–256</td><td class="codecell"><pre class="source-code"><span></span>    movf divisorL, w, a
+    subwf remainderL, w, a
+    movwf differenceL, a
+</pre></td><td class="explanation">以 remainderL−divisorL 試減，差值低位暫存到 differenceL，C 保存低位是否借位。</td></tr><tr><td class="number">257–260</td><td class="codecell"><pre class="source-code"><span></span>    movf divisorH, w, a
+    subwfb remainderH, w, a
+    movwf differenceH, a
+    bnc nextDivisionBit
+</pre></td><td class="explanation">高位以 SUBWFB 接續借位，暫存 differenceH；最終 C=0 表示整個餘數不足，跳過接受差值。</td></tr><tr><td class="number">261–264</td><td class="codecell"><pre class="source-code"><span></span>    movff differenceH, remainderH
+    movff differenceL, remainderL
+    bsf quotientL, 0, a
+nextDivisionBit:
+</pre></td><td class="explanation">試減成功才把 difference 寫回 remainder 並設 quotientL.bit0=1；nextDivisionBit 是成功與失敗的共同出口。</td></tr><tr><td class="number">265–268</td><td class="codecell"><pre class="source-code"><span></span>    decfsz bitCount, f, a
+    bra divideLoop
+    return
+END resetVec
+</pre></td><td class="explanation">bitCount 減至零才 RETURN，否則繼續處理下一位；END resetVec 結束原始碼。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>檔首註解仍把 case 2 寫成 4/1，但實際預設資料已改；不可把 4/1 當成目前程式的輸出。</li><li>operation 是 0–3 的數值編碼，不是 ASCII 的 +、-、*、/；bit1 的優先序判斷只在這個編碼約定下成立。</li><li>PIC18 減法 C=1 表示「沒有借位」；BNC 因而是餘數不足、不能採用試減結果的分支。</li><li>Multiply16 的來源與目的不可重疊。它只保留低 16 位，並不檢查溢位；正確性依賴題目對完整中間乘積的範圍保證。</li><li>約分只能在得到本次分子與分母後進行；不能把前一次未約分的巨大值直接帶入下一次，並指望最後才約分。</li><li>此計算器沒有負數、非法運算碼與零除錯誤處理；題目約束排除了這些情形，不應把它解讀成通用分數函式庫。</li><li>工作暫存器全在固定 access RAM 020–03B；子程式會改寫共享暫存與 STATUS，不可不加保存地並行或由中斷重入。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>為何 A/B ÷ C/D × E/F 要走 leftFirst？</summary><p>乘除同級，題目要求從左到右；不能任意把除法右側重新結合。</p></details><details><summary>為什麼 divide16 要用 difference 暫存，而不是立刻改寫 remainder？</summary><p>試減可能借位；先保留差，只在 C=1 時提交，可在失敗時直接保留原餘數。</p></details><details><summary>GCD(0,d) 在這段 Euclid 實作中如何處理？</summary><p>只要 d 非零，先做 0÷d 得餘數 0，再更新成 (d,0)，因此回傳 d；可以把零分子約成 0/1，雖題目減法案例排除零結果。</p></details><details><summary>最終 RAM 和工作區的高低位規則一致嗎？</summary><p>一致：HW4 的工作配對與 010–013 都是先高位後低位；這與 HW5 的 XC8 unsigned int 參數槽 little-endian 不同。</p></details></section><nav class="pager"><a href="hw4-advance.html">← 8. 以 division 副程式反轉 16-bit 的四個 nibble</a><a href="hw5-gcd.html">10. C 呼叫組語 gcd(unsigned char a, unsigned char b) →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>

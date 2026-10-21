@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>13. 16-bit ÷ 8-bit 的二進位長除法｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">2024 期中考 · 第 13 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>13. 16-bit ÷ 8-bit 的二進位長除法</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">（15%）以 unsigned 16-bit 被除數 [0x30]:[0x31] 除以非零 8-bit [0x32]；商高、低位元組輸出至 [0x20]:[0x21]，餘數至 [0x22]。工作輸入會被覆寫；除以零不在題目定義內。各題須單獨組譯，不能把九題連結在一起；EQU 僅定義固定 RAM 符號而不保留記憶體。Access 模式不能直接存取任意 bank，跨 bank 陣列須用 FSR。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>使用二進位長除法，從最高位依序引入被除數的 16 個 bit。</li><li>qhi:qlo 左移時，原最高位經 Carry 接到餘數；低位騰出的 bit0 用來建立商。</li><li>餘數左移的中間值可能是 9-bit；若移出的 Carry 為 1，必須直接減除數，不能只看低八位。</li><li>無第九位時，以 rem8−divisor 的 Carry 判斷無借位；足夠才扣除並置商 bit0。固定做 16 輪。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>輸入</td><td>0x0406 / 0x03</td><td>1030 除以 3。</td></tr><tr><td>第六輪</td><td>餘數 1、商工作區 0x0180</td><td>前五輪引入零，第六輪引入首個 1，尚不足 3。</td></tr><tr><td>第七輪</td><td>餘數 2、工作區 0x0300</td><td>接入下一個 0，餘數由 1 變 2，仍不足 3。</td></tr><tr><td>第八輪</td><td>餘數 1、工作區 0x0601</td><td>中間餘數 4，減 3，商最低位設 1。</td></tr><tr><td>輸出</td><td>0x0157，餘數 0x01</td><td>3×343+1=1030。</td></tr><tr><td>邊界：0 / 7</td><td>商 0、餘數 0</td><td>仍完整執行 16 輪。</td></tr><tr><td>九位元邊界：0x01FD / 0xFF</td><td>商 1、餘數 0xFE</td><td>最後接位得到 509；低八位 253 小於 255，但第九位為 1，因此必須減。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">q1a.S</a></div><h3 class="file-title" id="file-0">Midterm/2024/solutions/q1a.S</h3><table class="codewalk" data-source="Midterm/2024/solutions/q1a.S"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1</td><td class="codecell"><pre class="source-code"><span></span>#include &lt;xc.inc&gt;
+</pre></td><td class="explanation">引入 xc.inc，提供 PIC18 暫存器與 pic-as 定義。</td></tr><tr><td class="number">2–4</td><td class="codecell"><pre class="source-code"><span></span>CONFIG WDT = OFF
+CONFIG LVP = OFF
+CONFIG XINST = OFF
+</pre></td><td class="explanation">停用看門狗、低電壓燒錄及延伸指令集；其餘組態仍依工具預設，實體板須另設定 oscillator 等項目。</td></tr><tr class="blank"><td class="number">5</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">6–10</td><td class="codecell"><pre class="source-code"><span></span>qhi EQU 0x30
+qlo EQU 0x31
+divisor EQU 0x32
+rem8 EQU 0x33
+bits EQU 0x34
+</pre></td><td class="explanation">將 0x30..0x34 命名為商／被除數高低位、除數、餘數及輪數；均在 Access RAM。</td></tr><tr class="blank"><td class="number">11</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">12–16</td><td class="codecell"><pre class="source-code"><span></span>PSECT resetVec,class=CODE,reloc=2
+resetVec:
+    goto main
+PSECT code,class=CODE,reloc=2
+GLOBAL main, done, Divide
+</pre></td><td class="explanation">建立 Reset 區段及入口，GOTO main；另開程式區並匯出 main、done、Divide。</td></tr><tr><td class="number">17–19</td><td class="codecell"><pre class="source-code"><span></span>main:
+    movlw 0x04
+    movwf qhi,0
+</pre></td><td class="explanation">main 將高 byte 0x04 寫入 qhi。</td></tr><tr><td class="number">20–23</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x06
+    movwf qlo,0
+    movlw 0x03
+    movwf divisor,0
+</pre></td><td class="explanation">將低 byte 0x06 與除數 0x03 寫入 qlo、divisor。</td></tr><tr><td class="number">24–26</td><td class="codecell"><pre class="source-code"><span></span>    call Divide
+done:
+    bra done
+</pre></td><td class="explanation">呼叫 Divide，返回後停在 done 自我分支，供檢查輸出。</td></tr><tr><td class="number">27–30</td><td class="codecell"><pre class="source-code"><span></span>
+; Input: qhi:qlo / divisor (nonzero).
+; Output: [0x20]:[0x21] quotient, [0x22] remainder.
+; Clobbers: inputs, rem8, bits, WREG, STATUS.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">31–34</td><td class="codecell"><pre class="source-code"><span></span>Divide:
+    clrf rem8,0
+    movlw 16
+    movwf bits,0
+</pre></td><td class="explanation">Divide 清餘數並將 bits 設為十進位 16。</td></tr><tr><td class="number">35–39</td><td class="codecell"><pre class="source-code"><span></span>DivideLoop:
+    bcf STATUS,0,0
+    rlcf qlo,1,0
+    rlcf qhi,1,0
+    rlcf rem8,1,0
+</pre></td><td class="explanation">每輪先清 C，低位再高位左移，最後把被除數舊 bit15 接入 rem8；此時 C 保存餘數第九位。</td></tr><tr><td class="number">40–43</td><td class="codecell"><pre class="source-code"><span></span>    bc DivideSubtract
+    movf divisor,0,0
+    subwf rem8,0,0
+    bnc DivideNext
+</pre></td><td class="explanation">第九位為 1 直接扣除；否則以 rem8−divisor 寫 WREG 做比較，若借位 C=0，跳過扣除。</td></tr><tr><td class="number">44–47</td><td class="codecell"><pre class="source-code"><span></span>DivideSubtract:
+    movf divisor,0,0
+    subwf rem8,1,0
+    bsf qlo,0,0
+</pre></td><td class="explanation">將除數真正從 rem8 扣除，低八位模 256 結果即正確新餘數，再設 qlo bit0 表示本輪商 1。</td></tr><tr><td class="number">48–50</td><td class="codecell"><pre class="source-code"><span></span>DivideNext:
+    decfsz bits,1,0
+    bra DivideLoop
+</pre></td><td class="explanation">bits 減一，非零繼續；歸零時 DECFSZ 跳過分支。</td></tr><tr><td class="number">51–54</td><td class="codecell"><pre class="source-code"><span></span>    movff qhi,0x20
+    movff qlo,0x21
+    movff rem8,0x22
+    return
+</pre></td><td class="explanation">複製工作商與餘數到 0x20..0x22，RETURN 返回呼叫者。</td></tr><tr><td class="number">55</td><td class="codecell"><pre class="source-code"><span></span>END resetVec
+</pre></td><td class="explanation">結束組譯並指定 Reset 入口；不是執行時停機指令。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>RLCF 是經 Carry 旋轉，起始不清 Carry 會把雜訊接進商。</li><li>SUBWF 計算 file−WREG；C=1 是沒有借位。</li><li>不要假設原被除數還留在 0x30:0x31；它已改成商。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>為何不能只用八位比較中間餘數？</summary><p>它可能大於 255，例如 509 的低 byte 是 253。</p></details><details><summary>16-bit 左移先動哪一端？</summary><p>先低 byte 再高 byte，以 Carry 串接。</p></details></section><nav class="pager"><a href="hw5-evaluate.html">← 12. 組語 evaluate：四個 16-bit 數的算術式</a><a href="midterm-q1b.html">14. Fact 巨集計算 C(n,k)，n≤8 →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>
