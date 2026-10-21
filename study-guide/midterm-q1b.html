@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>14. Fact 巨集計算 C(n,k)，n≤8｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">2024 期中考 · 第 14 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>14. Fact 巨集計算 C(n,k)，n≤8</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">（15%）用 Fact 巨集計算 C(n,k)，常數參數須滿足 0≤k≤n≤8，結果存 [0x00]。範例呼叫 Fact 5,3。工作 Pascal 列位於 0x40..0x48；巨集不是副程式。各題須單獨組譯，不能把九題連結在一起；EQU 僅定義固定 RAM 符號而不保留記憶體。Access 模式不能直接存取任意 bank，跨 bank 陣列須用 FSR。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>避免先計算 n!：8! 超過一個 byte，但最大答案 C(8,4)=70。</li><li>初始化 a[0]=1，其餘為 0；逐列套用 a[j]+=a[j−1]。</li><li>每列必須從 j=row 倒序到 1，才能讀到上一列的左鄰值。</li><li>做滿 n 列後直接讀 a[k]；LOCAL 使多次巨集展開的標籤互不衝突。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>初始列</td><td>1 0 0 0 0 0 0 0 0</td><td>a[0] 是邊界 1。</td></tr><tr><td>列 1、2</td><td>1 1；1 2 1</td><td>每列自右向左更新。</td></tr><tr><td>列 3、4</td><td>1 3 3 1；1 4 6 4 1</td><td>未更新的位置保留前列值。</td></tr><tr><td>列 5</td><td>1 5 10 10 5 1</td><td>a[3]=10=0x0A，寫入 0x00。</td></tr><tr><td>邊界 n=k=0</td><td>0x01</td><td>直接讀初始化的 a[0]，不執行列更新。</td></tr><tr><td>最大係數 n=8,k=4</td><td>70=0x46</td><td>全部合法結果可用八位加法。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">q1b.S</a></div><h3 class="file-title" id="file-0">Midterm/2024/solutions/q1b.S</h3><table class="codewalk" data-source="Midterm/2024/solutions/q1b.S"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1</td><td class="codecell"><pre class="source-code"><span></span>#include &lt;xc.inc&gt;
+</pre></td><td class="explanation">引入 xc.inc，提供 PIC18 暫存器與 pic-as 定義。</td></tr><tr><td class="number">2–4</td><td class="codecell"><pre class="source-code"><span></span>CONFIG WDT = OFF
+CONFIG LVP = OFF
+CONFIG XINST = OFF
+</pre></td><td class="explanation">停用看門狗、低電壓燒錄及延伸指令集；其餘組態仍依工具預設，實體板須另設定 oscillator 等項目。</td></tr><tr class="blank"><td class="number">5</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">6–10</td><td class="codecell"><pre class="source-code"><span></span>row EQU 0x30
+col EQU 0x31
+nval EQU 0x32
+kval EQU 0x33
+left EQU 0x34
+</pre></td><td class="explanation">指定 row、col、nval、kval、left 工作 RAM 0x30..0x34。</td></tr><tr><td class="number">11–14</td><td class="codecell"><pre class="source-code"><span></span>
+; Literal arguments: 0 &lt;= kk &lt;= nn &lt;= 8.
+; Pascal row occupies 0x40..0x48. Output: [0x00].
+; Clobbers: scratch RAM, WREG, STATUS, FSR0, FSR1.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">15–16</td><td class="codecell"><pre class="source-code"><span></span>Fact MACRO nn,kk
+    LOCAL clearRow,nextRow,nextCol,updateCol,finished
+</pre></td><td class="explanation">定義 Fact nn,kk 巨集與每次展開獨立的五個標籤。</td></tr><tr><td class="number">17–20</td><td class="codecell"><pre class="source-code"><span></span>    movlw nn
+    movwf nval,0
+    movlw kk
+    movwf kval,0
+</pre></td><td class="explanation">把常數 n、k 載入 nval、kval，供展開後程式執行。</td></tr><tr><td class="number">21–23</td><td class="codecell"><pre class="source-code"><span></span>    lfsr 0,0x40
+    movlw 9
+    movwf left,0
+</pre></td><td class="explanation">FSR0 指向 0x40，left=9，準備清九個係數。</td></tr><tr><td class="number">24–27</td><td class="codecell"><pre class="source-code"><span></span>clearRow:
+    clrf POSTINC0,0
+    decfsz left,1,0
+    bra clearRow
+</pre></td><td class="explanation">以 POSTINC0 清零後遞增指標，DECFSZ 計數九次。</td></tr><tr><td class="number">28–30</td><td class="codecell"><pre class="source-code"><span></span>    movlw 1
+    movwf 0x40,0
+    clrf row,0
+</pre></td><td class="explanation">設定 a[0]=1、row=0，建立第零列。</td></tr><tr><td class="number">31–35</td><td class="codecell"><pre class="source-code"><span></span>nextRow:
+    movf nval,0,0
+    cpfseq row,0
+    bra nextCol
+    bra finished
+</pre></td><td class="explanation">WREG 讀 n；CPFSEQ 若 row=n 跳過 nextCol 分支，改走 finished，否則開始下一列。</td></tr><tr><td class="number">36–38</td><td class="codecell"><pre class="source-code"><span></span>nextCol:
+    incf row,1,0
+    movff row,col
+</pre></td><td class="explanation">row 增一並複製到 col，先更新最右係數。</td></tr><tr><td class="number">39–41</td><td class="codecell"><pre class="source-code"><span></span>    lfsr 0,0x40
+    movf col,0,0
+    addwf FSR0L,1,0
+</pre></td><td class="explanation">FSR0=0x40+col，指向 a[col]。</td></tr><tr><td class="number">42–44</td><td class="codecell"><pre class="source-code"><span></span>    movff FSR0L,FSR1L
+    clrf FSR1H,0
+    decf FSR1L,1,0
+</pre></td><td class="explanation">FSR1 高位清零、低位取 FSR0L−1，指向 a[col−1]。</td></tr><tr><td class="number">45–47</td><td class="codecell"><pre class="source-code"><span></span>updateCol:
+    movf INDF1,0,0
+    addwf INDF0,1,0
+</pre></td><td class="explanation">將左鄰舊值讀至 WREG，加進目前係數並寫回 INDF0。</td></tr><tr><td class="number">48–52</td><td class="codecell"><pre class="source-code"><span></span>    decf FSR0L,1,0
+    decf FSR1L,1,0
+    decfsz col,1,0
+    bra updateCol
+    bra nextRow
+</pre></td><td class="explanation">兩指標向左移一格；col 非零再更新，完成後轉下一列。</td></tr><tr><td class="number">53–57</td><td class="codecell"><pre class="source-code"><span></span>finished:
+    lfsr 0,0x40
+    movf kval,0,0
+    addwf FSR0L,1,0
+    movff INDF0,0x00
+</pre></td><td class="explanation">以 0x40+k 定位結果，複製到 0x00。</td></tr><tr><td class="number">58</td><td class="codecell"><pre class="source-code"><span></span>ENDM
+</pre></td><td class="explanation">ENDM 結束巨集定義，並非執行時 RETURN。</td></tr><tr class="blank"><td class="number">59</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">60–64</td><td class="codecell"><pre class="source-code"><span></span>PSECT resetVec,class=CODE,reloc=2
+resetVec:
+    goto main
+PSECT code,class=CODE,reloc=2
+GLOBAL main, done
+</pre></td><td class="explanation">建立 Reset 跳轉及程式區，匯出 main、done。</td></tr><tr><td class="number">65–68</td><td class="codecell"><pre class="source-code"><span></span>main:
+    Fact 5,3
+done:
+    bra done
+</pre></td><td class="explanation">在 main 展開 Fact 5,3 的實體指令，算完停在 done。</td></tr><tr><td class="number">69</td><td class="codecell"><pre class="source-code"><span></span>END resetVec
+</pre></td><td class="explanation">指定 Reset 入口並結束來源。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>nn、kk 是組譯期常數，不是 RAM 位址或執行時參數。</li><li>由左往右更新會讀到本列的新值，算錯組合數。</li><li>無輸入檢查，超出 0≤k≤n≤8 可能越界。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>為何不先算 8!？</summary><p>中間階乘 40320 超過八位，但答案最大僅 70。</p></details><details><summary>LOCAL 有什麼作用？</summary><p>讓每次巨集展開的內部標籤獨立。</p></details></section><nav class="pager"><a href="midterm-q1a.html">← 13. 16-bit ÷ 8-bit 的二進位長除法</a><a href="midterm-q1c.html">15. Fact 副程式計算 C(n,k)，n≤15 →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>

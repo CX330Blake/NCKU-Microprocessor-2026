@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>8. 以 division 副程式反轉 16-bit 的四個 nibble｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">HW4 · 第 8 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>8. 以 division 副程式反轉 16-bit 的四個 nibble</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">從 [0x000] 高位元組與 [0x001] 低位元組讀取一個 16 位元無號整數，將四個十六進位數字（nibble）順序反轉，結果高位寫 [0x010]、低位寫 [0x011]。必須實作並明確呼叫名稱為 division 的 16 位元無號除法子程式，用反覆除以 16 的商與餘數取出各位，包含值為 0 的 nibble。PDF 範例為 1234→4321、3C7B→B7C3，另如 1200 必須得到 0021。此來源把除數固定為 16；目前 TEST_INPUT 預設自訂 0x2E5B，並不是 PDF 的任一範例。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>以 quotientHigh:quotientLow 保存尚未抽取的部分，以 010:011 累積反轉結果，nibbleCount 固定為 4。</li><li>對無號數而言，除以 16 的餘數正是原值低四位；商則是原值邏輯右移四位。因此 division 可先 AND 0x0F 保存餘數，再用四次跨位元組右移得到商。</li><li>每抽出一個餘數，將目前結果左移四位，再 OR 到低位，等同 result=result×16+remainder。低四位已清空，所以 OR 和加法在此等價。</li><li>不能用商是否為零決定停止：1200 第一次抽出 0，第二次仍需抽出 0；即使商提早為零也須補滿四個 nibble。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>初始</td><td>quotient=2E5B，result=0000，count=4</td><td>保留原輸入 000:001，不直接改寫它。</td></tr><tr><td>第 1 輪</td><td>商=02E5，餘數=B，result=000B</td><td>2E5B÷16；先左移結果，再附加 B。</td></tr><tr><td>第 2 輪</td><td>商=002E，餘數=5，result=00B5</td><td>低四位 5 成為下一位。</td></tr><tr><td>第 3 輪</td><td>商=0002，餘數=E，result=0B5E</td><td>四次左移把 B5 騰出一個 nibble。</td></tr><tr><td>第 4 輪</td><td>商=0000，餘數=2，result=B5E2</td><td>[010]=B5、[011]=E2，count 歸零。</td></tr><tr><td>零位範例</td><td>1200 的餘數序列為 0、0、2、1</td><td>結果依序 0000、0000、0002、0021；不能省略零位。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">advanced.S.bak</a></div><h3 class="file-title" id="file-0">HW4/advanced.S.bak</h3><table class="codewalk" data-source="HW4/advanced.S.bak"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1–2</td><td class="codecell"><pre class="source-code"><span></span>PROCESSOR 18F4520
+#include &lt;xc.inc&gt;
+</pre></td><td class="explanation">指定 PIC18F4520 並匯入 STATUS 等 xc.inc 定義。</td></tr><tr><td class="number">3–5</td><td class="codecell"><pre class="source-code"><span></span>
+; Select one input: 0x1234 -&gt; 0x4321, 0x3C7B -&gt; 0xB7C3,
+; 0x1200 -&gt; 0x0021, 0x0000 -&gt; 0x0000, 0xFFFF -&gt; 0xFFFF.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">6–8</td><td class="codecell"><pre class="source-code"><span></span>#ifndef TEST_INPUT
+#define TEST_INPUT 0x2e5b
+#endif
+</pre></td><td class="explanation">未外部覆寫 TEST_INPUT 時使用自訂 0x2E5B；預處理常數在組譯前決定。</td></tr><tr><td class="number">9–10</td><td class="codecell"><pre class="source-code"><span></span>
+; All operands are in the PIC18 access bank.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">11–12</td><td class="codecell"><pre class="source-code"><span></span>quotientHigh EQU 0x020
+quotientLow  EQU 0x021
+</pre></td><td class="explanation">quotientHigh=020、quotientLow=021，組成高位在前的 16 位元商／被除數工作區。</td></tr><tr><td class="number">13–15</td><td class="codecell"><pre class="source-code"><span></span>remainder    EQU 0x022
+nibbleCount  EQU 0x023
+shiftCount   EQU 0x024
+</pre></td><td class="explanation">022 保存 0–15 餘數，023 計四個 nibble，024 計每次四個單位位移；三者各為一位元組位址常數。</td></tr><tr class="blank"><td class="number">16</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">17–20</td><td class="codecell"><pre class="source-code"><span></span>PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+</pre></td><td class="explanation">定義重設區與 resetVec，GOTO main 進入初始化。</td></tr><tr class="blank"><td class="number">21</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">22–24</td><td class="codecell"><pre class="source-code"><span></span>PSECT code
+
+main:
+</pre></td><td class="explanation">選擇 code 區並宣告 main 入口。</td></tr><tr><td class="number">25</td><td class="codecell"><pre class="source-code"><span></span>    ; Load the selected test case before starting the reversal.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">26–29</td><td class="codecell"><pre class="source-code"><span></span>    movlw ((TEST_INPUT &gt;&gt; 8) &amp; 0xFF)
+    movwf 0x000, a
+    movlw (TEST_INPUT &amp; 0xFF)
+    movwf 0x001, a
+</pre></td><td class="explanation">以移位與遮罩分離 TEST_INPUT 的高、低位，分別寫入 000、001。</td></tr><tr class="blank"><td class="number">30</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">31–33</td><td class="codecell"><pre class="source-code"><span></span>reverseStart:
+    movff 0x000, quotientHigh
+    movff 0x001, quotientLow
+</pre></td><td class="explanation">reverseStart 複製輸入到 020:021，之後除法只改副本。</td></tr><tr><td class="number">34–37</td><td class="codecell"><pre class="source-code"><span></span>    clrf 0x010, a
+    clrf 0x011, a
+    movlw 4
+    movwf nibbleCount, a
+</pre></td><td class="explanation">清除 010:011 作為累積結果，nibbleCount←4，保證保留所有零 nibble。</td></tr><tr class="blank"><td class="number">38</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">39–40</td><td class="codecell"><pre class="source-code"><span></span>reverseLoop:
+    call division
+</pre></td><td class="explanation">每輪由 reverseLoop 呼叫 division，回傳新的商及本次最低 nibble。</td></tr><tr><td class="number">41–42</td><td class="codecell"><pre class="source-code"><span></span>
+    ; Append the remainder: result = (result &lt;&lt; 4) | remainder.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">43–45</td><td class="codecell"><pre class="source-code"><span></span>    movlw 4
+    movwf shiftCount, a
+appendShift:
+</pre></td><td class="explanation">將 shiftCount 設成 4，appendShift 標記結果乘以 16 所需的單位左移迴圈。</td></tr><tr><td class="number">46–48</td><td class="codecell"><pre class="source-code"><span></span>    bcf STATUS, 0, a
+    rlcf 0x011, f, a
+    rlcf 0x010, f, a
+</pre></td><td class="explanation">清 Carry，先 RLCF 低位 011 再 RLCF 高位 010；低位 bit7 經 C 進高位 bit0，整體左移一位並在 bit0 補零。</td></tr><tr><td class="number">49–50</td><td class="codecell"><pre class="source-code"><span></span>    decfsz shiftCount, f, a
+    bra appendShift
+</pre></td><td class="explanation">每次 shiftCount 減一；尚未為零便回到 appendShift，合計左移四位。</td></tr><tr><td class="number">51–52</td><td class="codecell"><pre class="source-code"><span></span>    movf remainder, w, a
+    iorwf 0x011, f, a
+</pre></td><td class="explanation">WREG←餘數，再 OR 到已清空低四位的 011，完成附加本輪數字。</td></tr><tr><td class="number">53–54</td><td class="codecell"><pre class="source-code"><span></span>
+    ; Process exactly four digits, even when the quotient becomes zero.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">55–56</td><td class="codecell"><pre class="source-code"><span></span>    decfsz nibbleCount, f, a
+    bra reverseLoop
+</pre></td><td class="explanation">nibbleCount 減一，未滿四輪就再除一次；不檢查商是否已零。</td></tr><tr class="blank"><td class="number">57</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">58–59</td><td class="codecell"><pre class="source-code"><span></span>done:
+    bra done
+</pre></td><td class="explanation">完成後停留 done，保持反轉結果供觀察。</td></tr><tr><td class="number">60–64</td><td class="codecell"><pre class="source-code"><span></span>
+; Unsigned 16-bit division by the fixed divisor 16.
+; Input: quotientHigh:quotientLow = dividend.
+; Output: quotientHigh:quotientLow = quotient; remainder = dividend % 16.
+; Clobbers WREG, STATUS and shiftCount; preserves the original input RAM.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">65–68</td><td class="codecell"><pre class="source-code"><span></span>division:
+    movf quotientLow, w, a
+    andlw 0x0F    ; any value % 16 means get its low 4 bits
+    movwf remainder, a
+</pre></td><td class="explanation">division 入口取 quotientLow &amp; 0x0F 存到 remainder；此餘數屬於移位前的被除數。</td></tr><tr><td class="number">69–71</td><td class="codecell"><pre class="source-code"><span></span>    movlw 4
+    movwf shiftCount, a
+divisionShift:
+</pre></td><td class="explanation">shiftCount←4，divisionShift 是除以 16 的四次單位右移入口。</td></tr><tr><td class="number">72–74</td><td class="codecell"><pre class="source-code"><span></span>    bcf STATUS, 0, a
+    rrcf quotientHigh, f, a ; bit 7 -&gt; C
+    rrcf quotientLow, f, a  ; C -&gt; bit 0, makes it continuously
+</pre></td><td class="explanation">清 Carry，先右旋高位再右旋低位，構成無號 16 位元右移。RRCF 實際是 bit0→C、舊 C→bit7；原行尾註解寫反了方向。</td></tr><tr><td class="number">75–77</td><td class="codecell"><pre class="source-code"><span></span>    decfsz shiftCount, f, a
+    bra divisionShift
+    return
+</pre></td><td class="explanation">四次移位後 RETURN；020:021 是商，022 是餘數，外層 nibbleCount 不受影響。</td></tr><tr class="blank"><td class="number">78</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">79</td><td class="codecell"><pre class="source-code"><span></span>END resetVec
+</pre></td><td class="explanation">結束組譯並指定 resetVec 作為入口。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>第 73–74 行行尾註解的位元方向不準確：RRCF 是 bit0→C、舊 C→bit7，不是 bit7→C 或 C→bit0。實際指令順序正確。</li><li>右移時先清 C，再處理高位、低位；左移則先清 C，再處理低位、高位。調換位元組順序會切斷跨位元組的位元傳遞。</li><li>division 雖名稱通用，實際只實作固定除數 16，沒有接收任意除數。</li><li>shiftCount 在 division 與結果左移中共用，但兩邊每次都重設為 4，不能把它誤認為四個 nibble 的外層計數器。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>為何輸入 0001 會得到 1000，而不是 0001？</summary><p>固定做四輪，餘數依次為 1、0、0、0；每輪都左移結果再附加餘數。</p></details><details><summary>右移前清 C 的作用是什麼？</summary><p>讓最高位補零，形成無號邏輯右移，而不是把上一筆 Carry 填入 bit15。</p></details><details><summary>目前預設應得到什麼？</summary><p>由 0x2E5B 推導出 0xB5E2；這不是新執行測試的宣稱。</p></details></section><nav class="pager"><a href="hw4-basic.html">← 7. 巨集 Mul_Add：x1×x2 + y1×y2</a><a href="hw4-hard.html">9. 分數計算機：三個分數、兩個運算子、化簡 →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>

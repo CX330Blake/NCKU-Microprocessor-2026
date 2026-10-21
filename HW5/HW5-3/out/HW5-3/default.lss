@@ -1,0 +1,125 @@
+
+default.elf:	file format elf32-pic
+
+Sections:
+Idx Name                       Size     VMA      Type
+  0                            00000000 00000000 
+  1 evaluate_text              000000e8 00000602 TEXT
+  2 cstackCOMRAM               00000017 00000001 BSS
+  3 init                       00000004 00007ffc DATA
+  4 reset_vec                  00000004 00000000 DATA
+  5 smallconst                 00000002 00000600 DATA
+  6 _stray_data_0_             00000004 00300000 DATA
+  7 _stray_data_1_             00000002 00300006 DATA
+  8 .strtab                    0000030d 00000000 
+  9 .symtab                    00000450 00000000 
+ 10 .debug_abbrev              00000062 00000000 DEBUG
+ 11 .debug_info                00000f14 00000000 DEBUG
+ 12 .debug_line                00000cbe 00000000 DEBUG
+ 13 .debug_pubnames            00000023 00000000 DEBUG
+ 14 .debug_aranges             00000308 00000000 DEBUG
+ 15 .note.microchip.deviceinfo 00000020 00000000 
+ 16 .shstrtab                  000000ce 00000000 
+
+Disassembly of section evaluate_text:
+
+00000602 <_evaluate>:
+; _evaluate():
+     602: 0c 6a        	clrf	0xc, a
+     604: 0d 6a        	clrf	0xd, a
+     606: 2b 0e        	movlw	0x2b
+     608: 14 6e        	movwf	0x14, a
+     60a: 01 c0 0e f0  	movff	0x1, 0xe
+     60e: 02 c0 0f f0  	movff	0x2, 0xf
+     612: 03 c0 15 f0  	movff	0x3, 0x15
+     616: 04 c0 10 f0  	movff	0x4, 0x10
+     61a: 05 c0 11 f0  	movff	0x5, 0x11
+     61e: 28 ec 03 f0  	call	0x650
+     622: 06 c0 15 f0  	movff	0x6, 0x15
+     626: 07 c0 10 f0  	movff	0x7, 0x10
+     62a: 08 c0 11 f0  	movff	0x8, 0x11
+     62e: 28 ec 03 f0  	call	0x650
+     632: 09 c0 15 f0  	movff	0x9, 0x15
+     636: 0a c0 10 f0  	movff	0xa, 0x10
+     63a: 0b c0 11 f0  	movff	0xb, 0x11
+     63e: 28 ec 03 f0  	call	0x650
+     642: 47 ec 03 f0  	call	0x68e
+     646: 0c c0 01 f0  	movff	0xc, 0x1
+     64a: 0d c0 02 f0  	movff	0xd, 0x2
+     64e: 12 00        	return
+     650: 15 50        	movf	0x15, w, a
+     652: 2a 0a        	xorlw	0x2a
+     654: 09 e0        	bz	0x668
+     656: 47 ec 03 f0  	call	0x68e
+     65a: 15 c0 14 f0  	movff	0x15, 0x14
+     65e: 10 c0 0e f0  	movff	0x10, 0xe
+     662: 11 c0 0f f0  	movff	0x11, 0xf
+     666: 12 00        	return
+     668: 0e 50        	movf	0xe, w, a
+     66a: 10 02        	mulwf	0x10, a
+     66c: f3 cf 12 f0  	movff	0xff3, 0x12
+     670: f4 cf 13 f0  	movff	0xff4, 0x13
+     674: 0f 50        	movf	0xf, w, a
+     676: 10 02        	mulwf	0x10, a
+     678: f3 50        	movf	0xf3, w, a
+     67a: 13 26        	addwf	0x13, f, a
+     67c: 0e 50        	movf	0xe, w, a
+     67e: 11 02        	mulwf	0x11, a
+     680: f3 50        	movf	0xf3, w, a
+     682: 13 26        	addwf	0x13, f, a
+     684: 12 c0 0e f0  	movff	0x12, 0xe
+     688: 13 c0 0f f0  	movff	0x13, 0xf
+     68c: 12 00        	return
+     68e: 14 50        	movf	0x14, w, a
+     690: 2d 0a        	xorlw	0x2d
+     692: 05 e0        	bz	0x69e
+     694: 0e 50        	movf	0xe, w, a
+     696: 0c 26        	addwf	0xc, f, a
+     698: 0f 50        	movf	0xf, w, a
+     69a: 0d 22        	addwfc	0xd, f, a
+     69c: 12 00        	return
+     69e: 0e 50        	movf	0xe, w, a
+     6a0: 0c 5e        	subwf	0xc, f, a
+     6a2: 0f 50        	movf	0xf, w, a
+     6a4: 0d 5a        	subwfb	0xd, f, a
+     6a6: 12 00        	return
+
+000006a8 <_main>:
+; __ptext0():
+; /Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-3/main.c:16
+;     ans = evaluate(50, '-', 20, '-', 10, '*', 2);
+     6a8: 02 6a        	clrf	0x2, a
+     6aa: 32 0e        	movlw	0x32
+     6ac: 01 6e        	movwf	0x1, a
+     6ae: 2d 0e        	movlw	0x2d
+     6b0: 03 6e        	movwf	0x3, a
+     6b2: 05 6a        	clrf	0x5, a
+     6b4: 14 0e        	movlw	0x14
+     6b6: 04 6e        	movwf	0x4, a
+     6b8: 2d 0e        	movlw	0x2d
+     6ba: 06 6e        	movwf	0x6, a
+     6bc: 08 6a        	clrf	0x8, a
+     6be: 0a 0e        	movlw	0xa
+     6c0: 07 6e        	movwf	0x7, a
+     6c2: 2a 0e        	movlw	0x2a
+     6c4: 09 6e        	movwf	0x9, a
+     6c6: 0b 6a        	clrf	0xb, a
+     6c8: 02 0e        	movlw	0x2
+     6ca: 0a 6e        	movwf	0xa, a
+     6cc: 01 ec 03 f0  	call	0x602
+     6d0: 01 c0 16 f0  	movff	0x1, 0x16
+     6d4: 02 c0 17 f0  	movff	0x2, 0x17
+; /Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-3/main.c:20
+;     }
+     6d8: 6c ef 03 f0  	goto	0x6d8
+     6dc: fe ef 3f f0  	goto	0x7ffc
+
+000006e0 <start_initialization>:
+; __initialization():
+     6e0: 17 6a        	clrf	0x17, a
+     6e2: 16 6a        	clrf	0x16, a
+
+000006e4 <end_of_initialization>:
+; __end_of__initialization():
+     6e4: 00 01        	movlb	0x0
+     6e6: 54 ef 03 f0  	goto	0x6a8

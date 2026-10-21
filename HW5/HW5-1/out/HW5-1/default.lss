@@ -1,0 +1,64 @@
+
+default.elf:	file format elf32-pic
+
+Sections:
+Idx Name                       Size     VMA      Type
+  0                            00000000 00000000 
+  1 gcd_data                   00000004 00000001 BSS
+  2 gcd_text                   0000003a 00000602 TEXT
+  3 init                       00000004 00007ffc DATA
+  4 reset_vec                  00000004 00000000 DATA
+  5 smallconst                 00000002 00000600 DATA
+  6 _stray_data_0_             00000004 00300000 DATA
+  7 _stray_data_1_             00000002 00300006 DATA
+  8 .strtab                    000002b6 00000000 
+  9 .symtab                    000003e0 00000000 
+ 10 .debug_abbrev              00000062 00000000 DEBUG
+ 11 .debug_info                00000f10 00000000 DEBUG
+ 12 .debug_line                00000c88 00000000 DEBUG
+ 13 .debug_pubnames            00000023 00000000 DEBUG
+ 14 .debug_aranges             00000308 00000000 DEBUG
+ 15 .note.microchip.deviceinfo 00000020 00000000 
+ 16 .shstrtab                  000000c5 00000000 
+
+Disassembly of section gcd_text:
+
+00000602 <_gcd>:
+; _gcd():
+     602: 01 6e        	movwf	0x1, a
+     604: 04 c0 02 f0  	movff	0x4, 0x2
+     608: 02 50        	movf	0x2, w, a
+     60a: 01 5c        	subwf	0x1, w, a
+     60c: 06 e0        	bz	0x61a
+     60e: 03 e2        	bc	0x616
+     610: 01 50        	movf	0x1, w, a
+     612: 02 5e        	subwf	0x2, f, a
+     614: f9 d7        	bra	0x1608
+     616: 01 6e        	movwf	0x1, a
+     618: f7 d7        	bra	0x1608
+     61a: 01 50        	movf	0x1, w, a
+     61c: 04 6e        	movwf	0x4, a
+     61e: 12 00        	return
+
+00000620 <_main>:
+; __ptext0():
+; /Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/main.c:14
+;     ans = gcd(144, 233);
+     620: e9 0e        	movlw	0xe9
+     622: 04 6e        	movwf	0x4, a
+     624: 90 0e        	movlw	0x90
+     626: 01 ec 03 f0  	call	0x602
+     62a: 03 6e        	movwf	0x3, a
+; /Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/main.c:18
+;     }
+     62c: 16 ef 03 f0  	goto	0x62c
+     630: fe ef 3f f0  	goto	0x7ffc
+
+00000634 <start_initialization>:
+; __initialization():
+     634: 03 6a        	clrf	0x3, a
+
+00000636 <end_of_initialization>:
+; __end_of__initialization():
+     636: 00 01        	movlb	0x0
+     638: 10 ef 03 f0  	goto	0x620

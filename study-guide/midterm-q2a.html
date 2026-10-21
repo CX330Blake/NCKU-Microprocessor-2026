@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>16. 原地反轉指定子陣列｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">2024 期中考 · 第 16 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>16. 原地反轉指定子陣列</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">（15%）對 RAM 0x300..0x309 的十個 byte 原地反轉包含端點的子陣列。[0x10]=head、[0x11]=tail 都是索引，前提 0≤head≤tail≤9；區間外與輸入索引保持不變。各題須單獨組譯，不能把九題連結在一起；EQU 僅定義固定 RAM 符號而不保留記憶體。Access 模式不能直接存取任意 bank，跨 bank 陣列須用 FSR。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>FSR0=0x300+head、FSR1=0x300+tail，以一個暫存 byte 交換左右值。</li><li>只在 left&lt;right 時交換；交換後左指標加一、右指標減一。</li><li>兩指標始終在 bank 3，本題只比較低 byte 足夠；不可無條件移植到跨 bank 陣列。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>原陣列</td><td>65 06 03 65 0C 04 F7 32 50 00</td><td>數值均十六進位。</td></tr><tr><td>head=3,tail=6</td><td>FSR0=0x303，FSR1=0x306</td><td>端點都包含。</td></tr><tr><td>第一次交換</td><td>索引 3↔6：65↔F7</td><td>指標移至 4、5。</td></tr><tr><td>第二次交換</td><td>索引 4↔5：0C↔04</td><td>指標成 5、4，已交錯。</td></tr><tr><td>結果</td><td>65 06 03 F7 04 0C 65 32 50 00</td><td>只有索引 3..6 改變。</td></tr><tr><td>邊界 head=tail=7</td><td>不交換</td><td>比較時 C=1，立即返回。</td></tr><tr><td>全反轉 0..9</td><td>00 50 32 F7 04 0C 65 03 06 65</td><td>五次交換後交錯停止。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">q2a.S</a></div><h3 class="file-title" id="file-0">Midterm/2024/solutions/q2a.S</h3><table class="codewalk" data-source="Midterm/2024/solutions/q2a.S"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1</td><td class="codecell"><pre class="source-code"><span></span>#include &lt;xc.inc&gt;
+</pre></td><td class="explanation">引入 xc.inc，提供 PIC18 暫存器與 pic-as 定義。</td></tr><tr class="blank"><td class="number">2</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">3–5</td><td class="codecell"><pre class="source-code"><span></span>CONFIG WDT = OFF
+CONFIG LVP = OFF
+CONFIG XINST = OFF
+</pre></td><td class="explanation">停用看門狗、低電壓燒錄及延伸指令集；其餘組態仍依工具預設，實體板須另設定 oscillator 等項目。</td></tr><tr><td class="number">6–10</td><td class="codecell"><pre class="source-code"><span></span>
+; Interface: ARRAY is RAM 0x300..0x309; HEAD and TAIL are inclusive
+; indices satisfying 0 &lt;= HEAD &lt;= TAIL &lt;= 9. Inputs are preserved.
+; reverse_subarray modifies only ARRAY[HEAD..TAIL], using FSR0/FSR1.
+; Clobbers: WREG, STATUS, FSR0, FSR1, SWAP_BYTE.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">11–14</td><td class="codecell"><pre class="source-code"><span></span>ARRAY       EQU 0x300
+HEAD        EQU 0x10
+TAIL        EQU 0x11
+SWAP_BYTE   EQU 0x30
+</pre></td><td class="explanation">定義陣列基址 0x300、輸入索引 0x10/0x11、交換暫存 0x30。</td></tr><tr class="blank"><td class="number">15</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">16–20</td><td class="codecell"><pre class="source-code"><span></span>GLOBAL main, done, reverse_subarray
+
+PSECT resetVec,class=CODE,reloc=2
+reset_entry:
+    goto main
+</pre></td><td class="explanation">匯出介面並建立 Reset GOTO main。</td></tr><tr class="blank"><td class="number">21</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">22–24</td><td class="codecell"><pre class="source-code"><span></span>PSECT mainCode,class=CODE,reloc=2
+main:
+    lfsr 0, ARRAY
+</pre></td><td class="explanation">切至主程式區，FSR0 指向陣列首。</td></tr><tr><td class="number">25–28</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x65
+    movwf POSTINC0, 0
+    movlw 0x06
+    movwf POSTINC0, 0
+</pre></td><td class="explanation">依序寫入索引 0=0x65、1=0x06，每次寫 POSTINC0 後前進。</td></tr><tr><td class="number">29–32</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x03
+    movwf POSTINC0, 0
+    movlw 0x65
+    movwf POSTINC0, 0
+</pre></td><td class="explanation">依序寫索引 2=0x03、3=0x65。</td></tr><tr><td class="number">33–36</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x0C
+    movwf POSTINC0, 0
+    movlw 0x04
+    movwf POSTINC0, 0
+</pre></td><td class="explanation">依序寫索引 4=0x0C、5=0x04。</td></tr><tr><td class="number">37–40</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0xF7
+    movwf POSTINC0, 0
+    movlw 0x32
+    movwf POSTINC0, 0
+</pre></td><td class="explanation">依序寫索引 6=0xF7、7=0x32。</td></tr><tr><td class="number">41–43</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x50
+    movwf POSTINC0, 0
+    clrf INDF0, 0
+</pre></td><td class="explanation">寫索引 8=0x50，清索引 9 為 0。</td></tr><tr><td class="number">44–48</td><td class="codecell"><pre class="source-code"><span></span>    movlw 3
+    movwf HEAD, 0
+    movlw 6
+    movwf TAIL, 0
+    call reverse_subarray
+</pre></td><td class="explanation">設定包含端點的 head=3、tail=6，呼叫 reverse_subarray。</td></tr><tr><td class="number">49–50</td><td class="codecell"><pre class="source-code"><span></span>done:
+    bra done
+</pre></td><td class="explanation">返回後在 done 保持結果。</td></tr><tr class="blank"><td class="number">51</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">52–55</td><td class="codecell"><pre class="source-code"><span></span>reverse_subarray:
+    lfsr 0, ARRAY
+    movf HEAD, 0, 0
+    addwf FSR0L, 1, 0
+</pre></td><td class="explanation">FSR0 以 0x300 為基底，加 HEAD 形成左端位址。</td></tr><tr><td class="number">56–58</td><td class="codecell"><pre class="source-code"><span></span>    lfsr 1, ARRAY
+    movf TAIL, 0, 0
+    addwf FSR1L, 1, 0
+</pre></td><td class="explanation">FSR1 以 0x300 為基底，加 TAIL 形成右端位址。</td></tr><tr><td class="number">59–63</td><td class="codecell"><pre class="source-code"><span></span>reverse_loop:
+    ; Both pointers remain in bank 3, so comparing low bytes is enough.
+    movf FSR1L, 0, 0
+    subwf FSR0L, 0, 0
+    bc reverse_done
+</pre></td><td class="explanation">計算 FSR0L−FSR1L，C=1 表示左端已等於或超過右端，跳至返回。</td></tr><tr><td class="number">64–66</td><td class="codecell"><pre class="source-code"><span></span>    movff INDF0, SWAP_BYTE
+    movff INDF1, INDF0
+    movff SWAP_BYTE, INDF1
+</pre></td><td class="explanation">以 SWAP_BYTE 暫存左值，右值搬左，暫存值搬右，完成原地交換。</td></tr><tr><td class="number">67–69</td><td class="codecell"><pre class="source-code"><span></span>    incf FSR0L, 1, 0
+    decf FSR1L, 1, 0
+    bra reverse_loop
+</pre></td><td class="explanation">左低位加一、右低位減一，重新比較。</td></tr><tr><td class="number">70–71</td><td class="codecell"><pre class="source-code"><span></span>reverse_done:
+    return
+</pre></td><td class="explanation">終止反轉，RETURN；HEAD、TAIL 未被改寫。</td></tr><tr class="blank"><td class="number">72</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">73</td><td class="codecell"><pre class="source-code"><span></span>END reset_entry
+</pre></td><td class="explanation">結束來源並指定 reset_entry。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>不能把索引當成完整 RAM 位址。</li><li>偶數長度反轉後指標會交錯，不一定相等。</li><li>直接用 Access 定址 0x300 會寫錯 RAM，必須用 FSR。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>為何 left=right 就能停？</summary><p>中央元素與自己交換沒有意義。</p></details><details><summary>SUBWF 後 C=1 代表什麼？</summary><p>left−right 無借位，即 left≥right，應停止。</p></details></section><nav class="pager"><a href="midterm-q1c.html">← 15. Fact 副程式計算 C(n,k)，n≤15</a><a href="midterm-q2b.html">17. 兩個三元素串列的對稱差集 →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>

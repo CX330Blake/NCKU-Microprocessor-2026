@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>19. 邏輯左移、算術右移與 nibble 乘法｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">2024 期中考 · 第 19 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>19. 邏輯左移、算術右移與 nibble 乘法</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">（15%）設 x=[0x00]，依序計算 a=(x&lt;&lt;2) mod 256、b=對 a 做 8-bit 算術右移三位、c=(b&lt;&lt;2) mod 256，分別存 [0x01]、[0x02]、[0x03]。再各取 a、b、c 的高低 nibble 相乘，存 [0x11]、[0x12]、[0x13]。每一步使用前一步的結果，非各自從 x 出發；輸入保留。各題須單獨組譯，不能把九題連結在一起；EQU 僅定義固定 RAM 符號而不保留記憶體。Access 模式不能直接存取任意 bank，跨 bank 陣列須用 FSR。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>邏輯左移用清 Carry 再 RLCF，每移一位都先清 C，捨去溢位並於最低位補零。</li><li>算術右移每輪先將當前 bit7 複製到 C，再 RRCF，使高位補符號。RRCF 會重寫 C，因此每輪都要重設。</li><li>SWAPF 後 ANDLW 0x0F 取得高 nibble，原值 ANDLW 0x0F 取得低 nibble。MULWF 回傳 PRODH:PRODL；15×15=225，一個 byte 足夠。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>輸入 x=0x93</td><td>10010011</td><td>原輸入保留在 0x00。</td></tr><tr><td>第一次左移兩位</td><td>0x26 → 0x4C</td><td>兩次都清 C，丟棄超出八位的 bit。</td></tr><tr><td>算術右移三位</td><td>0x26 → 0x13 → 0x09</td><td>a=0x4C 符號位零，與邏輯右移碰巧相同。</td></tr><tr><td>最後左移兩位</td><td>0x12 → 0x24</td><td>輸出 a=4C、b=09、c=24。</td></tr><tr><td>乘積</td><td>4×C=0x30；0×9=0；2×4=8</td><td>0x11..0x13=30 00 08。</td></tr><tr><td>負號邊界 x=0x20</td><td>a=80；右移 C0→E0→F0；c=C0</td><td>算術右移不是得到 0x10。乘積都是 0。</td></tr><tr><td>零輸入</td><td>所有輸出 0</td><td>符號與移入位皆零。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">q3a.S</a></div><h3 class="file-title" id="file-0">Midterm/2024/solutions/q3a.S</h3><table class="codewalk" data-source="Midterm/2024/solutions/q3a.S"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1</td><td class="codecell"><pre class="source-code"><span></span>#include &lt;xc.inc&gt;
+</pre></td><td class="explanation">引入 xc.inc，提供 PIC18 暫存器與 pic-as 定義。</td></tr><tr class="blank"><td class="number">2</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">3–5</td><td class="codecell"><pre class="source-code"><span></span>CONFIG WDT = OFF
+CONFIG LVP = OFF
+CONFIG XINST = OFF
+</pre></td><td class="explanation">停用看門狗、低電壓燒錄及延伸指令集；其餘組態仍依工具預設，實體板須另設定 oscillator 等項目。</td></tr><tr class="blank"><td class="number">6</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">7–10</td><td class="codecell"><pre class="source-code"><span></span>INPUT_VALUE EQU 0x00
+SHIFT_LEFT EQU 0x01
+SHIFT_ARITH EQU 0x02
+SHIFT_FINAL EQU 0x03
+</pre></td><td class="explanation">指定輸入與三階段位移結果的 RAM。</td></tr><tr><td class="number">11–15</td><td class="codecell"><pre class="source-code"><span></span>PRODUCT_1 EQU 0x11
+PRODUCT_2 EQU 0x12
+PRODUCT_3 EQU 0x13
+SHIFT_COUNT EQU 0x30
+NIBBLE_TEMP EQU 0x31
+</pre></td><td class="explanation">定義三個乘積輸出及位移計數、nibble 暫存。</td></tr><tr class="blank"><td class="number">16</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">17–21</td><td class="codecell"><pre class="source-code"><span></span>GLOBAL main, done, solve_q3a
+
+PSECT resetVec,class=CODE,reloc=2
+resetVec:
+    goto main
+</pre></td><td class="explanation">匯出 main、done、solve_q3a，建立 Reset 跳轉。</td></tr><tr class="blank"><td class="number">22</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">23–27</td><td class="codecell"><pre class="source-code"><span></span>PSECT code,class=CODE,reloc=2
+main:
+    movlw 0x93
+    movwf INPUT_VALUE, 0
+    call solve_q3a
+</pre></td><td class="explanation">程式區 main 設輸入 0x93，再 CALL solve_q3a。</td></tr><tr><td class="number">28–29</td><td class="codecell"><pre class="source-code"><span></span>done:
+    bra done
+</pre></td><td class="explanation">運算後在 done 保持輸出。</td></tr><tr><td class="number">30–33</td><td class="codecell"><pre class="source-code"><span></span>
+; Input: RAM 0x00. Outputs: RAM 0x01..0x03 and 0x11..0x13.
+; Clobbers: WREG, STATUS, PRODH:PRODL, RAM 0x30..0x31.
+; Left shifts discard overflow. Arithmetic right shifts copy the current sign.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">34–36</td><td class="codecell"><pre class="source-code"><span></span>solve_q3a:
+    movf INPUT_VALUE, 0, 0
+    movwf SHIFT_LEFT, 0
+</pre></td><td class="explanation">將輸入複製至 SHIFT_LEFT，保持原值。</td></tr><tr><td class="number">37–40</td><td class="codecell"><pre class="source-code"><span></span>    bcf STATUS, 0, 0
+    rlcf SHIFT_LEFT, 1, 0
+    bcf STATUS, 0, 0
+    rlcf SHIFT_LEFT, 1, 0
+</pre></td><td class="explanation">兩次清 C 並 RLCF SHIFT_LEFT，完成補零左移兩位。</td></tr><tr class="blank"><td class="number">41</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">42–45</td><td class="codecell"><pre class="source-code"><span></span>    movf SHIFT_LEFT, 0, 0
+    movwf SHIFT_ARITH, 0
+    movlw 3
+    movwf SHIFT_COUNT, 0
+</pre></td><td class="explanation">將第一階段結果複製至 SHIFT_ARITH，設定三次右移。</td></tr><tr><td class="number">46–50</td><td class="codecell"><pre class="source-code"><span></span>arithmetic_shift_loop:
+    bcf STATUS, 0, 0
+    btfsc SHIFT_ARITH, 7, 0
+    bsf STATUS, 0, 0
+    rrcf SHIFT_ARITH, 1, 0
+</pre></td><td class="explanation">每輪 C 先清零；若 bit7=0，BTFSC 跳過 BSF；若 bit7=1 則設 C，再 RRCF 補符號。</td></tr><tr><td class="number">51–52</td><td class="codecell"><pre class="source-code"><span></span>    decfsz SHIFT_COUNT, 1, 0
+    bra arithmetic_shift_loop
+</pre></td><td class="explanation">SHIFT_COUNT 減一，非零重複右移，零則跳過分支。</td></tr><tr class="blank"><td class="number">53</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">54–55</td><td class="codecell"><pre class="source-code"><span></span>    movf SHIFT_ARITH, 0, 0
+    movwf SHIFT_FINAL, 0
+</pre></td><td class="explanation">把算術右移結果複製到 SHIFT_FINAL。</td></tr><tr><td class="number">56–59</td><td class="codecell"><pre class="source-code"><span></span>    bcf STATUS, 0, 0
+    rlcf SHIFT_FINAL, 1, 0
+    bcf STATUS, 0, 0
+    rlcf SHIFT_FINAL, 1, 0
+</pre></td><td class="explanation">再清 C 配合 RLCF 兩次，對 b 做邏輯左移。</td></tr><tr class="blank"><td class="number">60</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">61–63</td><td class="codecell"><pre class="source-code"><span></span>    movf SHIFT_LEFT, 0, 0
+    call multiply_nibbles
+    movwf PRODUCT_1, 0
+</pre></td><td class="explanation">WREG 取 a，呼叫 nibble 乘法，回傳值寫 PRODUCT_1。</td></tr><tr><td class="number">64–66</td><td class="codecell"><pre class="source-code"><span></span>    movf SHIFT_ARITH, 0, 0
+    call multiply_nibbles
+    movwf PRODUCT_2, 0
+</pre></td><td class="explanation">WREG 取 b，同樣計算並寫 PRODUCT_2。</td></tr><tr><td class="number">67–70</td><td class="codecell"><pre class="source-code"><span></span>    movf SHIFT_FINAL, 0, 0
+    call multiply_nibbles
+    movwf PRODUCT_3, 0
+    return
+</pre></td><td class="explanation">WREG 取 c，計算 PRODUCT_3，RETURN 回 main。</td></tr><tr><td class="number">71–72</td><td class="codecell"><pre class="source-code"><span></span>
+; Input WREG byte; output WREG = upper nibble * lower nibble (0..225).
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">73–77</td><td class="codecell"><pre class="source-code"><span></span>multiply_nibbles:
+    movwf NIBBLE_TEMP, 0
+    swapf NIBBLE_TEMP, 0, 0
+    andlw 0x0F
+    movwf PRODL, 0
+</pre></td><td class="explanation">保存原 byte；SWAPF 將高 nibble 移低，遮罩後暫存到 PRODL。</td></tr><tr><td class="number">78–80</td><td class="codecell"><pre class="source-code"><span></span>    movf NIBBLE_TEMP, 0, 0
+    andlw 0x0F
+    mulwf PRODL, 0
+</pre></td><td class="explanation">取原值低 nibble 放 WREG，以 MULWF PRODL 做 unsigned 高低 nibble 相乘。</td></tr><tr><td class="number">81–82</td><td class="codecell"><pre class="source-code"><span></span>    movf PRODL, 0, 0
+    return
+</pre></td><td class="explanation">由 PRODL 讀取乘積低 byte 到 WREG 返回；高 byte 必為零。</td></tr><tr class="blank"><td class="number">83</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">84</td><td class="codecell"><pre class="source-code"><span></span>END resetVec
+</pre></td><td class="explanation">指定 Reset 入口並結束來源。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>預設 0x93 例子不足以區分算術／邏輯右移，需看 a 的 bit7=1 的例子。</li><li>不是對原始 0x93 做三次獨立位移。</li><li>PRODL 在乘法前暫存高 nibble，乘法後已變為乘積，不能仍當成原運算元。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>為何每次算術右移前都設定 Carry？</summary><p>RRCF 結束後 C 是舊 bit0，不再是符號位。</p></details><details><summary>乘積高 byte 是否可能非零？</summary><p>不會，最大 225&lt;256。</p></details></section><nav class="pager"><a href="midterm-q2c.html">← 18. 相同四個 hexadecimal digits 的下一個排列</a><a href="midterm-q3b.html">20. CRC-16 多項式長除法 →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>

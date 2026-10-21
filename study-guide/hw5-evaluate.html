@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>12. 組語 evaluate：四個 16-bit 數的算術式｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">HW5 · 第 12 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>12. 組語 evaluate：四個 16-bit 數的算術式</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">由 C 呼叫 PIC18 組合語言函式 evaluate，計算 a op1 b op2 c op3 d。函式宣告必須是 extern unsigned int evaluate(unsigned int a, char op1, unsigned int b, char op2, unsigned int c, char op3, unsigned int d);。四個數字是16位元無號整數，三個運算子是8位元字元，只支援 +、-、*。乘法優先於加減，同優先序由左至右；例如 2+3×4−5=9。題目保證所有需要的中間結果與最後結果都在0–65535，不需要負數表示。最終 unsigned int 回傳值須放在 C 的 ans，於 Watches 展示；題目稱 evaluate.asm，此專案實際用 evaluate.S。目前 main.c 的式子是 50−20−10×2，並不是 README 仍描述的 2+3×4−5。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>不必建堆疊或通用剖析器：維護一個尚未提交的乘法項 term、一個該項前的加減符號 sign，以及已提交的 total。初始化 total=0、term=a、sign=加。</li><li>依序讀三組 (op,rhs)。若 op 是乘法，就只做 term←term×rhs，不動 total 或 sign；因而連續乘法始終屬於同一項。</li><li>若 op 是加或減，先依原 sign 把整個 term 加進或減出 total，再將新 op 保存為下一項 sign，term 改為 rhs。舊 sign 必須先用完，不能先覆寫。</li><li>三個運算子都處理完後，仍有最後一項尚未提交，必須再 CALL eval_flush，才能把結果寫回 _evaluate$0 讓 C 取得。</li><li>16×16 乘法拆成低×低與兩個交叉乘積；只保留低16位，高×高項對低16位沒有貢獻。題目保證合法乘積不溢位，故省略高位計算不影響合法答案。</li><li>此 XC8 介面以 _evaluate$0 到 $6 連結符號傳入 a、op1、b、op2、c、op3、d，unsigned int 在各槽中低位在前。_evaluate$0 也作16位元返回槽；沒有硬編碼參數 RAM 位址。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>初始化</td><td>total=0，term=50，sign=+</td><td>a=50 先成為未提交的第一項。</td></tr><tr><td>op1 是 −，rhs=20</td><td>flush 後 total=50；sign=−，term=20</td><td>加減結束前項，因此先提交 +50。</td></tr><tr><td>op2 是 −，rhs=10</td><td>flush 後 total=30；sign=−，term=10</td><td>先用舊 sign 減20，再保存新減號，確保加減由左至右。</td></tr><tr><td>op3 是 ×，rhs=2</td><td>term=20，sign仍為−，total仍為30</td><td>10×2 在同一個乘法項內完成，沒有提前從 total 減10。</td></tr><tr><td>最後 flush</td><td>total=30−20=10=0x000A</td><td>返回槽低位0A、高位00，C 的 ans=10。</td></tr><tr><td>乘法拆解例</td><td>0x0102×0x0003：02×03=0006，01×03=0003，02×00=0</td><td>交叉乘積低位03加到結果高位，得到0306，即258×3=774。</td></tr><tr><td>README 案例對照</td><td>2+3×4−5：先提交2，term延伸成12，再提交12，最後減5</td><td>若改回該組參數才會得到9；目前 C 預設為10。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">evaluate.S</a><a class="file-link" href="#file-1">main.c</a></div><h3 class="file-title" id="file-0">HW5/HW5-3/evaluate.S</h3><table class="codewalk" data-source="HW5/HW5-3/evaluate.S"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1</td><td class="codecell"><pre class="source-code"><span></span>#include &lt;xc.inc&gt;
+</pre></td><td class="explanation">引入 xc.inc，提供 PRODL/PRODH 等硬體乘積暫存器符號。</td></tr><tr class="blank"><td class="number">2</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">3–5</td><td class="codecell"><pre class="source-code"><span></span>GLOBAL _evaluate
+EXTRN _evaluate$0, _evaluate$1, _evaluate$2, _evaluate$3
+EXTRN _evaluate$4, _evaluate$5, _evaluate$6
+</pre></td><td class="explanation">匯出 _evaluate，匯入七個由 XC8 連結器配置的參數槽 $0–$6；不是固定 RAM 地址。</td></tr><tr class="blank"><td class="number">6</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">7–9</td><td class="codecell"><pre class="source-code"><span></span>PSECT evaluate_data, class=COMRAM, space=1, noexec, lowdata
+eval_total: DS 2
+eval_term: DS 2
+</pre></td><td class="explanation">在 COMRAM/lowdata 區配置 total 與 term 各2位元組，均低位在前；total 為已提交總和，term 為尚未提交乘法項。</td></tr><tr><td class="number">10–13</td><td class="codecell"><pre class="source-code"><span></span>eval_rhs: DS 2
+eval_product: DS 2
+eval_sign: DS 1
+eval_operator: DS 1
+</pre></td><td class="explanation">配置 rhs、product 各2位元組與 sign、operator 各1位元組，整個工作區共10位元組。</td></tr><tr class="blank"><td class="number">14</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">15</td><td class="codecell"><pre class="source-code"><span></span>PSECT evaluate_text, local, class=CODE, reloc=2
+</pre></td><td class="explanation">建立兩位元組對齊的 evaluate_text 程式區，local 限定區段符號作用域。</td></tr><tr><td class="number">16–18</td><td class="codecell"><pre class="source-code"><span></span>
+; XC8 allocates each argument slot and returns unsigned int in _evaluate$0.
+; Keep one multiplication term and the pending '+' or '-' for that term.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">19–23</td><td class="codecell"><pre class="source-code"><span></span>_evaluate:
+    CLRF eval_total, a
+    CLRF eval_total+1, a
+    MOVLW '+'
+    MOVWF eval_sign, a
+</pre></td><td class="explanation">_evaluate 入口將 total 兩位清零，sign 初始化為 ASCII 加號；DS 工作區不會自動清除，故此初始化必要。</td></tr><tr><td class="number">24–25</td><td class="codecell"><pre class="source-code"><span></span>    MOVFF _evaluate$0, eval_term
+    MOVFF _evaluate$0+1, eval_term+1
+</pre></td><td class="explanation">從第一參數槽 $0 複製 a 的低／高位到 term，準備第一個乘法項。</td></tr><tr class="blank"><td class="number">26</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">27–30</td><td class="codecell"><pre class="source-code"><span></span>    MOVFF _evaluate$1, eval_operator
+    MOVFF _evaluate$2, eval_rhs
+    MOVFF _evaluate$2+1, eval_rhs+1
+    CALL eval_step
+</pre></td><td class="explanation">從 $1 取 op1、$2 取 b 到 operator/rhs，CALL eval_step 消費第一組運算子與右數。</td></tr><tr class="blank"><td class="number">31</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">32–35</td><td class="codecell"><pre class="source-code"><span></span>    MOVFF _evaluate$3, eval_operator
+    MOVFF _evaluate$4, eval_rhs
+    MOVFF _evaluate$4+1, eval_rhs+1
+    CALL eval_step
+</pre></td><td class="explanation">從 $3 取 op2、$4 取 c，再執行第二次 eval_step；沿用先前累積的 total、term、sign。</td></tr><tr class="blank"><td class="number">36</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">37–40</td><td class="codecell"><pre class="source-code"><span></span>    MOVFF _evaluate$5, eval_operator
+    MOVFF _evaluate$6, eval_rhs
+    MOVFF _evaluate$6+1, eval_rhs+1
+    CALL eval_step
+</pre></td><td class="explanation">從 $5 取 op3、$6 取 d，再執行第三次 eval_step。</td></tr><tr class="blank"><td class="number">41</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">42–45</td><td class="codecell"><pre class="source-code"><span></span>    CALL eval_flush
+    MOVFF eval_total, _evaluate$0
+    MOVFF eval_total+1, _evaluate$0+1
+    RETURN
+</pre></td><td class="explanation">最後再提交尚未結算的 term，將 total 低高位寫入返回槽 $0/$0+1，RETURN 返回 C。</td></tr><tr><td class="number">46–47</td><td class="codecell"><pre class="source-code"><span></span>
+; Multiplication extends the current term; addition/subtraction ends it.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">48–51</td><td class="codecell"><pre class="source-code"><span></span>eval_step:
+    MOVF eval_operator, w, a
+    XORLW '*'
+    BZ eval_multiply
+</pre></td><td class="explanation">eval_step 以 operator XOR ASCII * 檢查乘法，相等令 Z=1，直接跳 eval_multiply，不提前提交 term。</td></tr><tr><td class="number">52–56</td><td class="codecell"><pre class="source-code"><span></span>    CALL eval_flush
+    MOVFF eval_operator, eval_sign
+    MOVFF eval_rhs, eval_term
+    MOVFF eval_rhs+1, eval_term+1
+    RETURN
+</pre></td><td class="explanation">非乘法時先 CALL eval_flush 使用舊 sign；再把新 operator 存作下一項 sign，把 rhs 複製成新 term，RETURN。</td></tr><tr><td class="number">57–59</td><td class="codecell"><pre class="source-code"><span></span>
+; Low 16 bits of (term.low + 256*term.high)*(rhs.low + 256*rhs.high).
+; The high*high product contributes only above bit 15 and is unnecessary.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">60–64</td><td class="codecell"><pre class="source-code"><span></span>eval_multiply:
+    MOVF eval_term, w, a
+    MULWF eval_rhs, a
+    MOVFF PRODL, eval_product
+    MOVFF PRODH, eval_product+1
+</pre></td><td class="explanation">eval_multiply 先算 term.low×rhs.low，PRODL/PRODH 複製到 product 兩位，保留完整低×低乘積。</td></tr><tr class="blank"><td class="number">65</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">66–69</td><td class="codecell"><pre class="source-code"><span></span>    MOVF eval_term+1, w, a
+    MULWF eval_rhs, a
+    MOVF PRODL, w, a
+    ADDWF eval_product+1, f, a
+</pre></td><td class="explanation">算 term.high×rhs.low，取 PRODL 加到 product.high，代表交叉項左移8位後仍落在低16位的部分。</td></tr><tr class="blank"><td class="number">70</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">71–74</td><td class="codecell"><pre class="source-code"><span></span>    MOVF eval_term, w, a
+    MULWF eval_rhs+1, a
+    MOVF PRODL, w, a
+    ADDWF eval_product+1, f, a
+</pre></td><td class="explanation">算 term.low×rhs.high，再將 PRODL 加到 product.high；不需要此交叉乘積的高位。</td></tr><tr class="blank"><td class="number">75</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">76–78</td><td class="codecell"><pre class="source-code"><span></span>    MOVFF eval_product, eval_term
+    MOVFF eval_product+1, eval_term+1
+    RETURN
+</pre></td><td class="explanation">把 product 低高位寫回 term，RETURN；sign 與 total 不變，使乘法鏈繼續延伸同一項。</td></tr><tr><td class="number">79–80</td><td class="codecell"><pre class="source-code"><span></span>
+; Commit terms from left to right, propagating carry or borrow to bit 15.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">81–84</td><td class="codecell"><pre class="source-code"><span></span>eval_flush:
+    MOVF eval_sign, w, a
+    XORLW '-'
+    BZ eval_subtract
+</pre></td><td class="explanation">eval_flush 用 sign XOR ASCII 減號決定是否走 eval_subtract；不是減號時走加法路徑，合法輸入只會是加號。</td></tr><tr><td class="number">85–89</td><td class="codecell"><pre class="source-code"><span></span>    MOVF eval_term, w, a
+    ADDWF eval_total, f, a
+    MOVF eval_term+1, w, a
+    ADDWFC eval_total+1, f, a
+    RETURN
+</pre></td><td class="explanation">把 term.low 加入 total.low，MOVF 高位保留 C，再 ADDWFC 將高位與進位一起加入 total.high，RETURN。</td></tr><tr class="blank"><td class="number">90</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">91–96</td><td class="codecell"><pre class="source-code"><span></span>eval_subtract:
+    MOVF eval_term, w, a
+    SUBWF eval_total, f, a
+    MOVF eval_term+1, w, a
+    SUBWFB eval_total+1, f, a
+    RETURN
+</pre></td><td class="explanation">eval_subtract 先低位 total−term，接著 SUBWFB 以高位承接借位，RETURN；遵守題目非負中間值保證。</td></tr></tbody></table><h3 class="file-title" id="file-1">HW5/HW5-3/main.c</h3><table class="codewalk" data-source="HW5/HW5-3/main.c"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1</td><td class="codecell"><pre class="source-code"><span></span>#include &lt;xc.h&gt;
+</pre></td><td class="explanation">載入 XC8 裝置與編譯器定義。</td></tr><tr class="blank"><td class="number">2</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">3–4</td><td class="codecell"><pre class="source-code"><span></span>#pragma config OSC = INTIO67
+#pragma config WDT = OFF
+</pre></td><td class="explanation">設定內部振盪器模式，關閉看門狗，讓停在結果觀察迴圈時不因 WDT 重設。</td></tr><tr><td class="number">5–6</td><td class="codecell"><pre class="source-code"><span></span>#pragma config LVP = OFF
+#pragma config XINST = OFF
+</pre></td><td class="explanation">關閉低電壓燒錄與擴充指令模式，使用標準 PIC18 指令語義。</td></tr><tr class="blank"><td class="number">7</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">8–10</td><td class="codecell"><pre class="source-code"><span></span>extern unsigned int evaluate(unsigned int a, char op1, unsigned int b,
+                             char op2, unsigned int c, char op3,
+                             unsigned int d);
+</pre></td><td class="explanation">完整宣告七參數 evaluate：四個 unsigned int 數值交錯三個 char 運算子，回傳 unsigned int；宣告必須與組語參數槽順序相符。</td></tr><tr class="blank"><td class="number">11</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">12</td><td class="codecell"><pre class="source-code"><span></span>volatile unsigned int ans;
+</pre></td><td class="explanation">宣告全域 volatile unsigned int ans，保留16位元回傳值供 Watches 觀察。</td></tr><tr class="blank"><td class="number">13</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">14–16</td><td class="codecell"><pre class="source-code"><span></span>void main(void)
+{
+    ans = evaluate(50, '-', 20, '-', 10, '*', 2);
+</pre></td><td class="explanation">main 實際呼叫 evaluate(50,減號,20,減號,10,乘號,2)，依優先序得10並寫入 ans；不是 README 的9。</td></tr><tr><td class="number">17–18</td><td class="codecell"><pre class="source-code"><span></span>
+    /* Keep the result available in the debugger's Watches window. */
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">19–21</td><td class="codecell"><pre class="source-code"><span></span>    while (1) {
+    }
+}
+</pre></td><td class="explanation">進入永久空迴圈以保存結果，不進行任何列印或周邊輸出；最後大括號結束 main。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>支援的是 ASCII 字元 +、-、*，不是 HW4 分數題的0、1、2運算碼；C 呼叫必須使用單引號字元常數。</li><li>若讀到減號立刻執行 total−rhs，就會把後續乘法拆錯；必須等乘法項完整才使用 pending sign。</li><li>最後的 eval_flush 不可省略，否則只有前面幾項進 total，最後一個 term 完全遺漏。</li><li>乘法只保留低16位，沒有額外溢位偵測；減法也以無號算術處理。超出題目保證的非法輸入可能回繞，不應當成有號運算或錯誤處理。</li><li>SUBWFB 中 C=1 表示前一位無借位；高位實際減的是 rhs.high+(1−C)，不是直接減 C。</li><li>README 中預設呼叫、ans=9 與歷史模擬結果已不等於目前 main.c 的測試式；本文只是依實際來源推導，未重新執行建置或模擬。</li><li>工作區以靜態 COMRAM 配置，雖每次初始化狀態，但不具重入能力；中斷並行呼叫會破壞當前項與總和。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>50−20−10×2 應是10還是40？</summary><p>是10。先算10×2=20，再做50−20−20；把減法錯誤地結合成50−(20−20)或先整式左至右都不符合規則。</p></details><details><summary>為何連續乘法不需要另一個優先序堆疊？</summary><p>唯一高優先序運算是乘法，所有相鄰乘法都可累積在當前 term；遇加減再提交整項即可。</p></details><details><summary>為什麼不用算 term.high×rhs.high？</summary><p>這一項會乘上65536，只影響bit16以上，對16位元結果沒有貢獻；合法輸入的完整乘積又保證不超出16位元。</p></details><details><summary>返回前是否仍可把 _evaluate$0 當作原 a？</summary><p>不可；它在入口已複製到 term，返回時重用同一槽存結果，C 呼叫端應讀返回值而非假定原槽內容保留。</p></details></section><nav class="pager"><a href="hw5-primes.html">← 11. count_primes(n,m)：區間質數數量與 cycle 限制</a><a href="midterm-q1a.html">13. 16-bit ÷ 8-bit 的二進位長除法 →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>

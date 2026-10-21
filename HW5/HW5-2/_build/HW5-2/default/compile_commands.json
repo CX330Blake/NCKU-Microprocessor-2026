@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/_build/HW5-2/default",
+  "command": "/Applications/microchip/xc8/v3.10/bin/xc8-cc -DXPRJ_default=default -D__18F4520__ -D__DEBUG=1 -I/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2 -c -mcpu=18F4520 -x assembler-with-cpp -mdfp=/Users/CX330/.mchp_packs/Microchip/PIC18Fxxxx_DFP/1.8.178/xc8 -fno-short-double -fno-short-float -memi=wordwrite -O0 -maddrqual=ignore -mwarn=-3 -msummary=-psect,-class,+mem,-hex,-file -ginhx32 -Wl,--data-init -mno-keep-startup -mno-download -mno-default-config-bits -std=c99 -gdwarf-3 -mstack=compiled:auto:auto:auto -o CMakeFiles/HW5_2_default_default_XC8_assemblePreprocess.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/count_primes.S.o -c /Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/count_primes.S",
+  "file": "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/count_primes.S",
+  "output": "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/_build/HW5-2/default/CMakeFiles/HW5_2_default_default_XC8_assemblePreprocess.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/count_primes.S.o"
+},
+{
+  "directory": "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/_build/HW5-2/default",
+  "command": "/Applications/microchip/xc8/v3.10/bin/xc8-cc -DXPRJ_default=default -D__18F4520__ -D__DEBUG=1 -c -mcpu=18F4520 -mdfp=/Users/CX330/.mchp_packs/Microchip/PIC18Fxxxx_DFP/1.8.178/xc8 -fno-short-double -fno-short-float -memi=wordwrite -O0 -maddrqual=ignore -mwarn=-3 -msummary=-psect,-class,+mem,-hex,-file -ginhx32 -Wl,--data-init -mno-keep-startup -mno-download -mno-default-config-bits -std=c99 -gdwarf-3 -mstack=compiled:auto:auto:auto -o CMakeFiles/HW5_2_default_default_XC8_compile.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/main.c.p1 -c /Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/main.c",
+  "file": "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/main.c",
+  "output": "/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/_build/HW5-2/default/CMakeFiles/HW5_2_default_default_XC8_compile.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/main.c.p1"
+}
+]

@@ -1,0 +1,12 @@
+# ninja log v7
+33	916	1791982666607172469	CMakeFiles/HW5_1_default_default_XC8_assemble.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/gcd.asm.o	c599de416a3286ad
+36	1589	1791982666609402963	CMakeFiles/HW5_1_default_default_XC8_compile.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/main.c.p1	411f91a1500c4849
+1589	3435	1791982668162934968	/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/out/HW5-1/default.elf	3e0f2c56deb39f78
+2	240	1791987695393298074	CMakeFiles/HW5_1_default_default_XC8_assemblePreprocess.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/gcd.S.o	c3ab2822f97fed4b
+4	249	1791987695394000193	CMakeFiles/HW5_1_default_default_XC8_compile.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/main.c.p1	411f91a1500c4849
+249	923	1791987695639580127	/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/out/HW5-1/default.elf	aa4b90810281ea92
+107	2222	1792034194555698625	CMakeFiles/HW5_1_default_default_XC8_assemblePreprocess.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/gcd.S.o	c3ab2822f97fed4b
+143	2394	1792034194573664372	CMakeFiles/HW5_1_default_default_XC8_compile.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/main.c.p1	411f91a1500c4849
+2395	7333	1792034196825675335	/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/out/HW5-1/default.elf	aa4b90810281ea92
+4	330	1792034244741026969	CMakeFiles/HW5_1_default_default_XC8_compile.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/main.c.p1	411f91a1500c4849
+330	1049	1792034245067017789	/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-1/out/HW5-1/default.elf	aa4b90810281ea92

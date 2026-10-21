@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <executable name="/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-3/out/HW5-3/default.hex">
+    <memory name="program">
+      <units>bytes</units>
+      <length>32768</length>
+      <used>242</used>
+      <free>32526</free>
+    </memory>
+    <memory name="data">
+      <units>bytes</units>
+      <length>1536</length>
+      <used>23</used>
+      <free>1513</free>
+    </memory>
+  </executable>
+</project>

@@ -1,0 +1,5 @@
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-3/_build/HW5-3/default/CMakeFiles/HW5_3_default_default_XC8_assemblePreprocess.dir
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-3/_build/HW5-3/default/CMakeFiles/HW5_3_default_default_XC8_compile.dir
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-3/_build/HW5-3/default/CMakeFiles/HW5_3_default_image_4tVhG9LA.dir
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-3/_build/HW5-3/default/CMakeFiles/edit_cache.dir
+/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-3/_build/HW5-3/default/CMakeFiles/rebuild_cache.dir

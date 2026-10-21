@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>6. 以迭代 Quicksort 將可變長度序列遞增排序｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">HW2 · 第 6 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>6. 以迭代 Quicksort 將可變長度序列遞增排序</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">以 Quicksort 將無號 8 位元序列由小到大原地排序。長度 l 存於資料記憶體 0x000，範圍 2≤l≤255；元素從 0x100 起，佔用 0x100～0x100+l−1，可包含重複值。結果必須回存原區域。展示時須使用課程提供的載入腳本／資料載入方式，並能解釋 partition、索引／指標、迴圈控制以及如何取代遞迴。PDF 提醒 PIC18F 硬體返回堆疊只能容納 31 個返回位址，不適合讓不利情況下深度接近 l 的直接遞迴排序。PDF 範例為長度 3 的 [03,02,01]，及長度 6 的 [0A,34,16,0A,F0,C8]。目前來源真正內嵌的是 DW 0xFF 長度及 255 個 DB 元素，開頭 09、0E、97、35、02，最後一筆為 64；不是上述兩個短範例。來源前段另有固定的機器碼資料載入器，教學保留它不修改。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>先區分三個位址空間／用途：程式記憶體 0x5000 存長度字與 DB 測資；載入器把長度放到資料 RAM 0x000、元素放到 0x100 起；排序程式在 0x20～0x2A 保存狀態，0x300+SP 與 0x400+SP 分別保存待排序區間的 low、high。</li><li>初始把 [0,l−1] 壓入軟體堆疊。STACK_SP 是已存區間數，同時也是下一次 push 的空槽索引；pop 要先將 SP 減一，再從兩個平行堆疊取出相同索引的 low/high。</li><li>主迴圈若 SP=0 就結束；若取到單元素 low==high 區間，直接略過。其餘區間使用 Lomuto partition：pivot=A[high]、i=low−1、j=low。</li><li>掃描 j=low 到 high−1。當 A[j]≤pivot 時先 i++，交換 A[i] 與 A[j]；否則只前進 j。維持不變量：A[low..i]≤pivot、A[i+1..j−1]&gt;pivot，未掃描部分從 j 起。</li><li>i 的初始 low−1 在 low=0 時以 8 位元 0xFF 表示。程式在以 i 形成元素指標之前一定先 INCF，所以第一次取用會正確回到 0，不會存取 0x1FF 作為負一索引。</li><li>j==high 時不再掃描 pivot；最後 i++，交換 A[i] 與 A[high]，令 p=i。此時左區都≤pivot，右區都&gt;pivot，pivot 已到本輪最終位置。</li><li>只有 p&lt;high 才壓右區 [p+1,high]；只有 p&gt;low 才壓左區 [low,p−1]。先右後左配合 LIFO，下一輪先處理左區；單元素區間可被壓入，但在主迴圈立即略過，不會壓入空區間。</li><li>push_range 是非遞迴子程式，只用 CALL/RETURN 暫時保存一層返回位址。真正待辦工作存於 RAM 明確堆疊，而非靠硬體返回堆疊記住遞迴路徑。255 個輸入元素的有效索引是 00～FE；堆疊頁則各有 256 個位元組，不與序列區域重疊。</li><li>此方法避開遞迴深度限制，但沒有改善 Lomuto 選最後一筆 pivot 的最壞時間；已排序或大量相等的輸入仍可能形成極不平衡分割，總比較量為平方級。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>來源實際測資的第一區間</td><td>l=FF；push [00,FE]；SP=1</td><td>載入器先把 255 筆元素放到 0x100～0x1FE；此列是依來源推演，不是執行測試紀錄。</td></tr><tr><td>第一次 pop／pivot</td><td>SP=0；low=00、high=FE；pivot=A[FE]=64</td><td>最後一個 DB 是 0x64，i 初始 FF、j 初始 00。</td></tr><tr><td>實際第一輪 j=00</td><td>A[00]=09≤64 → i=00，自交換</td><td>FSR0 與 FSR1 都指 0x100，交換同一位置仍正確。</td></tr><tr><td>j=01</td><td>0E≤64 → i=01，自交換</td><td>已接受區為 09、0E。</td></tr><tr><td>j=02</td><td>97&gt;64 → i 保持 01，只令 j=03</td><td>97 留在尚待交換的較大區。</td></tr><tr><td>j=03</td><td>35≤64 → i=02，交換 A[02] 與 A[03]</td><td>前四值變成 09、0E、35、97；不在此憑空聲稱整個 255 筆排序結果。</td></tr><tr><td>短例完整示意：PDF 第一例</td><td>[03,02,01]，初區間 [0,2]，pivot=01</td><td>以下切換到 PDF 的三筆例子，用來走完整個演算法，不是來源預設測資。</td></tr><tr><td>短例第一次分割</td><td>03、02 都&gt;01；i 從 FF 增到 00；交換 A[0]、A[2]</td><td>得到 [01,02,03]，p=0，只壓右區 [1,2]。</td></tr><tr><td>短例第二次分割</td><td>pivot=03，02≤03；p=2</td><td>02 與自己交換，最後 pivot 也自交換；只壓左區 [1,1]。</td></tr><tr><td>短例完成</td><td>pop [1,1] 略過；下一輪 SP=0</td><td>排序結果 [01,02,03] 保留於 0x100～0x102。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">hard.S</a></div><h3 class="file-title" id="file-0">HW2/hard.S</h3><table class="codewalk" data-source="HW2/hard.S"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1</td><td class="codecell"><pre class="source-code"><span></span>#include "xc.inc"
+</pre></td><td class="explanation">載入 xc.inc；本來源未另寫 PROCESSOR 指令，目標裝置須由建置設定提供。</td></tr><tr><td class="number">2–3</td><td class="codecell"><pre class="source-code"><span></span>PSECT testcase, local, class=STRCODE, reloc=1
+ORG 0x5000
+</pre></td><td class="explanation">宣告 local 的 testcase 區段（class=STRCODE，位元組對齊），ORG 將測資安排在程式記憶體 0x5000；不是資料 RAM 0x5000。</td></tr><tr><td class="number">4</td><td class="codecell"><pre class="source-code"><span></span>; Sequence length, 0x02~0xff
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">5</td><td class="codecell"><pre class="source-code"><span></span>DW  0xff
+</pre></td><td class="explanation">DW 0xFF 配置一個 16 位元長度字；載入器取其中低位元組 FF 當 255，接著跳過另一個長度位元組讀資料。</td></tr><tr><td class="number">6–7</td><td class="codecell"><pre class="source-code"><span></span>; The following is the input sequence.
+; Here is a random sequence of length 255.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">8–39</td><td class="codecell"><pre class="source-code"><span></span>DB  0x09, 0x0e, 0x97, 0x35, 0x02, 0x71, 0x41, 0x1f
+DB  0xd4, 0x5c, 0x89, 0x11, 0xc2, 0xe4, 0x6b, 0x0c
+DB  0x82, 0x8b, 0x61, 0x83, 0x87, 0x83, 0x65, 0x7f
+DB  0x75, 0x70, 0x94, 0x55, 0x5e, 0xa0, 0x05, 0xd2
+DB  0xd5, 0x3d, 0x1c, 0x95, 0x4e, 0x51, 0xce, 0x1a
+DB  0x01, 0xb2, 0x09, 0xcf, 0x69, 0x57, 0x08, 0x68
+DB  0xd7, 0x9e, 0x05, 0x8b, 0xbc, 0x97, 0x51, 0x38
+DB  0x70, 0xda, 0x8f, 0xac, 0x9a, 0x1d, 0x7f, 0x24
+DB  0x7b, 0x96, 0xeb, 0x55, 0x8e, 0x5f, 0x47, 0xb1
+DB  0xe0, 0xb2, 0x60, 0xca, 0x56, 0x3b, 0x7e, 0x81
+DB  0x6b, 0x29, 0x68, 0x0b, 0x75, 0x5e, 0x8d, 0xf1
+DB  0x5f, 0x46, 0x17, 0x9e, 0x3e, 0xa7, 0x18, 0x21
+DB  0x2b, 0x0e, 0x61, 0xa6, 0x6d, 0xd7, 0x23, 0xf9
+DB  0x96, 0xc7, 0x2a, 0x80, 0xdf, 0x45, 0x22, 0x73
+DB  0xc1, 0xaf, 0x4f, 0x28, 0x44, 0xee, 0xbd, 0x68
+DB  0x0a, 0x60, 0x17, 0x00, 0x96, 0xd6, 0x75, 0x6b
+DB  0x9d, 0xf1, 0xe8, 0x3a, 0xf9, 0xf3, 0xb4, 0x4f
+DB  0x8b, 0x1b, 0x7c, 0xc7, 0xd5, 0xbd, 0x56, 0xa0
+DB  0xb7, 0x53, 0x48, 0x8a, 0xd5, 0xbf, 0x97, 0xdc
+DB  0x70, 0xd8, 0xc0, 0x41, 0xc9, 0xe3, 0xb1, 0xdc
+DB  0x56, 0x5e, 0xf5, 0xd7, 0x62, 0x3d, 0x03, 0xc5
+DB  0x7b, 0x1f, 0x1a, 0x05, 0x2b, 0x4a, 0xeb, 0x9d
+DB  0xe2, 0xa5, 0x78, 0xdb, 0x83, 0x93, 0x95, 0x8a
+DB  0x53, 0x08, 0xfa, 0x98, 0x52, 0x2d, 0x72, 0x29
+DB  0x95, 0x3f, 0xb7, 0x47, 0x31, 0x4f, 0x87, 0x58
+DB  0xc7, 0x3f, 0x0b, 0xc3, 0x55, 0x50, 0x70, 0xc3
+DB  0x92, 0xab, 0xc8, 0xa9, 0x05, 0xf4, 0x25, 0x82
+DB  0xf2, 0x83, 0xcb, 0xf6, 0x23, 0xe9, 0xee, 0x58
+DB  0x10, 0x0f, 0x93, 0xc8, 0x3b, 0x52, 0xa1, 0x22
+DB  0x37, 0xe2, 0xaa, 0xd8, 0x19, 0x44, 0x65, 0x52
+DB  0x3e, 0x57, 0x30, 0x62, 0x7d, 0xe2, 0xf3, 0x51
+DB  0x3d, 0x9b, 0x3d, 0xb0, 0x9a, 0x2f, 0x64
+</pre></td><td class="explanation">DB 表逐一配置 255 個無號 8 位元輸入，不是 ASCII、也不是每筆 16 位元。每列前 31 列各 8 筆，最後一列 7 筆，從 09、0E、97 開始，到 64 結束；載入後依序對應 RAM 0x100～0x1FE。此處以一段註解涵蓋整個測資表，避免把每個常數誤講成演算法步驟。</td></tr><tr class="blank"><td class="number">40–41</td><td class="codecell"><pre class="source-code"><span></span>
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">42–43</td><td class="codecell"><pre class="source-code"><span></span>PSECT main, local, abs, class=CODE, reloc=2
+ORG 0x00
+</pre></td><td class="explanation">宣告絕對定位的 main CODE 區段，ORG 0x00 放置重設後先執行的資料載入器。</td></tr><tr><td class="number">44</td><td class="codecell"><pre class="source-code"><span></span>; Data loader, !DO NOT MODIFY!
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">45–46</td><td class="codecell"><pre class="source-code"><span></span>DW 0x6af6, 0x6af8, 0x0e50, 0x6ef7, 0x0009, 0x50f5, 0x6f00, 0xee01
+DW 0xf000, 0x000b, 0xcff5, 0xffee, 0x62e9, 0xd7fb, 0xee00, 0xf000
+</pre></td><td class="explanation">這 16 個 DW 是固定 loader 機器碼：清 TBLPTRL/TBLPTRU、設 TBLPTRH=50，從程式記憶體讀長度到 RAM 000，令 FSR0=100，再以表格讀取與 MOVFF TABLAT,POSTINC0 複製元素，直到 FSR0L 等於長度；最後將 FSR0 歸零並自然接到 main。表讀先略過長度字的另一個位元組。這兩列必須作為完整機器碼區塊理解，不能修改或當普通測資跳過。</td></tr><tr class="blank"><td class="number">47</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">48</td><td class="codecell"><pre class="source-code"><span></span>SEQ_LEN     equ 0x00
+</pre></td><td class="explanation">SEQ_LEN 命名為 RAM 0x00，載入器已在這裡寫入長度。</td></tr><tr class="blank"><td class="number">49</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">50</td><td class="codecell"><pre class="source-code"><span></span>STACK_SP    equ 0x20
+</pre></td><td class="explanation">STACK_SP 命名為 0x20，存目前待處理區間數／下一個空槽索引。</td></tr><tr class="blank"><td class="number">51</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">52–55</td><td class="codecell"><pre class="source-code"><span></span>QS_LOW      equ 0x21
+QS_HIGH     equ 0x22
+QS_PIVOT    equ 0x23
+QS_I        equ 0x24
+</pre></td><td class="explanation">0x21～0x24 依序命名為目前 low、high、pivot 值、分割索引 i；EQU 不會執行任何初始化。</td></tr><tr><td class="number">56–59</td><td class="codecell"><pre class="source-code"><span></span>QS_J        equ 0x25
+QS_CURR     equ 0x26
+QS_TEMP     equ 0x27 ; for swap
+QS_P        equ 0x28 ; partition result p
+</pre></td><td class="explanation">0x25～0x28 依序保存掃描索引 j、A[j] 值、交換暫存、分割結果 p。</td></tr><tr class="blank"><td class="number">60</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">61–62</td><td class="codecell"><pre class="source-code"><span></span>PUSH_LOW    equ 0x29
+PUSH_HIGH   equ 0x2A
+</pre></td><td class="explanation">PUSH_LOW/HIGH 位於 0x29/0x2A，作為 push_range 的區間參數，與目前正在處理的 QS_LOW/HIGH 分開。</td></tr><tr class="blank"><td class="number">63</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">64</td><td class="codecell"><pre class="source-code"><span></span>main:
+</pre></td><td class="explanation">main 在固定資料載入器之後開始，不是前方 PSECT main 宣告本身的同義詞。</td></tr><tr><td class="number">65–73</td><td class="codecell"><pre class="source-code"><span></span>    ; --------------------------------------------------------
+    ; Explicit stack:
+    ;
+    ;   0x300 + SP : low index
+    ;   0x400 + SP : high index
+    ;
+    ; Initially push [0, length - 1].
+    ; --------------------------------------------------------
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">74</td><td class="codecell"><pre class="source-code"><span></span>    clrf    STACK_SP,c
+</pre></td><td class="explanation">STACK_SP 清零，軟體堆疊起初沒有待處理區間。</td></tr><tr class="blank"><td class="number">75</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">76</td><td class="codecell"><pre class="source-code"><span></span>    clrf    PUSH_LOW,c
+</pre></td><td class="explanation">PUSH_LOW 清零，初始區間從索引 0 開始。</td></tr><tr class="blank"><td class="number">77</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">78–80</td><td class="codecell"><pre class="source-code"><span></span>    movf    SEQ_LEN,w,c
+    addlw   0xFF                ; length - 1
+    movwf   PUSH_HIGH,c
+</pre></td><td class="explanation">W←長度，加 FF 等價於 8 位元減一，寫 PUSH_HIGH=l−1；合法長度 2～255 得 high=01～FE。</td></tr><tr class="blank"><td class="number">81</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">82</td><td class="codecell"><pre class="source-code"><span></span>    call    push_range
+</pre></td><td class="explanation">CALL push_range 把完整初始區間壓入 RAM 堆疊；只暫用一層硬體返回堆疊。</td></tr><tr><td class="number">83–88</td><td class="codecell"><pre class="source-code"><span></span>
+
+; ============================================================
+; Iterative Quicksort
+; ============================================================
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">89–92</td><td class="codecell"><pre class="source-code"><span></span>sort_loop:
+    ; If stack is empty, sorting is finished.
+    movf    STACK_SP,w,c
+    bz      sort_done
+</pre></td><td class="explanation">sort_loop 讀 SP 產生 Z 旗標，BZ 在 SP=0 時跳 sort_done；否則準備 pop 下一區間。</td></tr><tr><td class="number">93–97</td><td class="codecell"><pre class="source-code"><span></span>
+    ; --------------------------------------------------------
+    ; Pop one [low, high] pair.
+    ; --------------------------------------------------------
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">98</td><td class="codecell"><pre class="source-code"><span></span>    decf    STACK_SP,f,c
+</pre></td><td class="explanation">先 SP--，由下一個空槽退到最後一個有效區間的索引。</td></tr><tr><td class="number">99–100</td><td class="codecell"><pre class="source-code"><span></span>
+    ; low = stack_low[SP]
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">101–102</td><td class="codecell"><pre class="source-code"><span></span>    movlw   0x03
+    movwf   FSR0H,c
+</pre></td><td class="explanation">FSR0H←03，選擇保存 low 的 0x3xx 軟體堆疊頁。</td></tr><tr class="blank"><td class="number">103</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">104–105</td><td class="codecell"><pre class="source-code"><span></span>    movf    STACK_SP,w,c
+    movwf   FSR0L,c
+</pre></td><td class="explanation">FSR0L←SP，使 FSR0 完整指向 0x300+SP。</td></tr><tr class="blank"><td class="number">106</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">107–108</td><td class="codecell"><pre class="source-code"><span></span>    movf    INDF0,w,c
+    movwf   QS_LOW,c
+</pre></td><td class="explanation">間接讀取 stack_low[SP]，存入目前區間 QS_LOW。</td></tr><tr><td class="number">109–110</td><td class="codecell"><pre class="source-code"><span></span>
+    ; high = stack_high[SP]
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">111–112</td><td class="codecell"><pre class="source-code"><span></span>    movlw   0x04
+    movwf   FSR1H,c
+</pre></td><td class="explanation">FSR1H←04，選擇保存 high 的 0x4xx 堆疊頁。</td></tr><tr class="blank"><td class="number">113</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">114–115</td><td class="codecell"><pre class="source-code"><span></span>    movf    STACK_SP,w,c
+    movwf   FSR1L,c
+</pre></td><td class="explanation">FSR1L←同一 SP，讓 low/high 以平行陣列同索引配對。</td></tr><tr class="blank"><td class="number">116</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">117–118</td><td class="codecell"><pre class="source-code"><span></span>    movf    INDF1,w,c
+    movwf   QS_HIGH,c
+</pre></td><td class="explanation">間接讀 stack_high[SP] 到 QS_HIGH，完成 pop。</td></tr><tr><td class="number">119–120</td><td class="codecell"><pre class="source-code"><span></span>
+    ; A single-element range is already sorted.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">121–124</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_HIGH,w,c
+    cpfseq  QS_LOW,c
+    bra     partition_setup
+    bra     sort_loop
+</pre></td><td class="explanation">W←high；若 low==high，CPFSEQ 略過 BRA partition_setup，直接回 sort_loop。非單元素才分割；非空區間由 push 條件保證。</td></tr><tr><td class="number">125–142</td><td class="codecell"><pre class="source-code"><span></span>
+
+; ============================================================
+; Lomuto partition
+;
+; pivot = A[high]
+; i = low - 1
+;
+; for j = low; j &lt; high; j++:
+;     if A[j] &lt;= pivot:
+;         i++
+;         swap(A[i], A[j])
+;
+; i++
+; swap(A[i], A[high])
+; p = i
+; ============================================================
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">143</td><td class="codecell"><pre class="source-code"><span></span>partition_setup:
+</pre></td><td class="explanation">partition_setup 為一個非單元素區間建立 Lomuto 分割狀態。</td></tr><tr><td class="number">144–151</td><td class="codecell"><pre class="source-code"><span></span>    ; --------------------------------------------------------
+    ; pivot = A[high]
+    ;
+    ; Sequence is stored at 0x100 + index.
+    ; --------------------------------------------------------
+
+    ; FSR0 = 0x100 + high
+    ; pivot = *FSR0
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">152–153</td><td class="codecell"><pre class="source-code"><span></span>    movlw   0x01
+    movwf   FSR0H,c
+</pre></td><td class="explanation">FSR0H←01，準備在序列頁 0x1xx 中讀 pivot。</td></tr><tr class="blank"><td class="number">154</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">155–156</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_HIGH,w,c
+    movwf   FSR0L,c
+</pre></td><td class="explanation">FSR0L←high，完整位址為 0x100+high。</td></tr><tr class="blank"><td class="number">157</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">158–159</td><td class="codecell"><pre class="source-code"><span></span>    movf    INDF0,w,c
+    movwf   QS_PIVOT,c
+</pre></td><td class="explanation">讀 A[high] 存 QS_PIVOT，後續比較使用這個穩定副本。</td></tr><tr><td class="number">160–161</td><td class="codecell"><pre class="source-code"><span></span>
+    ; i = low - 1
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">162–164</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_LOW,w,c
+    addlw   0xFF
+    movwf   QS_I,c
+</pre></td><td class="explanation">QS_I←low−1；low=00 時得到 FF，這是預期的 8 位元環繞，尚未用它讀陣列。</td></tr><tr><td class="number">165–166</td><td class="codecell"><pre class="source-code"><span></span>
+    ; j = low
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">167–168</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_LOW,w,c
+    movwf   QS_J,c
+</pre></td><td class="explanation">QS_J←low，從區間第一筆開始向右掃描。</td></tr><tr class="blank"><td class="number">169–170</td><td class="codecell"><pre class="source-code"><span></span>
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">171–176</td><td class="codecell"><pre class="source-code"><span></span>partition_loop:
+    ; Stop when j == high.
+    movf    QS_HIGH,w,c
+    cpfseq  QS_J,c
+    bra     partition_body
+    bra     partition_finish
+</pre></td><td class="explanation">partition_loop：W←high；j==high 時略過 BRA partition_body，轉 partition_finish；未到 high 則進入掃描本體，不把 pivot 本身列入掃描。</td></tr><tr class="blank"><td class="number">177–178</td><td class="codecell"><pre class="source-code"><span></span>
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">179</td><td class="codecell"><pre class="source-code"><span></span>partition_body:
+</pre></td><td class="explanation">partition_body 讀出當前 A[j] 並決定它屬於 pivot 左側或右側。</td></tr><tr><td class="number">180–183</td><td class="codecell"><pre class="source-code"><span></span>    ; --------------------------------------------------------
+    ; Load A[j].
+    ; --------------------------------------------------------
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">184–185</td><td class="codecell"><pre class="source-code"><span></span>    movlw   0x01
+    movwf   FSR0H,c
+</pre></td><td class="explanation">FSR0H←01，重建序列頁的讀取指標。</td></tr><tr class="blank"><td class="number">186</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">187–188</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_J,w,c
+    movwf   FSR0L,c
+</pre></td><td class="explanation">FSR0L←j，FSR0 指向 A[j]。</td></tr><tr class="blank"><td class="number">189</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">190–191</td><td class="codecell"><pre class="source-code"><span></span>    movf    INDF0,w,c
+    movwf   QS_CURR,c
+</pre></td><td class="explanation">讀 A[j] 到 QS_CURR，FSR0 繼續保留 A[j] 位址供可能的交換使用。</td></tr><tr><td class="number">192–205</td><td class="codecell"><pre class="source-code"><span></span>
+    ; --------------------------------------------------------
+    ; if A[j] &lt;= pivot
+    ;
+    ; CPFSGT skips the next instruction when:
+    ;
+    ;     file &gt; WREG
+    ;
+    ; Here:
+    ;
+    ;     file = A[j]
+    ;     WREG = pivot
+    ; --------------------------------------------------------
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">206–208</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_PIVOT,w,c
+    cpfsgt  QS_CURR,c
+    bra     partition_take
+</pre></td><td class="explanation">W←pivot；CPFSGT 若 current&gt;pivot 就略過 BRA partition_take，否則（≤）進入 take。它是不帶正負號的比較，不依賴 Carry。</td></tr><tr class="blank"><td class="number">209</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">210</td><td class="codecell"><pre class="source-code"><span></span>    bra     partition_next
+</pre></td><td class="explanation">current&gt;pivot 時到這裡，跳 partition_next，不增加 i、也不交換。</td></tr><tr class="blank"><td class="number">211–212</td><td class="codecell"><pre class="source-code"><span></span>
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">213–215</td><td class="codecell"><pre class="source-code"><span></span>partition_take:
+    ; i++
+    incf    QS_I,f,c
+</pre></td><td class="explanation">partition_take 先 i++，擴大左側≤pivot 區；初始 i=FF 時在這裡回到 00。</td></tr><tr><td class="number">216–221</td><td class="codecell"><pre class="source-code"><span></span>
+    ; --------------------------------------------------------
+    ; FSR0 -&gt; A[j]
+    ; FSR1 -&gt; A[i]
+    ; --------------------------------------------------------
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">222–223</td><td class="codecell"><pre class="source-code"><span></span>    movlw   0x01
+    movwf   FSR1H,c
+</pre></td><td class="explanation">FSR1H←01，第二組指標也指向序列頁。</td></tr><tr class="blank"><td class="number">224</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">225–226</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_I,w,c
+    movwf   FSR1L,c
+</pre></td><td class="explanation">FSR1L←i，FSR1 指向 A[i]；FSR0 仍指 A[j]。</td></tr><tr><td class="number">227–231</td><td class="codecell"><pre class="source-code"><span></span>
+    ; --------------------------------------------------------
+    ; Swap A[i] and A[j].
+    ; --------------------------------------------------------
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">232–233</td><td class="codecell"><pre class="source-code"><span></span>    movf    INDF1,w,c
+    movwf   QS_TEMP,c
+</pre></td><td class="explanation">把原 A[i] 保存至 QS_TEMP，避免下一步寫入覆蓋後無法完成交換。</td></tr><tr class="blank"><td class="number">234</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">235–236</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_CURR,w,c
+    movwf   INDF1,c
+</pre></td><td class="explanation">將已快取的 A[j]=QS_CURR 寫到 A[i]。</td></tr><tr class="blank"><td class="number">237</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">238–239</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_TEMP,w,c
+    movwf   INDF0,c
+</pre></td><td class="explanation">把原 A[i] 從 QS_TEMP 寫到 A[j]，完成交換；i==j 時自交換也正確。</td></tr><tr class="blank"><td class="number">240–241</td><td class="codecell"><pre class="source-code"><span></span>
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">242–244</td><td class="codecell"><pre class="source-code"><span></span>partition_next:
+    incf    QS_J,f,c
+    bra     partition_loop
+</pre></td><td class="explanation">partition_next 令 j++，回比較 j 與 high，無論是否 take 每輪只前進一個掃描元素。</td></tr><tr><td class="number">245–250</td><td class="codecell"><pre class="source-code"><span></span>
+
+; ============================================================
+; Place pivot into its final position.
+; ============================================================
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">251–253</td><td class="codecell"><pre class="source-code"><span></span>partition_finish:
+    ; i++
+    incf    QS_I,f,c
+</pre></td><td class="explanation">partition_finish 在掃描結束後 i++，取得 pivot 應放的位置。</td></tr><tr><td class="number">254–255</td><td class="codecell"><pre class="source-code"><span></span>
+    ; p = i
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">256–257</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_I,w,c
+    movwf   QS_P,c
+</pre></td><td class="explanation">QS_P←i，保存分割結果，供後續建立左右區間。</td></tr><tr><td class="number">258–259</td><td class="codecell"><pre class="source-code"><span></span>
+    ; FSR0 -&gt; A[p]
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">260–261</td><td class="codecell"><pre class="source-code"><span></span>    movlw   0x01
+    movwf   FSR0H,c
+</pre></td><td class="explanation">FSR0H←01，為 A[p] 設定序列頁。</td></tr><tr class="blank"><td class="number">262</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">263–264</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_P,w,c
+    movwf   FSR0L,c
+</pre></td><td class="explanation">FSR0L←p，使 FSR0 指向 A[p]。</td></tr><tr><td class="number">265–266</td><td class="codecell"><pre class="source-code"><span></span>
+    ; FSR1 -&gt; A[high]
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">267–268</td><td class="codecell"><pre class="source-code"><span></span>    movlw   0x01
+    movwf   FSR1H,c
+</pre></td><td class="explanation">FSR1H←01，為 A[high] 設定序列頁。</td></tr><tr class="blank"><td class="number">269</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">270–271</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_HIGH,w,c
+    movwf   FSR1L,c
+</pre></td><td class="explanation">FSR1L←high，使 FSR1 指向原 pivot 所在位置。</td></tr><tr><td class="number">272–273</td><td class="codecell"><pre class="source-code"><span></span>
+    ; Swap A[p] and A[high].
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">274–275</td><td class="codecell"><pre class="source-code"><span></span>    movf    INDF0,w,c
+    movwf   QS_TEMP,c
+</pre></td><td class="explanation">保存 A[p] 至 QS_TEMP，作為交換暫存。</td></tr><tr class="blank"><td class="number">276</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">277–278</td><td class="codecell"><pre class="source-code"><span></span>    movf    INDF1,w,c
+    movwf   INDF0,c
+</pre></td><td class="explanation">從 A[high] 讀 pivot 並寫到 A[p]，pivot 就定位。</td></tr><tr class="blank"><td class="number">279</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">280–281</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_TEMP,w,c
+    movwf   INDF1,c
+</pre></td><td class="explanation">原 A[p] 寫回 A[high]，完成最後交換；pivot 左側≤它、右側&gt;它。</td></tr><tr><td class="number">282–287</td><td class="codecell"><pre class="source-code"><span></span>
+
+; ============================================================
+; Push right range [p + 1, high] if p &lt; high.
+; ============================================================
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">288–291</td><td class="codecell"><pre class="source-code"><span></span>check_right:
+    movf    QS_HIGH,w,c
+    cpfslt  QS_P,c
+    bra     check_left
+</pre></td><td class="explanation">check_right：W←high，CPFSLT 若 p&lt;high 就略過 BRA check_left，建立右區；否則右區為空，直接檢查左區。</td></tr><tr class="blank"><td class="number">292</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">293–295</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_P,w,c
+    addlw   0x01
+    movwf   PUSH_LOW,c
+</pre></td><td class="explanation">PUSH_LOW←p+1；只有先確認 p&lt;high 才做此運算，避免空右區。</td></tr><tr class="blank"><td class="number">296</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">297–298</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_HIGH,w,c
+    movwf   PUSH_HIGH,c
+</pre></td><td class="explanation">PUSH_HIGH←目前 high，形成 [p+1,high]。</td></tr><tr class="blank"><td class="number">299</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">300</td><td class="codecell"><pre class="source-code"><span></span>    call    push_range
+</pre></td><td class="explanation">先把右區壓入軟體堆疊；push_range 會使用 FSR0/FSR1，但不修改 QS_LOW/HIGH/P。</td></tr><tr><td class="number">301–309</td><td class="codecell"><pre class="source-code"><span></span>
+
+; ============================================================
+; Push left range [low, p - 1] if p &gt; low.
+;
+; Right is pushed first and left second, therefore left will
+; be processed first because the explicit stack is LIFO.
+; ============================================================
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">310–313</td><td class="codecell"><pre class="source-code"><span></span>check_left:
+    movf    QS_LOW,w,c
+    cpfsgt  QS_P,c
+    bra     sort_loop
+</pre></td><td class="explanation">check_left：W←low，CPFSGT 若 p&gt;low 就略過 BRA sort_loop，建立左區；否則左區為空，回主迴圈。</td></tr><tr class="blank"><td class="number">314</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">315–316</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_LOW,w,c
+    movwf   PUSH_LOW,c
+</pre></td><td class="explanation">PUSH_LOW←目前 low，設定左區起點。</td></tr><tr class="blank"><td class="number">317</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">318–320</td><td class="codecell"><pre class="source-code"><span></span>    movf    QS_P,w,c
+    addlw   0xFF
+    movwf   PUSH_HIGH,c
+</pre></td><td class="explanation">PUSH_HIGH←p−1；只有 p&gt;low 才執行，不會在 p=0 時把 FF 當有效終點。</td></tr><tr class="blank"><td class="number">321</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">322–324</td><td class="codecell"><pre class="source-code"><span></span>    call    push_range
+
+    bra     sort_loop
+</pre></td><td class="explanation">壓入左區後回 sort_loop。左區後壓，LIFO 所以下一輪先處理它。</td></tr><tr><td class="number">325–336</td><td class="codecell"><pre class="source-code"><span></span>
+
+; ============================================================
+; push_range
+;
+; Store one [PUSH_LOW, PUSH_HIGH] range into the explicit
+; software stack.
+;
+; low stack  : 0x300 + STACK_SP
+; high stack : 0x400 + STACK_SP
+; ============================================================
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">337</td><td class="codecell"><pre class="source-code"><span></span>push_range:
+</pre></td><td class="explanation">push_range 是共用的非遞迴壓入子程式；輸入為 PUSH_LOW/HIGH，SP 指向尚未使用的槽。</td></tr><tr><td class="number">338</td><td class="codecell"><pre class="source-code"><span></span>    ; Store low index.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">339–340</td><td class="codecell"><pre class="source-code"><span></span>    movlw   0x03
+    movwf   FSR0H,c
+</pre></td><td class="explanation">FSR0H←03，選擇 low 堆疊頁。</td></tr><tr class="blank"><td class="number">341</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">342–343</td><td class="codecell"><pre class="source-code"><span></span>    movf    STACK_SP,w,c
+    movwf   FSR0L,c
+</pre></td><td class="explanation">FSR0L←SP，指向 stack_low[SP] 的空槽。</td></tr><tr class="blank"><td class="number">344</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">345–346</td><td class="codecell"><pre class="source-code"><span></span>    movf    PUSH_LOW,w,c
+    movwf   INDF0,c
+</pre></td><td class="explanation">PUSH_LOW 寫入 0x300+SP，保存新區間低索引。</td></tr><tr><td class="number">347–348</td><td class="codecell"><pre class="source-code"><span></span>
+    ; Store high index.
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">349–350</td><td class="codecell"><pre class="source-code"><span></span>    movlw   0x04
+    movwf   FSR1H,c
+</pre></td><td class="explanation">FSR1H←04，選擇 high 堆疊頁。</td></tr><tr class="blank"><td class="number">351</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">352–353</td><td class="codecell"><pre class="source-code"><span></span>    movf    STACK_SP,w,c
+    movwf   FSR1L,c
+</pre></td><td class="explanation">FSR1L←相同 SP，指向對應 high 槽。</td></tr><tr class="blank"><td class="number">354</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">355–356</td><td class="codecell"><pre class="source-code"><span></span>    movf    PUSH_HIGH,w,c
+    movwf   INDF1,c
+</pre></td><td class="explanation">PUSH_HIGH 寫入 0x400+SP，與剛寫的 low 組成一個區間。</td></tr><tr><td class="number">357–358</td><td class="codecell"><pre class="source-code"><span></span>
+    ; SP++
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">359</td><td class="codecell"><pre class="source-code"><span></span>    incf    STACK_SP,f,c
+</pre></td><td class="explanation">SP++，表示多一個待辦區間，也指向下一次可寫空槽。</td></tr><tr class="blank"><td class="number">360</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">361</td><td class="codecell"><pre class="source-code"><span></span>    return
+</pre></td><td class="explanation">RETURN 回呼叫處，釋放這次 CALL 的硬體返回位址；沒有在子程式內再次遞迴排序。</td></tr><tr><td class="number">362–367</td><td class="codecell"><pre class="source-code"><span></span>
+
+; ============================================================
+; Finished
+; ============================================================
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">368–369</td><td class="codecell"><pre class="source-code"><span></span>sort_done:
+    bra     sort_done
+</pre></td><td class="explanation">sort_done 自迴圈，表示軟體堆疊已空，原資料區保留遞增結果。</td></tr><tr class="blank"><td class="number">370</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">371</td><td class="codecell"><pre class="source-code"><span></span>END
+</pre></td><td class="explanation">END 結束組譯來源，沒有產生額外 CPU 指令。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>不能把來源中的 DW/DB 測資當成排序指令；它們在程式記憶體，先由固定 loader 搬到資料 RAM 才成為 A[]。0x5000 並非資料陣列的起始位址。</li><li>載入器的兩行 DW 是實際可執行 PIC18 機器碼，不是可任意刪掉的常數；其中也含雙字指令，閱讀時必須按指令長度解碼。</li><li>CPFSGT QS_CURR 在 A[j]&gt;pivot 時略過 BRA partition_take，再執行 BRA partition_next；也就是『不大於』才交換，重複值會歸入左區。</li><li>low=0 時 QS_I=FF 是刻意使用 8 位元模數表示 low−1；若在 i++ 前就拿它組位址，才會讀錯資料。</li><li>只把 FSRnH 設 01、FSRnL 設索引是因為最大有效索引 FE，資料完全位於 0x1xx；不需要一般的多位元地址加法，但也不能直接套用到更長陣列。</li><li>右／左區壓入條件不能拿掉：p=0 時直接做 p−1 會得到 FF，p=high 時產生 p+1 則形成空區間。程式先比較才進行加減，避免這類邊界錯誤。</li><li>本實作只在 pop 時檢查 low==high，未另查 low&gt;high，因為 push 前的比較維持 low≤high 不變量。若外部改壞區間或堆疊，這個前提就不存在。</li><li>所有值的比較皆為無號；例如 F0 應排在 C8 後面，不是把 bit7 當作負號。</li><li>不應聲稱演算法是穩定排序：Lomuto 交換可能改變相等元素的身分次序。HW2 Advance 的 A 優先規則與這題的排序要求是不同議題。</li><li>當前內嵌長度是 FF，來源沒有聲稱已跑過所有邊界案例；此教學的 trace 是人工根據指令推演，不能當成新的模擬器驗證。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>為何右區先 push，卻是左區先被處理？</summary><p>軟體堆疊是後進先出；左區後寫入較高的堆疊索引，下次 pop 先取到左區。</p></details><details><summary>所有值都等於 pivot 時，分割位置與效率如何？</summary><p>每個 A[j] 都走 take，最後 p=high。只留下長度少一的左區，排序仍正確且不會遞迴爆硬體返回堆疊，但比較工作量可能達 O(l²)。</p></details><details><summary>程式何時真的使用硬體返回堆疊？</summary><p>只在 CALL push_range 時暫存返回位址，RETURN 後釋放；sort_loop 的各區間透過 RAM 堆疊與 BRA 管理，不是遞迴 CALL 自己。</p></details><details><summary>長度 FF 的最後一個元素在 0x1FF 嗎？</summary><p>不是。共有 255 筆，索引從 00 到 FE，所以最後是 0x1FE；0x1FF 是其後一格。</p></details></section><nav class="pager"><a href="hw2-advance.html">← 5. 合併兩個遞增序列，輸出遞減且穩定</a><a href="hw4-basic.html">7. 巨集 Mul_Add：x1×x2 + y1×y2 →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>

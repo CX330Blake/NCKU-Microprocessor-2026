@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PIC18F4520 逐題離線備考教材：題意、推導、範例追蹤與完整程式碼逐行解釋。"><title>5. 合併兩個遞增序列，輸出遞減且穩定｜PIC18 備考教材</title><style>:root{--ink:#18263a;--muted:#596b81;--line:#dce3ed;--accent:#2256ac;--paper:#f5f6fa;--card:#fff;--code:#eef3fc}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{padding-top:40px}h1{font-size:clamp(26px,3.5vw,40px);line-height:1.35;letter-spacing:-.025em;margin:14px 0}h2{font-size:24px;margin-top:0}h3{font-size:18px}.muted,.meta{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em}.topnav,.pager,.toc{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.topnav{justify-content:space-between}.toc{padding:12px 16px;background:#e8eef8;border-radius:12px}.toc a{font-size:14px;font-weight:650}.section{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:0 0 24px;min-width:0}.notice{background:#fff5df;border-left:4px solid #aa7723;padding:14px 18px;border-radius:4px;white-space:pre-line}.problem{white-space:pre-line}.steps li{margin-bottom:14px;padding-left:5px}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-size:.88em}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#e8eef8;padding:12px}td{padding:12px;vertical-align:top;border-bottom:1px solid var(--line)}.trace{overflow-x:auto}.codewalk{table-layout:fixed}.codewalk th:first-child{width:72px}.codewalk th:nth-child(2){width:53%}.codewalk td.number{font:12px/1.7 ui-monospace,monospace;color:var(--muted);background:#f7f9fc}.codewalk td.codecell{background:var(--code);padding:9px 12px}.codewalk pre{margin:0;white-space:pre;overflow:auto;font-size:13px;line-height:1.75;color:#173256;tab-size:4}.codewalk td.explanation{font-size:14px;line-height:1.8}.codewalk .passive{color:var(--muted);font-size:12px}details summary{cursor:pointer;color:var(--accent);font-weight:650}details{margin:12px 0}details p{margin:8px 0}.file-title{margin-top:36px;overflow-wrap:anywhere}.files-nav{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.file-link{font-size:13px;overflow-wrap:anywhere}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card strong{display:block;line-height:1.6}.card span{display:block;font-size:13px;color:var(--muted);margin-top:10px}.chapter-title{margin:36px 0 18px}.pager{justify-content:space-between}.footer{font-size:13px;color:var(--muted)}.search{width:min(600px,100%);font:inherit;padding:12px;border:1px solid var(--line);border-radius:9px}.empty{display:none}.hidden{display:none!important}@media(max-width:850px){header,main,footer{padding:20px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.codewalk,.codewalk tbody,.codewalk tr,.codewalk td{display:block;width:100%}.codewalk thead{display:none}.codewalk tr{border:1px solid var(--line);border-radius:8px;margin:12px 0;overflow:hidden}.codewalk td.number{padding:5px 12px}.codewalk td.number:before{content:'原始碼行號 '}.codewalk td.explanation{background:white}.section{padding:18px}.toc{gap:9px 15px}}@media(max-width:480px){.cards{grid-template-columns:1fr}.section{padding:14px}.topnav{font-size:14px}td,th{padding:9px}}@media print{body{background:white}.toc,.topnav,.pager{display:none}.section{border:0;padding:0;margin:24px 0}.codewalk pre{white-space:pre-wrap}.codewalk tr{break-inside:avoid}}.codewalk tr.blank{display:none}</style></head><body><header><nav class="topnav"><a href="index.html">← 全部題目目錄</a><span class="meta">HW2 · 第 5 / 21 題</span></nav><p class="eyebrow">一題一頁 / 解法推導 / 完整原始碼逐段對照</p><h1>5. 合併兩個遞增序列，輸出遞減且穩定</h1><nav class="toc" aria-label="本題章節"><a href="#problem">題目描述</a><a href="#reasoning">解題思路</a><a href="#trace">範例追蹤</a><a href="#code">完整程式碼與解釋</a><a href="#pitfalls">易錯點</a><a href="#quiz">自我檢查</a></nav></header><main><section class="section" id="problem"><h2>01 / 題目到底要做什麼？</h2><div class="problem">兩個無號 8 位元遞增序列 A、B，A 有 6 筆放在 0x200～0x205，B 有 5 筆放在 0x210～0x214。讀取兩序列元素必須使用間接定址，將全部 11 筆合併成遞減序列，依序寫到 0x220～0x22A，最大值在 0x220。若目前 A、B 值相等，要優先輸出 A，符合題目指定的穩定合併 tie-break。PDF 範例一為 A=[01,03,05,07,09,0B]、B=[02,04,06,08,0A]；範例二為 A=[05,1A,2C,40,7E,A0]、B=[06,20,33,80,F0]。來源真正載入另一組 A=[12,15,18,22,2A,31]、B=[04,09,0E,12,1B]，剛好包含跨序列相等的 0x12，可用來解釋 A 優先。</div></section><section class="section" id="reasoning"><h2>02 / 從題意推導程式</h2><ol class="steps"><li>兩序列輸入本來是由小到大，但輸出要求由大到小，所以應從各序列尾端往前讀。初始化用 POSTINC 寫前五／前四筆，最後一筆用 INDF 寫入且不前進，因此 FSR0 最後停在 0x205，FSR1 停在 0x214。</li><li>FSR2 從 0x220 向前寫。COUNT_A=6、COUNT_B=5 追蹤尚未輸出的筆數，不能靠指標所指的數值是否為 0 判斷耗盡，因為 0 本身是合法元素。</li><li>每次 W←目前 A，先用 CPFSEQ INDF1 檢查 B==A。相等直接選 A；不等再用 CPFSLT INDF1 判斷 B&lt;A，若成立選 A，否則選 B。整體選較大者，平手選 A。</li><li>選 A 時 MOVFF POSTDEC0,POSTINC2 同時從 A 尾讀值並倒退 A 指標，寫入輸出後前進輸出指標；B 路徑對稱。來源陣列本身不會被改寫。</li><li>只要剛輸出的那個序列還有元素，就回 compare；其計數減到 0 後，另一序列必然還有尚未輸出的資料，跳到 drain 將剩餘值依倒序完整搬出。</li><li>這是兩個有序串流的合併，不需要再對 11 筆做排序。時間工作量與輸出長度成正比；COUNT_A/B 的追蹤保證不在序列耗盡後還比較越界記憶體。</li></ol></section><section class="section" id="trace"><h2>03 / 跟著範例走一次</h2><p class="muted">以下為依程式語意整理的手算追蹤；不是本次重新執行 PIC 模擬器的結果。</p><div class="trace"><table><thead><tr><th>階段／狀態</th><th>數值</th><th>為何變成這樣</th></tr></thead><tbody><tr><td>初始化後指標</td><td>FSR0=205→31；FSR1=214→1B；FSR2=220</td><td>A/B 都指到各自最大值；計數為 6、5。</td></tr><tr><td>第 1～3 次選取</td><td>31(A)、2A(A)、22(A)</td><td>三次 A 都大於目前 B 的 1B；輸出到 220～222。</td></tr><tr><td>第 4 次</td><td>1B(B)</td><td>目前 A=18、B=1B，選 B；B 指標倒退到 213→12。</td></tr><tr><td>第 5～6 次</td><td>18(A)、15(A)</td><td>A 尚有 12，B 仍是 12。</td></tr><tr><td>第 7 次平手</td><td>12(A) → [226]；COUNT_A=0</td><td>CPFSEQ 優先 put_a，不能先取 B 的同值 12。</td></tr><tr><td>排空 B</td><td>12、0E、09、04 → [227]～[22A]</td><td>A 已耗盡，不再回 compare 讀 0x1FF。</td></tr><tr><td>最終輸出</td><td>31 2A 22 1B 18 15 12 12 0E 09 04</td><td>共 11 筆遞減；兩個 12 的來源順序是 A 再 B。</td></tr></tbody></table></div></section><section class="section" id="code"><h2>04 / 完整程式碼 × 逐行／小段解釋</h2><p>左側保留完整原檔，右側說明該行的資料流、條件與作用。以一行或緊密相關的小段為單位閱讀；行號對應原始檔。手機版則把解釋接在程式碼下方。</p><p class="muted">所有程式碼已內嵌本頁，無須另外開啟 .S、.c 或 .py。生成資料表可收合，但內容完整保留。原檔中的測資、註解或額外約定若與題目不同，會在說明中區分，不默默修改原碼。</p><div class="files-nav"><a class="file-link" href="#file-0">advance.S.bak</a></div><h3 class="file-title" id="file-0">HW2/advance.S.bak</h3><table class="codewalk" data-source="HW2/advance.S.bak"><thead><tr><th>行號</th><th>完整原始碼（保留原檔內容）</th><th>這一行／這一小段在做什麼</th></tr></thead><tbody><tr><td class="number">1–2</td><td class="codecell"><pre class="source-code"><span></span>PROCESSOR 18F4520
+#include &lt;xc.inc&gt;
+</pre></td><td class="explanation">指定 PIC18F4520，載入 xc.inc 的裝置與間接定址符號。</td></tr><tr class="blank"><td class="number">3</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">4</td><td class="codecell"><pre class="source-code"><span></span>PSECT resetVec,class=CODE,reloc=2
+</pre></td><td class="explanation">宣告兩位元組對齊的 resetVec 程式碼區段。</td></tr><tr class="blank"><td class="number">5</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">6–7</td><td class="codecell"><pre class="source-code"><span></span>resetVec:
+    goto main
+</pre></td><td class="explanation">重設入口跳往 main。</td></tr><tr class="blank"><td class="number">8</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">9</td><td class="codecell"><pre class="source-code"><span></span>PSECT code
+</pre></td><td class="explanation">切換一般 code 區段。</td></tr><tr class="blank"><td class="number">10</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">11–12</td><td class="codecell"><pre class="source-code"><span></span>COUNT_A equ 0x20
+COUNT_B equ 0x21
+</pre></td><td class="explanation">EQU 將 COUNT_A、COUNT_B 命名為 RAM 0x20、0x21；只是符號定義，不會自動初始化記憶體。</td></tr><tr class="blank"><td class="number">13</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">14–17</td><td class="codecell"><pre class="source-code"><span></span>main:
+    lfsr 0, 0x200 ; seq A
+    lfsr 1, 0x210 ; seq B
+    lfsr 2, 0x220 ; final seq
+</pre></td><td class="explanation">main 設定 FSR0=200（A）、FSR1=210（B）、FSR2=220（輸出），三組指標角色分開。</td></tr><tr class="blank"><td class="number">18</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">19–20</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x12
+    movwf POSTINC0
+</pre></td><td class="explanation">A[0]←0x12，POSTINC0 寫後使 FSR0=201。</td></tr><tr><td class="number">21–22</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x15
+    movwf POSTINC0
+</pre></td><td class="explanation">A[1]←0x15，FSR0 前進至 202。</td></tr><tr><td class="number">23–24</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x18
+    movwf POSTINC0
+</pre></td><td class="explanation">A[2]←0x18，FSR0 前進至 203。</td></tr><tr><td class="number">25–26</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x22
+    movwf POSTINC0
+</pre></td><td class="explanation">A[3]←0x22，FSR0 前進至 204。</td></tr><tr><td class="number">27–28</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x2a
+    movwf POSTINC0
+</pre></td><td class="explanation">A[4]←0x2A，FSR0 前進至 205。</td></tr><tr><td class="number">29–30</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x31
+    movwf INDF0
+</pre></td><td class="explanation">A[5]←0x31，使用 INDF0 不自增，將 FSR0 留在 205，正好指向 A 的最大值。</td></tr><tr class="blank"><td class="number">31</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">32–33</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x04
+    movwf POSTINC1
+</pre></td><td class="explanation">B[0]←0x04，POSTINC1 寫後前進至 211。</td></tr><tr><td class="number">34–35</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x09
+    movwf POSTINC1
+</pre></td><td class="explanation">B[1]←0x09，FSR1 前進至 212。</td></tr><tr><td class="number">36–37</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x0e
+    movwf POSTINC1
+</pre></td><td class="explanation">B[2]←0x0E，FSR1 前進至 213。</td></tr><tr><td class="number">38–39</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x12
+    movwf POSTINC1
+</pre></td><td class="explanation">B[3]←0x12，FSR1 前進至 214；這個 12 之後會與 A 的 12 平手。</td></tr><tr><td class="number">40–41</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x1b
+    movwf INDF1
+</pre></td><td class="explanation">B[4]←0x1B，用 INDF1 不移動 FSR1，保留在 B 尾端。</td></tr><tr class="blank"><td class="number">42</td><td class="codecell"><pre class="source-code"><span></span>    
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">43–46</td><td class="codecell"><pre class="source-code"><span></span>    movlw 0x6
+    movwf COUNT_A
+    movlw 0x5
+    movwf COUNT_B
+</pre></td><td class="explanation">COUNT_A←6、COUNT_B←5，設定兩邊尚未輸出的元素數。</td></tr><tr class="blank"><td class="number">47</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">48</td><td class="codecell"><pre class="source-code"><span></span>compare:
+</pre></td><td class="explanation">compare 為兩序列都尚有元素時的合併比較入口。</td></tr><tr><td class="number">49</td><td class="codecell"><pre class="source-code"><span></span>    ; W = current A
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">50–53</td><td class="codecell"><pre class="source-code"><span></span>    movf INDF0, W
+    cpfseq INDF1 ; if equal, A has priority
+    bra not_equal
+    bra put_a
+</pre></td><td class="explanation">W←目前 A；若 B==A，CPFSEQ 略過 BRA not_equal，接著 BRA put_a；不等則跳往大小比較。</td></tr><tr class="blank"><td class="number">54</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">55–58</td><td class="codecell"><pre class="source-code"><span></span>not_equal:
+    cpfslt INDF1
+    bra put_b
+    bra put_a
+</pre></td><td class="explanation">not_equal：若 B&lt;A，CPFSLT 略過 BRA put_b，選 A；若 B&gt;A，執行 BRA put_b。</td></tr><tr class="blank"><td class="number">59</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">60–61</td><td class="codecell"><pre class="source-code"><span></span>put_a:
+    movff POSTDEC0, POSTINC2
+</pre></td><td class="explanation">put_a 從 *FSR0 讀 A 值、寫到 *FSR2；POSTDEC0 讀後倒退 A，POSTINC2 寫後前進輸出。</td></tr><tr><td class="number">62–64</td><td class="codecell"><pre class="source-code"><span></span>    decfsz COUNT_A
+    bra compare
+    bra drain_b ; A is clear, copy the rest of B
+</pre></td><td class="explanation">COUNT_A 減一並寫回 F（省略目的地的預設）。非零回 compare；變零略過該分支，轉 drain_b 複製 B 剩餘值。</td></tr><tr class="blank"><td class="number">65</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">66–67</td><td class="codecell"><pre class="source-code"><span></span>put_b:
+    movff POSTDEC1, POSTINC2
+</pre></td><td class="explanation">put_b 對 B 做相同搬移：讀後倒退 FSR1，寫後前進 FSR2。</td></tr><tr><td class="number">68–70</td><td class="codecell"><pre class="source-code"><span></span>    decfsz COUNT_B
+    bra compare
+    bra drain_a ; B is clear, copy the rest of A
+</pre></td><td class="explanation">COUNT_B 減一；尚有值就 compare，耗盡則 drain_a，不再讀 B 指標。</td></tr><tr class="blank"><td class="number">71</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">72–75</td><td class="codecell"><pre class="source-code"><span></span>drain_a:
+    movff POSTDEC0, POSTINC2
+    decfsz COUNT_A, F
+    bra drain_a
+</pre></td><td class="explanation">drain_a 逐筆從 A 尾端搬到輸出並遞減 COUNT_A，直到減成零略過 BRA drain_a。</td></tr><tr><td class="number">76</td><td class="codecell"><pre class="source-code"><span></span>    bra done
+</pre></td><td class="explanation">A 排空後跳 done，避免落入 drain_b 讀已耗盡的 B。</td></tr><tr class="blank"><td class="number">77</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">78–81</td><td class="codecell"><pre class="source-code"><span></span>drain_b:
+    movff POSTDEC1, POSTINC2
+    decfsz COUNT_B, F
+    bra drain_b
+</pre></td><td class="explanation">drain_b 從 B 尾端搬出剩餘值，COUNT_B 減成零時跳過迴圈分支，直接落入 done。</td></tr><tr class="blank"><td class="number">82</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">83–84</td><td class="codecell"><pre class="source-code"><span></span>done:
+    bra done
+</pre></td><td class="explanation">done 自迴圈；輸出已佔滿 0x220～0x22A，FSR2 停在下一格 0x22B。</td></tr><tr class="blank"><td class="number">85</td><td class="codecell"><pre class="source-code"><span></span>
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr><tr><td class="number">86</td><td class="codecell"><pre class="source-code"><span></span>END resetVec
+</pre></td><td class="explanation">結束來源，指定 resetVec 入口。</td></tr><tr class="blank"><td class="number">87–88</td><td class="codecell"><pre class="source-code"><span></span>
+
+</pre></td><td class="explanation passive">原檔空行／註解；用於分隔段落或標示背景，不執行指令。</td></tr></tbody></table></section><section class="section" id="pitfalls"><h2>05 / 最容易踩的坑</h2><ul class="steps"><li>輸入遞增、輸出遞減，所以讀指標必須向後走；若初始化最後一筆也用 POSTINC，指標會停到序列之外。</li><li>CPFSLT INDF1 的意思是目前 B&lt;W(A) 時略過 BRA put_b；不要顛倒比較方向。</li><li>相等必須在不等比較之前獨立處理，否則容易讓 B 在平手時先出。來源的平手路徑確實先選 A。</li><li>這份來源的 DECFSZ COUNT_A/COUNT_B 有些省略目的地，依此 PIC18 組譯語法預設寫回 F；不是只把減一結果放到 W。排空區則明寫 F。</li><li>指標在取完最後一筆後可能倒退到陣列前一格，但此時計數已為零，流程立即轉入排空另一陣列，不再讀該位置。</li><li>題目對『stable』的明文要求是 A/B 當前元素相等時 A 優先。若把同一序列內重複值也當成帶身分的記錄，倒序讀取本身會反轉它們的身分順序；不要擴大聲稱此實作保留所有記錄的原始相對次序。</li></ul></section><section class="section" id="quiz"><h2>06 / 確認自己真的懂了</h2><details><summary>為何相等時執行 BRA put_a，而不是先看 COUNT_A？</summary><p>到 compare 時兩邊計數都非零，才有合法當前值；相等直接依題意選 A，輸出後 DECFSZ 再決定是否耗盡。</p></details><details><summary>drain_b 的 COUNT_B 會不會在進入時已是 0？</summary><p>正常流程不會。只有 A 剛輸出到 0 才進 drain_b，而若 B 先到 0，早已轉入 drain_a，不會再回 compare。</p></details></section><nav class="pager"><a href="hw2-basic.html">← 4. 依前項奇偶產生三個新值</a><a href="hw2-hard.html">6. 以迭代 Quicksort 將可變長度序列遞增排序 →</a></nav></main><footer class="footer">這一頁可單獨複製並離線閱讀；上一題／下一題與目錄是選用導覽。題意依倉庫課程素材整理，程式碼為目前解答快照。未變更韌體，不將既有歷史測試當成本次驗證。</footer></body></html>

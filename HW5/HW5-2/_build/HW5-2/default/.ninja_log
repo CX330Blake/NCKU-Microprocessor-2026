@@ -1,0 +1,4 @@
+# ninja log v7
+2	267	1791983600181321679	CMakeFiles/HW5_2_default_default_XC8_compile.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/main.c.p1	79889defd964fe25
+2	269	1791984568492770574	CMakeFiles/HW5_2_default_default_XC8_assemblePreprocess.dir/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/count_primes.S.o	871917bf43c409c7
+269	1004	1791984568759400760	/Users/CX330/Working/Share/NCKU-Microprocessor-2026/HW5/HW5-2/out/HW5-2/default.elf	ceb9cfd0ca381d1a
