@@ -1,0 +1,64 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+CONFIG OSC = INTIO67
+CONFIG WDT = OFF
+CONFIG XINST = OFF
+
+target      equ 0x005
+result      equ 0x010
+outer_count equ 0x011
+inner_count equ 0x012
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+main:
+    ; Use five values because 0x00-0x04 contains five bytes.
+    movlw   1
+    movwf   0x000
+    movlw   2
+    movwf   0x001
+    movlw   3
+    movwf   0x002
+    movlw   4
+    movwf   0x003
+    movlw   5
+    movwf   0x004
+    movlw   6
+    movwf   target
+
+    clrf    result
+    lfsr    0, 0x000
+    movlw   4
+    movwf   outer_count
+
+outer_loop:
+    movff   FSR0L, FSR1L
+    movff   FSR0H, FSR1H
+    incf    FSR1L, F
+    movff   outer_count, inner_count
+
+inner_loop:
+    movf    INDF0, W
+    addwf   POSTINC1, W
+    cpfseq  target
+    bra     not_equal
+    incf    result, F
+
+not_equal:
+    decfsz  inner_count, F
+    bra     inner_loop
+
+    incf    FSR0L, F
+    decfsz  outer_count, F
+    bra     outer_loop
+
+done:
+    bra     done
+
+END resetVec

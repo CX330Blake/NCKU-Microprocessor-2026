@@ -1,0 +1,97 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+CONFIG OSC = INTIO67
+CONFIG WDT = OFF
+CONFIG XINST = OFF
+
+; The recalled question omits addresses. This solution uses the following:
+input_h  equ 0x000
+input_l  equ 0x001
+output_h equ 0x010
+output_l equ 0x011
+mag_h    equ 0x020
+mag_l    equ 0x021
+exponent equ 0x022
+sign     equ 0x023
+count    equ 0x024
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+main:
+    ; Test input: signed integer -42 = 0xFFD6.
+    movlw   0xFF
+    movwf   input_h
+    movlw   0xD6
+    movwf   input_l
+
+    clrf    output_h
+    clrf    output_l
+    clrf    sign
+    movff   input_h, mag_h
+    movff   input_l, mag_l
+
+    ; Convert a negative input to its unsigned magnitude.
+    btfss   mag_h, 7
+    bra     magnitude_ready
+    movlw   0x80
+    movwf   sign
+    comf    mag_l, F
+    comf    mag_h, F
+    incf    mag_l, F
+    bnz     magnitude_ready
+    incf    mag_h, F
+
+magnitude_ready:
+    movf    mag_h, W
+    iorwf   mag_l, W
+    bz      done
+
+    ; Bias is 15. A bit at position 15 therefore has exponent 30.
+    movlw   30
+    movwf   exponent
+
+normalize:
+    btfsc   mag_h, 7
+    bra     normalized
+    bcf     STATUS, 0
+    rlcf    mag_l, F
+    rlcf    mag_h, F
+    decf    exponent, F
+    bra     normalize
+
+normalized:
+    ; Keep the implicit leading bit plus the next 10 fraction bits.
+    ; The source did not specify rounding, so discarded bits are truncated.
+    movlw   5
+    movwf   count
+shift_right:
+    bcf     STATUS, 0
+    rrcf    mag_h, F
+    rrcf    mag_l, F
+    decfsz  count, F
+    bra     shift_right
+
+    movff   mag_l, output_l
+    movf    mag_h, W
+    andlw   0x03
+    movwf   output_h
+
+    bcf     STATUS, 0
+    rlcf    exponent, F
+    bcf     STATUS, 0
+    rlcf    exponent, F
+    movf    exponent, W
+    iorwf   output_h, F
+    movf    sign, W
+    iorwf   output_h, F
+
+done:
+    bra     done
+
+END resetVec

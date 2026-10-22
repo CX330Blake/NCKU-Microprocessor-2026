@@ -1,0 +1,91 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+CONFIG OSC = INTIO67
+CONFIG WDT = OFF
+CONFIG XINST = OFF
+
+outer_count equ 0x040
+inner_count equ 0x041
+tmp         equ 0x042
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+main:
+    ; Test input: three unsorted lists.
+    movlw   9
+    movwf   0x010
+    movlw   2
+    movwf   0x011
+    movlw   7
+    movwf   0x012
+
+    movlw   1
+    movwf   0x020
+    movlw   8
+    movwf   0x021
+    movlw   3
+    movwf   0x022
+
+    movlw   6
+    movwf   0x030
+    movlw   4
+    movwf   0x031
+    movlw   5
+    movwf   0x032
+
+    ; Gather the three lists into 0x00-0x08 using FSRs.
+    lfsr    1, 0x000
+
+    lfsr    0, 0x010
+    call    copy_three
+    lfsr    0, 0x020
+    call    copy_three
+    lfsr    0, 0x030
+    call    copy_three
+
+    ; The question does not state an order; use ascending order.
+    movlw   8
+    movwf   outer_count
+
+bubble_pass:
+    lfsr    0, 0x000
+    lfsr    1, 0x001
+    movff   outer_count, inner_count
+
+bubble_pair:
+    movf    INDF1, W
+    cpfsgt  INDF0
+    bra     no_swap
+
+    movff   INDF0, tmp
+    movff   INDF1, INDF0
+    movff   tmp, INDF1
+
+no_swap:
+    incf    FSR0L, F
+    incf    FSR1L, F
+    decfsz  inner_count, F
+    bra     bubble_pair
+
+    decfsz  outer_count, F
+    bra     bubble_pass
+
+done:
+    bra     done
+
+copy_three:
+    movlw   3
+    movwf   inner_count
+copy_loop:
+    movff   POSTINC0, POSTINC1
+    decfsz  inner_count, F
+    bra     copy_loop
+    return
+
+END resetVec
