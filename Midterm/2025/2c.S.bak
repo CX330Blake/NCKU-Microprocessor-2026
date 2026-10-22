@@ -1,0 +1,65 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+CONFIG OSC = INTIO67
+CONFIG WDT = OFF
+CONFIG XINST = OFF
+
+tmp equ 0x000
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+main:
+    ; Test input matrix: [1 2 3; 4 5 6; 7 8 9].
+    lfsr    0, 0x200
+    movlw   1
+    movwf   POSTINC0
+    movlw   2
+    movwf   POSTINC0
+    movlw   3
+    movwf   POSTINC0
+
+    lfsr    0, 0x210
+    movlw   4
+    movwf   POSTINC0
+    movlw   5
+    movwf   POSTINC0
+    movlw   6
+    movwf   POSTINC0
+
+    lfsr    0, 0x220
+    movlw   7
+    movwf   POSTINC0
+    movlw   8
+    movwf   POSTINC0
+    movlw   9
+    movwf   POSTINC0
+
+    ; Transpose by swapping the three pairs below the diagonal.
+    lfsr    0, 0x201
+    lfsr    1, 0x210
+    call    swap_indirect
+
+    lfsr    0, 0x202
+    lfsr    1, 0x220
+    call    swap_indirect
+
+    lfsr    0, 0x212
+    lfsr    1, 0x221
+    call    swap_indirect
+
+done:
+    bra     done
+
+swap_indirect:
+    movff   INDF0, tmp
+    movff   INDF1, INDF0
+    movff   tmp, INDF1
+    return
+
+END resetVec

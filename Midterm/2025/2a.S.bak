@@ -1,0 +1,39 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+CONFIG OSC = INTIO67
+CONFIG WDT = OFF
+CONFIG XINST = OFF
+
+count equ 0x010
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+main:
+    ; Test input: first two Fibonacci values.
+    movlw   0x00
+    movwf   0x000
+    movlw   0x01
+    movwf   0x001
+
+    lfsr    0, 0x000          ; reads the previous two values
+    lfsr    1, 0x002          ; writes the next value
+    movlw   6
+    movwf   count
+
+fibonacci_loop:
+    movf    POSTINC0, W
+    addwf   INDF0, W
+    movwf   POSTINC1
+    decfsz  count, F
+    bra     fibonacci_loop
+
+done:
+    bra     done
+
+END resetVec

@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch 2025-test-practice: default",
+      "type": "mplab-core-da",
+      "request": "launch",
+      "project": "2025-test-practice",
+      "configuration": "default",
+      "stopOnEntry": false,
+      "preLaunchTask": "2025-test-practice: default - Build",
+      "program": "${workspaceFolder:2025-test-practice}/out/2025-test-practice/default.elf"
+    }
+  ]
+}

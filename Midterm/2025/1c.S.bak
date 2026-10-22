@@ -1,0 +1,113 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+CONFIG OSC = INTIO67
+CONFIG WDT = OFF
+CONFIG XINST = OFF
+
+a_hi    equ 0x000
+a_lo    equ 0x001
+b_hi    equ 0x002
+b_lo    equ 0x003
+result  equ 0x010
+sum_top equ 0x011
+sum_hi  equ 0x012
+sum_lo  equ 0x013
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+main:
+    ; Test input: BCD 0565 + 0656 = 01221, a palindrome.
+    movlw   0x05
+    movwf   a_hi
+    movlw   0x65
+    movwf   a_lo
+    movlw   0x06
+    movwf   b_hi
+    movlw   0x56
+    movwf   b_lo
+
+    ; Add the packed BCD bytes from low to high.
+    movf    a_lo, W
+    addwf   b_lo, W
+    daw
+    movwf   sum_lo
+
+    movf    a_hi, W
+    addwfc  b_hi, W
+    daw
+    movwf   sum_hi
+
+    clrf    sum_top
+    btfsc   STATUS, 0
+    incf    sum_top, F
+
+    clrf    result
+
+    ; Ignore leading decimal zeroes and compare outer digits.
+    movf    sum_top, F
+    bnz     check_five_digits
+
+    movf    sum_hi, W
+    andlw   0xF0
+    bnz     check_four_digits
+
+    movf    sum_hi, W
+    andlw   0x0F
+    bnz     check_three_digits
+
+    movf    sum_lo, W
+    andlw   0xF0
+    bnz     check_two_digits
+
+    bra     palindrome       ; zero or one digit
+
+check_five_digits:
+    movf    sum_top, W
+    xorwf   sum_lo, W
+    andlw   0x0F
+    bnz     done
+
+    movf    sum_hi, W
+    xorwf   sum_lo, W
+    andlw   0xF0
+    bnz     done
+    bra     palindrome
+
+check_four_digits:
+    swapf   sum_hi, W
+    xorwf   sum_lo, W
+    andlw   0x0F
+    bnz     done
+
+    swapf   sum_lo, W
+    xorwf   sum_hi, W
+    andlw   0x0F
+    bnz     done
+    bra     palindrome
+
+check_three_digits:
+    movf    sum_hi, W
+    xorwf   sum_lo, W
+    andlw   0x0F
+    bnz     done
+    bra     palindrome
+
+check_two_digits:
+    swapf   sum_lo, W
+    xorwf   sum_lo, W
+    andlw   0x0F
+    bnz     done
+
+palindrome:
+    setf    result
+
+done:
+    bra     done
+
+END resetVec

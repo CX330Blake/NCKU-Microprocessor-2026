@@ -1,0 +1,57 @@
+PROCESSOR 18F4520
+#include <xc.inc>
+
+CONFIG OSC = INTIO67
+CONFIG WDT = OFF
+CONFIG XINST = OFF
+
+input_3 equ 0x000
+input_2 equ 0x001
+input_1 equ 0x002
+input_0 equ 0x003
+result  equ 0x010
+
+PSECT resetVec,class=CODE,reloc=2
+
+resetVec:
+    goto main
+
+PSECT code
+
+main:
+    ; Test input: ignore F, then check ABCBCBA.
+    movlw   0xFA
+    movwf   input_3
+    movlw   0xBC
+    movwf   input_2
+    movlw   0xBC
+    movwf   input_1
+    movlw   0xBA
+    movwf   input_0
+
+    clrf    result
+
+    ; First nibble == seventh nibble.
+    movf    input_3, W
+    xorwf   input_0, W
+    andlw   0x0F
+    bnz     done
+
+    ; Second nibble == sixth nibble.
+    movf    input_2, W
+    xorwf   input_0, W
+    andlw   0xF0
+    bnz     done
+
+    ; Third nibble == fifth nibble.
+    movf    input_2, W
+    xorwf   input_1, W
+    andlw   0x0F
+    bnz     done
+
+    setf    result
+
+done:
+    bra     done
+
+END resetVec
